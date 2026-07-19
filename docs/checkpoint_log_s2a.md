@@ -123,6 +123,111 @@ first_release, with the adversarial leakage test (reading between reference-peri
 and release_datetime must return the PRIOR print). Also: authoritative PCE
 reference_period reassignment from first-release vintage dates.
 
+## Task 3 — timebase.py + Checkpoint-2 fixes
+
+### TASK 0 — vintage-safe MoM (first_release_mom)  ·  CHECKPOINT 1 APPROVED
+
+Built `first_release_mom` (canonical MoM target): within-vintage rule — for reference
+month t, both level_t and level_{t-1} are read from the single vintage published at
+t's first release (the row whose inclusive window [observed_asof_vintage, vintage_end]
+contains t's first-release vintage). `first_release` (levels) demoted to DIAGNOSTIC with
+a docstring warning; it stays the source of first-release *vintage dates*. 14,346 MoM rows.
+
+Both mandatory tests green (`tests/test_vintage_mom.py`):
+- (a) synthetic 2× re-referencing: within-vintage MoM stays +1.000%/month; naive
+  cross-vintage differencing fabricates −49.5% at the re-referenced month.
+- (b) real: PCEPILFE and CPI SA MoM continuous through their events (no |MoM|>1%).
+
+MoM series around both events (within-vintage vs naive):
+
+PCEPILFE (BEA re-referencing at vintage 2023-09-29 → hits ref 2023-08):
+| ref | within-vintage | naive | note |
+|---|---|---|---|
+| 2023-06 | +0.165% | +0.132% | |
+| 2023-07 | +0.216% | +0.209% | |
+| 2023-08 | **+0.145%** | **−6.966%** | naive artifact; within-vintage clean |
+| 2023-09 | +0.299% | +0.266% | |
+
+CPIAUCSL (February seasonal-factor restatement → hits Jan ref):
+| ref | within-vintage | naive |
+|---|---|---|
+| 2023-12 | +0.303% | +0.303% |
+| 2024-01 | **+0.305%** | +0.270% (3.5bp leak) |
+| 2024-02 | +0.442% | +0.442% |
+
+### Amendment A.1 — omission audit: premise corrected (FLAG)
+
+Checkpoint-1 review assumed the 34 first_release_mom omissions were "one per series at
+its minimum reference period." **That premise is off by 15.** The real, all-principled
+decomposition (asserted by `test_first_release_mom_omissions_are_all_principled`, which
+fails on ANY omission outside these categories):
+
+- **19 series-start** (one per series, no t-1) — as assumed;
+- **14 reference gaps** — t-1 was never released: the **2025 government shutdown** dropped
+  2025-10 for most CPI series, so 2025-11 has no MoM. (Used-cars/new-vehicles were
+  released in Oct-2025, so they are exempt — a nice internal consistency check.)
+- **1 vintage discontinuity** — CPIAUCSL 1970-12, whose earliest ALFRED vintage (1972-07-21,
+  value 119.03 on the old 1957-59=100 base) shares no vintage window with 1970-11.
+  Omitting is correct: no common base to difference across.
+
+19 + 14 + 1 = 34. Every omission is principled; none is a silent bug. The test asserts
+the *principle* (categorised, series-start count == n_series), not the magic number, so
+it stays valid when the DB is rebuilt with post-shutdown data.
+
+### Amendment B — vintage leakage magnitude: why latest-vintage backtests overstate skill
+
+The within-vintage vs naive gap is not academic; it is a direct measure of how much a
+naive (latest-vintage) backtest would cheat:
+
+- **PCE re-referencing (ref 2023-08): 711 bp.** Naive cross-vintage MoM = −6.966% vs
+  within-vintage +0.145%. A latest-vintage backtest would "predict" a catastrophic
+  print that never happened — pure look-ahead from the 2023 BEA base change.
+- **CPI February seasonal restatement (ref 2024-01): 3.5 bp.** Within-vintage +0.305%
+  vs naive +0.270%. Small per month, but it recurs every February across the whole
+  sample and always in the direction of the revision, so a latest-vintage backtest
+  gets a systematic, free "edge" from knowing the future seasonal factors.
+
+Both are leakage a latest-vintage target would silently grant. `docs/sa_floor.md`
+(Session 3A) will cite the 3.5 bp figure as part of the achievable-accuracy floor.
+
+### TASK 1–3 — timebase.py + adversarial/crosswalk tests  ·  DONE
+
+- **`src/nowcast/timebase.py`** — the only sanctioned read path. `asof(series_id, ft)`,
+  `asof_mom(series_id, ft)`, `asof_mom_for_ref(series_id, ref, ft)` with `NotYetReleased`
+  / `NoMomExists` / `UnknownSeries`. Observable datetime = first-release vintage date @
+  release time (release_calendar join for the time, 08:30 ET convention fallback);
+  strictly-before semantics. Crosswalk resolves mapping.yaml ids ↔ ALFRED alias ids.
+  PCE reference periods come from the vintages, never release_calendar's provisional
+  month-1 assignment.
+- **`tests/test_timebase.py`** (adversarial, Task 2 + Amendment C): for every print type,
+  a forecast_time between reference-period end and release returns the PRIOR print for
+  asof/asof_mom and raises NotYetReleased for asof_mom_for_ref; exact-release-instant is
+  strictly-before → prior; series-start → NoMomExists (asof_mom_for_ref) / skipped
+  (asof_mom); 50-pair random property sweep asserts asof never leaks a
+  not-yet-released value and always returns the latest observable. **If this file ever
+  fails, the backtest is invalid.**
+- **`tests/test_crosswalk.py`** (Task 3): FRED-alias latest values vs BLS-official series
+  (BLS public API — the authoritative source; the raw CU ids are not in FRED) match to
+  0.01 index points over trailing 3 years. Current max|diff| = 0.0. Fails loudly by pair.
+
+### TASK 4 — housekeeping · DONE
+
+- **naru pinned** to exact commit `35a26120db5db7c06e8e7e4d7238d9a2b5211311` via a git
+  source in pyproject (non-editable, side-stepping naru#5). **ACTION FOR ASH: push the
+  naru branch `feat/csv-tsv-source-reader`; once on GitHub, swap the source URL from
+  file:// to the GitHub remote (same rev).**
+- **SQLite lock hang diagnosed** (not just worked around) — root cause = default
+  busy_timeout 0 + rollback-journal mode + a killed background process holding the lock;
+  naru closes its own connections so it's not leaking, but is fragile under concurrency.
+  Written up as **naru#6** (desired: WAL + busy_timeout + context-managed sessions).
+  Minimal marked shim applied: `src/nowcast/db.connect()` (WAL + busy_timeout + always
+  closes); timebase/views/provenance all route through it; WAL now persistent on the DB.
+
+### Definition of done
+pytest green (38, incl. adversarial + synthetic re-referencing + delta audit + crosswalk);
+first_release_mom documented as the canonical MoM target; crosswalk test in the suite;
+naru pinned; lock diagnosis written. No open questions blocking Session 2B.
+
 ## Environment notes (this session)
 - naru consumed **non-editable** (naru#5 shadow bug). After naru changes:
   `uv sync --reinstall-package naru-data`; if nowcast import breaks, `uv sync --reinstall`.

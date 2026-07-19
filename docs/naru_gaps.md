@@ -159,6 +159,40 @@ editable installs resolves to src.
 *and* `_examples`, so there is no shadow. Trade-off: naru changes require
 `uv sync --reinstall-package naru-data` to take effect (documented in pyproject).
 
+## naru#6 — Connection lifecycle: no WAL, no busy_timeout, no session context manager  ·  severity: LOW-MEDIUM (workaround in place)
+
+**Symptom (Session 2A).** Repeated "database is locked" errors and multi-minute
+hangs when running DB scripts, sometimes leaving a python process holding the file
+lock until killed (`lsof -t data/db/nowcast.sqlite`).
+
+**Diagnosis (per rule 3 — root cause, not just the workaround).**
+- naru's `runtime.run()` *does* close its connection on every path (`conn.close()`),
+  so leaked connections are NOT primarily naru's fault. The hangs came from a
+  combination:
+  1. **No busy_timeout.** naru opens `sqlite3.connect(db_path)` with SQLite's default
+     `busy_timeout = 0`: any lock contention raises "database is locked" *immediately*
+     instead of waiting.
+  2. **Rollback-journal mode (not WAL).** Under the default journal mode a reader and a
+     writer block each other; a single long-running query (our correlated-subquery
+     view before it was indexed) or a stuck process holds a lock the whole time.
+  3. Our own early inline scripts opened connections without a context manager; when a
+     slow `uv run` auto-backgrounded and was killed mid-statement, the OS held the lock
+     until process death.
+- So: not a naru bug per se, but naru is **fragile under concurrency** and a more
+  robust default would have prevented the contention from ever surfacing as a hard
+  error/hang.
+
+**Desired API (naru).** A connection/session helper used by the runtime and query
+paths that (a) enables `PRAGMA journal_mode=WAL` by default (readers never block the
+writer), (b) sets a configurable `PRAGMA busy_timeout` (wait, don't error), and (c) is
+a context manager so the connection is always closed. e.g.
+`with naru.store.session(db_path) as conn: ...`.
+
+**Local shim (this repo).** `# SHIM: pending naru#6` — `src/nowcast/db.connect()`:
+a context manager that sets WAL + a 30s busy_timeout and guarantees close. All
+repo-side DB access (timebase, views, provenance) goes through it. WAL is now enabled
+persistently on nowcast.sqlite.
+
 ## Status log
 
 | date | gap | state |
@@ -167,4 +201,5 @@ editable installs resolves to src.
 | 2026-07-19 | naru#2 | logged; sidecar shim planned |
 | 2026-07-19 | naru#3 | logged; handled downstream in timebase.py by design |
 | 2026-07-19 | naru#4 | logged; deferred, not needed in 2A |
-| 2026-07-19 | naru#5 | workaround: nowcast installs naru non-editable; proper fix is a naru packaging change |
+| 2026-07-19 | naru#5 | workaround: nowcast installs naru non-editable (pinned git rev 35a2612); proper fix is a naru packaging change |
+| 2026-07-19 | naru#6 | shim: src/nowcast/db.connect (WAL + busy_timeout + context manager); proper fix is WAL/timeout/session defaults in naru |

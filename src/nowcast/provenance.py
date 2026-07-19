@@ -18,8 +18,9 @@ from __future__ import annotations
 
 import hashlib
 import json
-import sqlite3
 from pathlib import Path
+
+from nowcast import db
 
 _DDL = """
 CREATE TABLE IF NOT EXISTS meta_fetch_provenance (
@@ -50,8 +51,7 @@ def record_fetch_provenance(
     records = json.loads(Path(provenance_json).read_text())
     artifact_sha = hashlib.sha256(Path(ingested_file).read_bytes()).hexdigest()
 
-    conn = sqlite3.connect(db_path)
-    try:
+    with db.connect(db_path) as conn:
         conn.executescript(_DDL)
         rows = [
             (
@@ -76,5 +76,3 @@ def record_fetch_provenance(
         )
         conn.commit()
         return len(rows)
-    finally:
-        conn.close()

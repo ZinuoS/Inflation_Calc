@@ -15,13 +15,15 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-# naru is installed NON-editable from the local clone. Editable install is
-# broken by naru's own packaging (it force-includes examples into naru/_examples,
-# which creates a site-packages/naru/ dir that shadows the editable src -- logged
-# as naru#5 in docs/naru_gaps.md). A full wheel unpack carries the real modules
-# AND the examples, so import works. After changing naru, refresh with:
-#   uv sync --reinstall-package naru-data
-naru-data = { path = "/Users/zinuoshi/naru", editable = false }
+# naru is pinned to an EXACT commit for reproducibility (a path/branch install
+# builds from the working tree, which is not reproducible). Installed non-editable
+# from a local git source: a full wheel unpack carries the real modules AND the
+# force-included examples, side-stepping the editable-install shadow bug (naru#5).
+# commit 35a2612 = the CSV/TSV source reader (naru#1). When naru advances, bump rev
+# and run: uv sync --reinstall-package naru-data.
+# ACTION FOR ASH: push branch feat/csv-tsv-source-reader and, once on GitHub, swap
+# this to git = "https://github.com/ZinuoS/naru-data" with the same rev.
+naru-data = { git = "file:///Users/zinuoshi/naru", rev = "35a26120db5db7c06e8e7e4d7238d9a2b5211311" }
 
 [build-system]
 requires = ["hatchling"]
