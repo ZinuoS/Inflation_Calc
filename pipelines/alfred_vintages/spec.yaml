@@ -1,0 +1,57 @@
+# alfred_vintages pipeline spec (Session 2A, Task 2)
+# Point-in-time vintages from ALFRED (FRED observations with a full realtime span).
+# One API call per series returns every observation tagged with the vintage window
+# [realtime_start, realtime_end) during which it was the current value. The earliest
+# realtime_start per (series, reference_period) is the first release -- the value the
+# market traded (research plan D3).
+
+source: alfred_observations
+
+api:
+  base_url: https://api.stlouisfed.org/fred/series/observations
+  file_type: json
+  realtime_start: "1776-07-04"   # ALFRED epoch -> full vintage history
+  realtime_end: "9999-12-31"
+
+# Series come from mapping.yaml (targets + major CPI components); scope approved at
+# CHECKPOINT 2 pre-pull as "targets + major components". IMPORTANT (data finding):
+# the raw BLS ids for CPI major groups (CUSR0000SAF, ...SAH, ...) exist in FRED but
+# are NOT archived in ALFRED (no vintages). FRED's alias ids (CPIFABSL, CPIHOSSL, ...)
+# ARE archived, so we use those. mapping_series_id records the corresponding
+# mapping.yaml item series so vintage rows join back to the component map.
+series:
+  # --- targets (research plan D2) ---
+  - {alfred_id: CPIAUCSL,        role: headline_cpi_sa,               mapping_series_id: CUSR0000SA0}
+  - {alfred_id: CPILFESL,        role: core_cpi_sa,                   mapping_series_id: CUSR0000SA0L1E}
+  - {alfred_id: PPIFIS,          role: ppi_final_demand_sa,           mapping_series_id: WPSFD4}
+  - {alfred_id: PCEPI,           role: headline_pce,                  mapping_series_id: null}
+  - {alfred_id: PCEPILFE,        role: core_pce,                      mapping_series_id: null}
+  # --- CPI major groups (SA), via ALFRED-archived FRED alias ids ---
+  - {alfred_id: CPIFABSL,        role: cpi_food_and_beverages,        mapping_series_id: CUSR0000SAF}
+  - {alfred_id: CPIHOSSL,        role: cpi_housing,                   mapping_series_id: CUSR0000SAH}
+  - {alfred_id: CPIAPPSL,        role: cpi_apparel,                   mapping_series_id: CUSR0000SAA}
+  - {alfred_id: CPITRNSL,        role: cpi_transportation,            mapping_series_id: CUSR0000SAT}
+  - {alfred_id: CPIMEDSL,        role: cpi_medical_care,              mapping_series_id: CUSR0000SAM}
+  - {alfred_id: CPIRECSL,        role: cpi_recreation,                mapping_series_id: CUSR0000SAR}
+  - {alfred_id: CPIEDUSL,        role: cpi_education_and_communication, mapping_series_id: CUSR0000SAE}
+  - {alfred_id: CPIOGSSL,        role: cpi_other_goods_and_services,  mapping_series_id: CUSR0000SAG}
+  # --- key strata / aggregates ---
+  - {alfred_id: CPIUFDSL,        role: cpi_food,                      mapping_series_id: CUSR0000SAF1}
+  - {alfred_id: CPIENGSL,        role: cpi_energy,                    mapping_series_id: CUSR0000SA0E}
+  - {alfred_id: CUSR0000SAH1,    role: cpi_shelter,                   mapping_series_id: CUSR0000SAH1}
+  - {alfred_id: CUSR0000SEHA,    role: cpi_rent_primary,              mapping_series_id: CUSR0000SEHA}
+  - {alfred_id: CUSR0000SETA01,  role: cpi_new_vehicles,              mapping_series_id: CUSR0000SETA01}
+  - {alfred_id: CUSR0000SETA02,  role: cpi_used_cars_and_trucks,      mapping_series_id: CUSR0000SETA02}
+
+output_csv_columns:              # canonical staged CSV -> naru artifact input
+  - series_id                    # ALFRED series id (the vintage identifier)
+  - mapping_series_id            # corresponding mapping.yaml series (join key); may be empty
+  - reference_period             # observation date (first of month), YYYY-MM-DD
+  - observed_asof_vintage        # realtime_start = vintage date the value became current
+  - vintage_end                  # realtime_end of that vintage window
+  - value                        # index level; blank if ALFRED reports "."
+
+paths:
+  raw_dir: data/raw/alfred_vintages
+  staged_csv: normalized.csv
+  provenance: provenance.json

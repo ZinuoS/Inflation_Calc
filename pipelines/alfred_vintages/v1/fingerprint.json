@@ -1,0 +1,13 @@
+{
+  "sheet": "alfred_vintages",
+  "sheet_index": 0,
+  "header_row": 1,
+  "columns": [
+    {"name": "series_id", "type": "string", "strictness": "strict"},
+    {"name": "mapping_series_id", "type": "string", "strictness": "strict"},
+    {"name": "reference_period", "type": "string", "strictness": "strict"},
+    {"name": "observed_asof_vintage", "type": "string", "strictness": "strict"},
+    {"name": "vintage_end", "type": "string", "strictness": "strict"},
+    {"name": "value", "type": "string", "strictness": "strict"}
+  ]
+}

@@ -75,6 +75,57 @@ sequential heuristic, or reverse the task order. release_calendar's firewall val
 Imposed 08:30 ET for all rows (release_time_basis = convention_0830ET); override table
 empty pending spot-check. Spot-check vs BLS for 3 recent prints to be done before freeze.
 
-### Not yet built (blocked on the decision)
+### Not yet built (blocked on the decision) — NOW BUILT (see above)
 naru artifact (v1/), the load into nowcast.sqlite, meta_fetch_provenance table,
 golden fixture, validations (one-per-print-per-ref-month; CPI precedes PCE).
+
+## CHECKPOINT 2 — alfred_vintages (Task 2)  ·  BUILT & LOADED
+
+Scope (approved): targets + major CPI components. **19 series**, ALFRED full realtime
+span. Data finding: raw BLS major-group ids (CUSR0000SAF …) are NOT archived in ALFRED;
+used FRED alias ids (CPIFABSL, CPIHOSSL, …), with `mapping_series_id` carrying the
+crosswalk back to mapping.yaml.
+
+**Loaded:** `observations` table, run_id=2, **47,945 vintage rows** (blank "." obs
+dropped at edge), all validations PASS. Key (series_id, reference_period,
+observed_asof_vintage) — distinct value per vintage, none supersedes another.
+Views `first_release` (14,380 rows) + `latest_value` materialized by
+`src/nowcast/views.py` (+ an index on the natural key; the correlated view query is
+O(n²) without it). Provenance recorded (19 rows). Golden test passes; offline view
+tests green (`tests/test_views.py`). Full suite 25 green.
+
+### Vintage counts per series (rows / reference range)
+CPIAUCSL 3360 (1947–2026), CPILFESL 2258 (1957–), PPIFIS 792 (2009-11–, PPI-FD start),
+PCEPI 8637 · PCEPILFE 8675 (1959–, **monthly-revised → deep vintage history**),
+CPIFABSL 1703, CPIHOSSL 1713, CPIAPPSL 1948, CPITRNSL 1973, CPIMEDSL 1967,
+CPIRECSL 1473 (1993–), CPIEDUSL 1377 (1993–), CPIOGSSL 1578, CPIUFDSL 2534,
+CPIENGSL 2685, CUSR0000SAH1 1773 (shelter), CUSR0000SEHA 1438 (rent), SETA01 1780,
+SETA02 1695 (used cars).
+
+### Spot-check: first release vs latest (6 known revision episodes)
+| series | ref | first (vintage) | latest (vintage) | rev |
+|---|---|---|---|---|
+| CPIAUCSL | 2020-01 | 258.820 @2020-02-13 | 259.127 @2025-02-12 | +0.307 |
+| CPIAUCSL | 2022-06 | 295.328 @2022-07-13 | 294.957 @2026-02-13 | −0.371 |
+| CPILFESL | 2021-06 | 278.140 @2021-07-13 | 277.651 @2026-02-13 | −0.489 |
+| CUSR0000SETA02 | 2021-06 | 197.227 @2021-07-13 | 194.846 @2024-02-09 | −2.381 |
+| PCEPILFE | 2021-06 | 117.275 @2021-07-30 | 108.603 @2025-09-26 | −8.672* |
+| PCEPILFE | 2025-01 | 124.334 @2025-02-28 | 124.587 @2025-09-26 | +0.253 |
+
+\*PCE level shift is a BEA re-referencing (base-year change), not a data error; MoM
+surprises (our target) are base-invariant. **Every first_release_vintage matches the
+release_calendar release date** — the firewall cross-validates (CPI 2020-01 → 2020-02-13;
+PCE 2021-06 → 2021-07-30).
+
+### Not yet built (Task 3, next)
+`src/nowcast/timebase.py` — `asof(series_id, forecast_time)` joining release_calendar +
+first_release, with the adversarial leakage test (reading between reference-period end
+and release_datetime must return the PRIOR print). Also: authoritative PCE
+reference_period reassignment from first-release vintage dates.
+
+## Environment notes (this session)
+- naru consumed **non-editable** (naru#5 shadow bug). After naru changes:
+  `uv sync --reinstall-package naru-data`; if nowcast import breaks, `uv sync --reinstall`.
+- For nowcast-importing scripts, `PYTHONPATH=src .venv/bin/python` is the reliable
+  invocation (uv's editable .pth for nowcast is flaky, and `uv run` auto-sync can hang
+  holding the DB lock). naru CLI (`uv run naru …`) is fine.

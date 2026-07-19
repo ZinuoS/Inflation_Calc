@@ -1,0 +1,23 @@
+# Output contract for the bitemporal observations table.
+row_count:
+  min: 40000            # ~47.9k rows across 19 series; guards a truncated pull
+
+key_uniqueness:
+  - columns: [series_id, reference_period, observed_asof_vintage]
+
+null_policy:
+  - column: series_id
+    nulls_allowed: false
+  - column: reference_period
+    nulls_allowed: false
+  - column: observed_asof_vintage
+    nulls_allowed: false
+  - column: vintage_end
+    nulls_allowed: false
+  - column: value
+    nulls_allowed: false     # blank ("." ) observations are dropped at the edge
+
+value_ranges:
+  - column: value
+    min: 0.0                 # CPI/PPI/PCE index levels are strictly positive
+    max: 100000.0

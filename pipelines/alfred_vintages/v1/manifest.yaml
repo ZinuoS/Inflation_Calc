@@ -1,0 +1,6 @@
+name: alfred_vintages
+version: v1
+sheet: alfred_vintages
+target_table: observations
+key: [series_id, reference_period, observed_asof_vintage]
+source_format: csv
