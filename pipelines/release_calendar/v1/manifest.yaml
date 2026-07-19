@@ -1,0 +1,6 @@
+name: release_calendar
+version: v1
+sheet: release_calendar
+target_table: release_calendar
+key: [print, reference_period]
+source_format: csv

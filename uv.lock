@@ -1283,7 +1283,7 @@ wheels = [
 [[package]]
 name = "naru-data"
 version = "0.1.0"
-source = { editable = "/Users/zinuoshi/naru" }
+source = { directory = "/Users/zinuoshi/naru" }
 dependencies = [
     { name = "openpyxl" },
     { name = "pandas" },
@@ -1426,7 +1426,7 @@ dependencies = [
 requires-dist = [
     { name = "jupyter", specifier = "==1.1.1" },
     { name = "matplotlib", specifier = "==3.11.1" },
-    { name = "naru-data", editable = "/Users/zinuoshi/naru" },
+    { name = "naru-data", directory = "/Users/zinuoshi/naru" },
     { name = "numpy", specifier = "==2.5.1" },
     { name = "pandas", specifier = "==3.0.3" },
     { name = "pytest", specifier = "==9.1.1" },

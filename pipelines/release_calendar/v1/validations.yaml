@@ -1,0 +1,25 @@
+# Output contract. Cross-row semantic checks the engine can't express
+# (CPI precedes PCE for the same reference month; one-per-print-per-ref-month is
+# covered below by key_uniqueness) live in tests/test_release_calendar.py and,
+# for the CPI-before-PCE ordering, in timebase.py once PCE reference_period is
+# authoritative (Task 3 -- PCE rows are provisional until then).
+
+row_count:
+  min: 1500          # ~1691 rows across 4 prints x ~36 years; guards a truncated pull
+
+key_uniqueness:
+  - columns: [print, reference_period]   # exactly one (first) release per print per ref month
+
+null_policy:
+  - column: print
+    nulls_allowed: false
+  - column: reference_period
+    nulls_allowed: false
+  - column: reference_period_basis
+    nulls_allowed: false
+  - column: release_date
+    nulls_allowed: false
+  - column: release_datetime_et
+    nulls_allowed: false
+  - column: source_url
+    nulls_allowed: false

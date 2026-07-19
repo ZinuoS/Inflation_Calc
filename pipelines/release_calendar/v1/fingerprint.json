@@ -1,0 +1,14 @@
+{
+  "sheet": "release_calendar",
+  "sheet_index": 0,
+  "header_row": 1,
+  "columns": [
+    {"name": "print", "type": "string", "strictness": "strict"},
+    {"name": "reference_period", "type": "string", "strictness": "strict"},
+    {"name": "reference_period_basis", "type": "string", "strictness": "strict"},
+    {"name": "release_date", "type": "string", "strictness": "strict"},
+    {"name": "release_datetime_et", "type": "string", "strictness": "strict"},
+    {"name": "release_time_basis", "type": "string", "strictness": "strict"},
+    {"name": "source_url", "type": "string", "strictness": "strict"}
+  ]
+}

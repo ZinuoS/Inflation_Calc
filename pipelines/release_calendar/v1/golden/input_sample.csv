@@ -1,0 +1,5 @@
+print,reference_period,reference_period_basis,release_date,release_datetime_et,release_time_basis,source_url
+CPI,1989-12-01,release_month_minus_1,1990-01-18,1990-01-18T08:30:00,convention_0830ET,https://api.stlouisfed.org/fred/release/dates?release_id=10&api_key=REDACTED
+PPI,1989-12-01,release_month_minus_1,1990-01-12,1990-01-12T08:30:00,convention_0830ET,https://api.stlouisfed.org/fred/release/dates?release_id=46&api_key=REDACTED
+Employment,1989-12-01,release_month_minus_1,1990-01-05,1990-01-05T08:30:00,convention_0830ET,https://api.stlouisfed.org/fred/release/dates?release_id=50&api_key=REDACTED
+PCE,1989-12-01,provisional_pending_vintage,1990-01-29,1990-01-29T08:30:00,convention_0830ET,https://api.stlouisfed.org/fred/release/dates?release_id=54&api_key=REDACTED

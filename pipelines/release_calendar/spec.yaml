@@ -1,0 +1,62 @@
+# release_calendar pipeline spec (Session 2A, Task 1)
+# Deterministic config for the edge fetcher (fetch.py). The naru artifact in
+# v1/ does the governed parse->validate->load; this file declares the fetch.
+
+source: fred_release_dates
+description: >
+  Historical + future scheduled release dates for CPI, PPI, PCE (Personal Income
+  & Outlays), and the Employment Situation, from the FRED release/dates API. This
+  table is the leakage firewall (research plan 2.3): every backtest row learns
+  what was knowable at forecast time from here.
+
+api:
+  base_url: https://api.stlouisfed.org/fred/release/dates
+  file_type: json
+  # api_key injected from env FRED_API_KEY at fetch time; NEVER stored/committed.
+  realtime_start: "1990-01-01"   # deepest clean history; >> the >=10y requirement
+  realtime_end: "9999-12-31"     # include future scheduled releases
+  include_release_dates_with_no_data: true
+  sort_order: asc
+  limit: 10000                   # FRED per-request max; 463 rows/release fits
+
+releases:                        # print label -> FRED release_id
+  CPI: 10
+  PPI: 46
+  Employment: 50
+  PCE: 54                        # BEA "Personal Income and Outlays" (contains PCE)
+
+# reference-period mapping: a monthly print released in calendar month X covers
+# reference month X-1 (all four are monthly with a ~1-month publication lag).
+# Clean for CPI/PPI/Employment; unreliable for PCE (BEA P&O releases slip across
+# the month boundary). PCE rows are therefore marked provisional and timebase.py
+# authoritatively reassigns/validates reference_period against ALFRED first-release
+# vintage dates (Task 2-3) -- where reference_period is definitionally correct.
+reference_period_rule: release_month_minus_1
+provisional_reference_prints: [PCE]
+
+# collision policy: if >1 release date maps to the same (print, reference_month),
+# the EARLIEST is the first-release datetime (what the market traded); every
+# collision is logged to exceptions, never smoothed (research plan: log, don't pad).
+on_reference_collision: keep_earliest_log_rest
+
+# release time is NOT provided by this endpoint; imposed by BLS/BEA convention.
+release_time:
+  convention_et: "08:30:00"
+  tz: America/New_York           # DST handled downstream in timebase.py
+  overrides: []                  # (reference_period, print) -> HH:MM:SS, when a
+                                 # spot-check finds a documented exception. Empty
+                                 # until evidence; do not invent.
+
+output_csv_columns:              # canonical staged CSV -> naru artifact input
+  - print                        # CPI | PPI | PCE | Employment
+  - reference_period             # first day of reference month, YYYY-MM-DD
+  - reference_period_basis       # release_month_minus_1 | provisional_pending_vintage
+  - release_date                 # actual release date, YYYY-MM-DD
+  - release_datetime_et          # release_date + convention_et, ISO local ET
+  - release_time_basis           # convention_0830ET | override | sourced
+  - source_url                   # FRED API url, api_key REDACTED
+
+paths:
+  raw_dir: data/raw/release_calendar          # {YYYY-MM-DD}/{print}.json (immutable)
+  staged_csv: normalized.csv                  # derived from json, co-located
+  provenance: provenance.json                 # url(redacted), retrieved_at, sha256

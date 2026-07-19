@@ -14,5 +14,10 @@ __pycache__/
 .ipynb_checkpoints/
 .ruff_cache/
 
+# secrets: API keys never enter git (CLAUDE.md rule 4). Loaded at fetch time
+# from a gitignored .env; pipelines read os.environ, never a hardcoded value.
+.env
+*.key
+
 # OS
 .DS_Store

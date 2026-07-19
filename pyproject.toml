@@ -15,9 +15,13 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-# naru is under active local development; this project is its torture test
-# (CLAUDE.md rule 3), so it installs editable from the local clone.
-naru-data = { path = "/Users/zinuoshi/naru", editable = true }
+# naru is installed NON-editable from the local clone. Editable install is
+# broken by naru's own packaging (it force-includes examples into naru/_examples,
+# which creates a site-packages/naru/ dir that shadows the editable src -- logged
+# as naru#5 in docs/naru_gaps.md). A full wheel unpack carries the real modules
+# AND the examples, so import works. After changing naru, refresh with:
+#   uv sync --reinstall-package naru-data
+naru-data = { path = "/Users/zinuoshi/naru", editable = false }
 
 [build-system]
 requires = ["hatchling"]
