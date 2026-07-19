@@ -67,3 +67,31 @@ def test_eia_heating_oil_parse():
     rows = mod.to_staged(obs, cfg)
     assert rows and rows[0]["frequency"] == cfg["frequency"]
     assert rows[0]["vintage_status"] == "unrevised"
+
+
+# ---------- atlanta_fed_wage (FRED-delivered, monitor) ----------
+
+def test_atlanta_fed_wage_parse():
+    import json
+
+    mod, cfg = _load_source("atlanta_fed_wage")
+    raw = json.loads((PIPELINES / "atlanta_fed_wage" / "golden" / "raw_sample.json").read_bytes())
+    obs = [(o["date"], o["value"]) for o in raw["observations"] if o["value"] != "."]
+    rows = mod.to_staged(obs, cfg, observed_date="2026-07-19")
+    assert len(rows) == 2
+    assert rows[0]["frequency"] == "monthly"
+    assert rows[0]["vintage_status"] == "revised_latest_only"
+    assert rows[0]["observed_date"] == "2026-07-19"  # restated -> pull date, not period
+
+
+# ---------- indeed_wage (long CSV, US filter, monitor) ----------
+
+def test_indeed_wage_parse_filters_us_and_parses_month():
+    mod, cfg = _load_source("indeed_wage")
+    raw = (PIPELINES / "indeed_wage" / "golden" / "raw_sample.csv").read_bytes()
+    rows = mod.parse(raw, cfg, observed_date="2026-07-19")
+    assert len(rows) == 2  # only the US rows, not Canada
+    assert {r["series_key"] for r in rows} == {"US_posted_wage_growth_yoy"}
+    assert rows[0]["period"] == "2019-01-01"  # "Jan-19" -> first-of-month
+    assert rows[0]["value"] == "0.03626943"
+    assert rows[0]["vintage_status"] == "revised_latest_only"

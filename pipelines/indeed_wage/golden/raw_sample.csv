@@ -1,0 +1,5 @@
+jobcountry,country,month,n_obs,posted_wage_growth_yoy,posted_wage_growth_yoy_3moavg
+CA,Canada,Jan-19,33199,0.020206606,NA
+CA,Canada,Feb-19,31114,0.020062619,NA
+US,United States,Jan-19,154753,0.03626943,NA
+US,United States,Feb-19,151799,0.035714286,NA

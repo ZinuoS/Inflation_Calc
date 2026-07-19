@@ -1,0 +1,13 @@
+# atlanta_fed_wage pipeline spec (Session 2B, Group A) — MONITOR source
+source: atlanta_fed_wage
+description: >
+  Atlanta Fed Wage Growth Tracker (unweighted median hourly wage growth, overall),
+  via FRED FRBATLWGTUMHWGO. Monitor signal for Services less energy services; a
+  wage-growth RATE, not a price proxy.
+vintage_status: revised_latest_only
+fred_series_id: FRBATLWGTUMHWGO
+frequency: monthly
+series_key: US_overall_median
+role: monitor
+mapped_aggregate: SASLE          # Services less energy services (monitor)
+proxy_history_start_planned: 1997

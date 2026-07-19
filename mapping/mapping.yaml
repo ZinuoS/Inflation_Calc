@@ -67,6 +67,15 @@ cpi:
     - indeed_wage_tracker (2019)
     - atlanta_fed_wage_tracker (1997)
     note: wage trackers are cost-pressure monitors, never next-print features
+    monitor_ingested:
+      atlanta_fed_wage:
+        vintage_status: revised_latest_only
+        history_actual: 1997-01
+        fred: FRBATLWGTUMHWGO
+      indeed_wage:
+        vintage_status: revised_latest_only
+        history_actual: 2019-01
+        note: posted wage growth YoY; git history = point_in_time archive (future)
   items:
   - name: Food and beverages
     item_code: SAF

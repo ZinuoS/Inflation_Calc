@@ -17,7 +17,35 @@
   parse test. This avoids 7× duplication of identical artifacts. **OK to proceed this
   way, or do you want a literal per-source naru artifact each?**
 
-## CHECKPOINT A — Group A ingestion  ·  PARTIAL (3 of 7 built + infra)  ·  AWAITING GO
+## Decisions (approved at first Group-A checkpoint)
+1. Keep the shared proxy_loader artifact (not per-source naru artifacts).
+2. Build discovery sources now (apartment_list/indeed/atlanta_fed); defer nadac/usda
+   index construction.
+
+## CHECKPOINT A — Group A ingestion  ·  5 built + infra  ·  RESOLVED
+
+Final loaded proxy_observations:
+
+| source | maps to (weight) | rows | range | freq | vintage_status |
+|---|---|---|---|---|---|
+| zori | Rent + OER (33%) | 138 | 2015-01→2026-06 | monthly | revised_latest_only |
+| eia_gasoline | Gasoline (2.90) | 1868 | 1990-08→2026-07 | weekly | unrevised |
+| eia_heating_oil | Fuel oil (0.08) | 10074 | 1986-06→2026-07 | daily | unrevised (spot≠retail) |
+| atlanta_fed_wage | Services monitor | 353 | 1997-01→2026-06 | monthly | revised_latest_only |
+| indeed_wage | Services monitor | 90 | 2019-01→2026-06 | monthly | revised_latest_only |
+
+Atlanta Fed + Indeed resolved via FRED (`FRBATLWGTUMHWGO`) and GitHub
+(`hiring-lab/indeed-wage-tracker`, CC BY 4.0) respectively. Both are MONITOR sources
+(wage-growth rates, not price proxies) — flagged as such in spec + mapping.
+
+**Deferred, documented (not fought):**
+- `apartment_list` (rent backup): licence OK (freely-available research CSV), but the
+  download is behind a JS dropdown (no static URL). ZORI is the primary shelter proxy
+  already ingested, so this backup is low-urgency — add via browser download later.
+- `nadac` (Rx drugs 0.97) + `usda_ams` (food ~2.5): deferred per decision — both need
+  an index built from per-NDC / retail-report micro-data (substantial, modelling-adjacent).
+
+### OLD (superseded) — first partial checkpoint
 
 Amendment 1 (vintage_status) recorded in every spec.yaml + mapping.yaml. All writes via
 db.connect(). Raw pulls immutable under data/raw/{source}/{date}/. Golden parse tests green.

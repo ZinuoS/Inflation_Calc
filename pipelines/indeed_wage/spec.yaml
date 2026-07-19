@@ -1,0 +1,19 @@
+# indeed_wage pipeline spec (Session 2B, Group A) — MONITOR source
+source: indeed_wage
+description: >
+  Indeed Hiring Lab Wage Tracker, US posted wage growth (YoY). Monitor signal for
+  Services less energy services; a YoY rate, not a price proxy.
+vintage_status: revised_latest_only
+url: https://raw.githubusercontent.com/hiring-lab/indeed-wage-tracker/main/posted-wage-growth-by-country.csv
+parse:
+  format: long_csv
+  filter_col: jobcountry
+  filter_value: US
+  month_col: month            # "Jan-19"
+  month_format: "%b-%y"
+  value_col: posted_wage_growth_yoy
+  frequency: monthly
+series_key: US_posted_wage_growth_yoy
+role: monitor
+mapped_aggregate: SASLE
+proxy_history_start_planned: 2019
