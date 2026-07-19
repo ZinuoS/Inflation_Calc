@@ -1,0 +1,13 @@
+# eia_heating_oil pipeline spec (Session 2B, Group A)
+source: eia_heating_oil
+description: >
+  EIA No.2 heating oil NY Harbor daily SPOT price (via FRED DHOILNYH). WEAK
+  wholesale proxy for CPI Fuel oil (retail); see license_note.md caveat. Stored
+  daily; monthly alignment in alignment.py.
+vintage_status: unrevised
+fred_series_id: DHOILNYH
+frequency: daily
+series_key: US_NYH_SPOT
+mapped_strata: [SEHE01]        # Fuel oil (approx)
+proxy_history_start_planned: 1990
+proxy_caveat: wholesale_spot_not_retail

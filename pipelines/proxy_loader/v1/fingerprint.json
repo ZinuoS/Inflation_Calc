@@ -1,0 +1,14 @@
+{
+  "sheet": "proxy",
+  "sheet_index": 0,
+  "header_row": 1,
+  "columns": [
+    {"name": "source", "type": "string", "strictness": "strict"},
+    {"name": "series_key", "type": "string", "strictness": "strict"},
+    {"name": "frequency", "type": "string", "strictness": "strict"},
+    {"name": "period", "type": "string", "strictness": "strict"},
+    {"name": "value", "type": "string", "strictness": "strict"},
+    {"name": "vintage_status", "type": "string", "strictness": "strict"},
+    {"name": "observed_date", "type": "string", "strictness": "strict"}
+  ]
+}

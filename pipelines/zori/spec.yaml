@@ -1,0 +1,23 @@
+# zori pipeline spec (Session 2B, Group A)
+source: zori
+description: >
+  Zillow Observed Rent Index (US national, smoothed, seasonally adjusted). A
+  published-proxy for CPI Rent of primary residence + OER (research plan §1.4).
+
+vintage_status: revised_latest_only   # Amendment 1: history is restated; no archive
+
+url: https://files.zillowstatic.com/research/public_csvs/zori/Metro_zori_uc_sfrcondomfr_sm_sa_month.csv
+
+# deterministic parse rules (no runtime inference)
+parse:
+  format: wide_csv                 # RegionID,SizeRank,RegionName,RegionType,StateName,<YYYY-MM-DD month cols>
+  select_region: United States     # RegionName == this; the national aggregate row
+  region_name_col: RegionName
+  first_value_col_index: 5         # 0-indexed; columns 0..4 are metadata
+  period_from_column_header: true  # each month column header is a month-end date
+  period_normalization: first_of_month   # month-end YYYY-MM-DD -> YYYY-MM-01
+  frequency: monthly
+
+series_key: US
+mapped_strata: [SEHA, SEHC]        # Rent of primary residence, OER
+proxy_history_start_planned: 2015  # verify actual depth on ingest, record in mapping

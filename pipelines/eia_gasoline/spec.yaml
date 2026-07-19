@@ -1,0 +1,14 @@
+# eia_gasoline pipeline spec (Session 2B, Group A)
+source: eia_gasoline
+description: >
+  EIA weekly U.S. regular retail gasoline price (via FRED GASREGW). Published-proxy
+  for CPI Gasoline (all types). Stored weekly; monthly alignment (BLS averaging
+  convention) happens in src/nowcast/alignment.py, not here.
+
+vintage_status: unrevised     # EIA weekly retail prices published final, not restated
+
+fred_series_id: GASREGW
+frequency: weekly
+series_key: US
+mapped_strata: [SETB01]       # Gasoline (all types)
+proxy_history_start_planned: 1993

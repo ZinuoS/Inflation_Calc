@@ -1,0 +1,6 @@
+name: proxy_loader
+version: v1
+sheet: proxy
+target_table: proxy_observations
+key: [source, series_key, period]
+source_format: csv

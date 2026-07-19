@@ -1,0 +1,4 @@
+source,series_key,frequency,period,value,vintage_status,observed_date
+zori,US,monthly,2015-01-01,1169.7142,revised_latest_only,2026-07-19
+zori,US,monthly,2015-02-01,1172.5,revised_latest_only,2026-07-19
+eia_gasoline,US,weekly,2024-01-01,3.089,unrevised,2024-01-08
