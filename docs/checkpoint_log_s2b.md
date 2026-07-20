@@ -303,3 +303,27 @@ exclusions across table: 370 pre_floor + ~12 skip.
 > monitors. Session-4 feature admission therefore starts from a deliberately small, honest
 > base — gasoline in; shelter as a lead/lag study; everything else pending deeper data —
 > which is the correct posture for an anti-leakage nowcast, not a disappointment.
+
+## Part 2 — publication prep · CHECKPOINT 2 (push gated on Ash's go + naru push)
+
+- **P1 data boundary:** `.gitignore` → `data/raw/**` + `data/db/**` (recursive; .gitkeep
+  kept). Audit: no raw data or DB file was ever committed (only small synthetic naru
+  golden parquet). **Manheim golden was the real 78 KB Manheim xlsx → replaced with a
+  5 KB synthetic schema-only fixture AND purged from history** (blob 22ad2b6f unreachable).
+- **P2 secrets:** `.env` never committed; full-history scan for FRED/key-shaped strings =
+  clean. No rotation needed.
+- **P3 history rewrite (git filter-repo):** all 14 Co-Authored-By trailers stripped;
+  Manheim real blob removed. `includeCoAuthoredBy: false` set in Claude settings; new
+  commits carry no trailer. Verified: history has a single author (Zinuo A Shi), 0
+  co-author trailers, 0 "claude" mentions. 56 tests green post-rewrite.
+- **P4/P5:** LICENSE (Apache-2.0), README.md (vintage doctrine + two-repo boundary),
+  docs/PROGRESS.md (honest DONE/PARTIAL/NOT-STARTED).
+- **P6 — BLOCKED:** pyproject still references naru via `file://` because the pinned
+  commit 35a2612 is NOT on github.com/ZinuoS/naru-data (branch never pushed). Per
+  instruction, not shipping a repo with a file:// dependency. **Ash action: push the naru
+  branch; then pyproject → `git = "https://github.com/ZinuoS/naru-data", rev=35a2612`.**
+- **Remote:** filter-repo removed origin (safety after rewrite). Push target undecided
+  (make Inflation_Calc public, or a new public repo) — Ash's call. Force-push required
+  (history rewritten).
+
+NOT PUSHED. Awaiting: (1) naru branch push (unblocks P6), (2) push target + explicit go.
