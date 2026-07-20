@@ -1,8 +1,8 @@
 # data is local-only: raw pulls are immutable and re-fetchable via pipelines,
 # the DB is rebuilt by naru. Directory structure is kept via .gitkeep.
-data/raw/*
+data/raw/**
 !data/raw/.gitkeep
-data/db/*
+data/db/**
 !data/db/.gitkeep
 
 # python
