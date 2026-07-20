@@ -132,3 +132,19 @@ def test_ppi_parse_seasonal_by_prefix_and_drops_invalid():
     assert by["PCU622110622110"]["seasonal"] == "NSA"  # PCU -> NSA
     assert by["WPSFD4"]["period"] == "2024-01-01"
     assert by["WPSFD4"]["source"] == "ppi"
+
+
+def test_official_key_index_created_before_bulk_load(tmp_path):
+    """CARRY 2 / naru#7: a from-scratch rebuild must create the official_current key
+    index BEFORE the bulk load, deterministically (no runbook step). Assert the shim
+    creates the table + key index on a fresh DB."""
+    import sqlite3
+
+    mod, _ = _load_source("bls_cpi_series")
+    db = tmp_path / "fresh.sqlite"
+    mod.ensure_indexed_official_table(db)
+    conn = sqlite3.connect(db)
+    idx = {r[0] for r in conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='official_current'")}
+    conn.close()
+    assert "ix_official_key" in idx  # supersede UPDATE probe is O(log n), not O(n)

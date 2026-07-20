@@ -1,0 +1,19 @@
+# bea_pce_detail pipeline spec (Session 2B, Group C) — DEPENDENCY-BLOCKED
+source: bea_pce_detail
+description: >
+  BEA PCE underlying detail price indexes (NIPA Table 2.4.4U, "Price Indexes for
+  Personal Consumption Expenditures by Type of Product, underlying detail"). The
+  official PCE-component price series against which the CPI/PPI->PCE bridge
+  reconstruction is validated in Session 3B.
+vintage_status: official_current
+methodology_replication_only: true   # 3B PCE-bridge VALIDATION; NEVER a backtest target
+
+api:
+  provider: BEA
+  base_url: https://apps.bea.gov/api/data
+  dataset: NIPA
+  table_name: T20404U            # Table 2.4.4U underlying detail price indexes
+  frequency: M
+  requires_env_key: BEA_API_KEY  # free key, https://apps.bea.gov/api/signup/
+
+status: SKIPPED_pending_key       # see SKIPPED.md

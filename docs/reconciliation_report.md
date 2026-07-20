@@ -4,15 +4,17 @@ Official-side MoM read via `timebase.asof_mom_for_ref` (first-release, within-vi
 
 ## Table (sorted by CPI weight × R²)
 
-| pair | CPI wt | n | skip | beta | R² | quality | optimistic |
-|---|--:|--:|--:|--:|--:|---|:--:|
-| EIA gasoline vs CPI Gasoline (SETB01) | 2.90 | 184 | 1 | +0.810 | 0.746 | stable |  |
-| ZORI vs CPI Shelter (SAH1) | 35.62 | 135 | 2 | +0.089 | 0.031 | unstable | ✓ |
-| ZORI vs CPI OER (SEHC01) | 25.23 | 135 | 2 | +0.045 | 0.010 | unstable | ✓ |
-| ZORI vs CPI Rent of primary residence | 7.84 | 135 | 2 | +0.042 | 0.007 | unstable | ✓ |
-| EIA heating-oil spot vs CPI Energy | 0.08 | 354 | 3 | +0.188 | 0.330 | stable |  |
-| Atlanta Fed wage tracker | 0.00 | 353 | 0 | — | — | monitor | ✓ |
-| Indeed wage tracker | 0.00 | 90 | 0 | — | — | monitor | ✓ |
+`pre_floor` = official reference months excluded for being below the series' vintage_floor (ALFRED bulk-archived, restated-as-first). `skip` = shutdown-gap / series-start / not-yet-released. Both excluded from the regression, never imputed.
+
+| pair | CPI wt | n | skip | pre_floor | beta | R² | quality | optimistic |
+|---|--:|--:|--:|--:|--:|--:|---|:--:|
+| EIA gasoline vs CPI Gasoline (SETB01) | 2.90 | 184 | 1 | 246 | +0.810 | 0.746 | stable |  |
+| ZORI vs CPI Shelter (SAH1) | 35.62 | 135 | 2 | 0 | +0.089 | 0.031 | unstable | ✓ |
+| ZORI vs CPI OER (SEHC01) | 25.23 | 135 | 2 | 0 | +0.045 | 0.010 | unstable | ✓ |
+| ZORI vs CPI Rent of primary residence | 7.84 | 135 | 2 | 0 | +0.042 | 0.007 | unstable | ✓ |
+| EIA heating-oil spot vs CPI Energy | 0.08 | 354 | 3 | 124 | +0.188 | 0.330 | stable |  |
+| Atlanta Fed wage tracker | 0.00 | 353 | 0 | 0 | — | — | monitor | ✓ |
+| Indeed wage tracker | 0.00 | 90 | 0 | 0 | — | — | monitor | ✓ |
 
 **Optimism-flagged pairs (proxy vintage unavailable): 5**
 

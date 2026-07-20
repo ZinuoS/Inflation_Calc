@@ -50,6 +50,31 @@ def parse_flat(text: str, codes: set[str], spec: dict, observed_date: str) -> li
     return rows
 
 
+def ensure_indexed_official_table(db_path) -> None:
+    """# SHIM: pending naru#7 -- naru's per-row supersede UPDATE has no key index, so
+    a from-scratch bulk load of official_current (~268k rows) is O(n^2) and never
+    finishes. Pre-create the naru final table AND its (series_id, period) key index
+    here, so the subsequent naru run loads into an already-indexed table in seconds.
+    Idempotent (CREATE ... IF NOT EXISTS); makes a rebuild deterministic with no
+    runbook step."""
+    from naru import store
+    from naru.artifact import load_artifact
+
+    from nowcast import db
+
+    art = load_artifact(REPO / "pipelines" / "official_loader" / "v1")
+    with db.connect(db_path) as conn:
+        store.create_final_table(conn, art.manifest.target_table, art.target_row)
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS ix_official_key ON official_current(series_id, period)"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS ix_official_active "
+            "ON official_current(series_id, _superseded_by_run_id)"
+        )
+        conn.commit()
+
+
 def fetch(as_of: str | None = None) -> Path:
     spec = yaml.safe_load((PIPE / "spec.yaml").read_text())
     as_of = as_of or dt.date.today().isoformat()
@@ -89,6 +114,7 @@ if __name__ == "__main__":
     staged, prov, as_of = fetch(sys.argv[1] if len(sys.argv) > 1 else None)
     from naru.runtime import run as naru_run
     from nowcast.provenance import record_fetch_provenance
+    ensure_indexed_official_table(REPO / "data/db/nowcast.sqlite")  # SHIM naru#7, before bulk load
     res = naru_run(artifact_path=REPO/"pipelines/official_loader/v1", input_path=staged,
                    db_path=REPO/"data/db/nowcast.sqlite", raw_dir=REPO/"data/db/naru_raw",
                    as_of=dt.date.fromisoformat(as_of))

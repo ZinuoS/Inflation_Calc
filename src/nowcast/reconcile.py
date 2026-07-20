@@ -200,13 +200,17 @@ def write_report(results: list[Result], path) -> None:
         "",
         "## Table (sorted by CPI weight × R²)",
         "",
-        "| pair | CPI wt | n | skip | beta | R² | quality | optimistic |",
-        "|---|--:|--:|--:|--:|--:|---|:--:|",
+        "`pre_floor` = official reference months excluded for being below the series' "
+        "vintage_floor (ALFRED bulk-archived, restated-as-first). `skip` = shutdown-gap / "
+        "series-start / not-yet-released. Both excluded from the regression, never imputed.",
+        "",
+        "| pair | CPI wt | n | skip | pre_floor | beta | R² | quality | optimistic |",
+        "|---|--:|--:|--:|--:|--:|--:|---|:--:|",
     ]
     for r in results:
         lines.append(
             f"| {r.label} | {r.cpi_weight:.2f} | {r.n_overlap} | {r.skipped_months} | "
-            f"{_fmt(r.beta)} | {_fmt(r.r2, '.3f')} | {r.proxy_quality} | "
+            f"{r.pre_floor_months} | {_fmt(r.beta)} | {_fmt(r.r2, '.3f')} | {r.proxy_quality} | "
             f"{'✓' if r.optimistic else ''} |"
         )
     lines += ["", f"**Optimism-flagged pairs (proxy vintage unavailable): {len(optimistic)}**", ""]
