@@ -1,0 +1,29 @@
+# bls_cpi_series pipeline spec (Session 2B, Group C)
+source: bls_cpi
+description: >
+  Official CPI component series (SA=CUSR0000*, NSA=CUUR0000*) for every mapping.yaml
+  item code, from BLS bulk flat files. For methodology replication in 3A/3B only.
+vintage_status: official_current
+methodology_replication_only: true   # NEVER a backtest target (those use ALFRED vintages)
+
+base_url: https://download.bls.gov/pub/time.series/cu/
+files:                               # US-city-average component + aggregate files
+  - cu.data.1.AllItems
+  - cu.data.2.Summaries
+  - cu.data.11.USFoodBeverage
+  - cu.data.12.USHousing
+  - cu.data.13.USApparel
+  - cu.data.14.USTransportation
+  - cu.data.15.USMedical
+  - cu.data.16.USRecreation
+  - cu.data.17.USEducationAndCommunication
+  - cu.data.18.USOtherGoodsAndServices
+  - cu.data.20.USCommoditiesServicesSpecial
+
+parse:
+  format: bls_flat_tsv               # series_id \t year \t period \t value \t footnote
+  area: "0000"                       # US city average
+  series_prefix_sa: CUSR0000         # + item_code
+  series_prefix_nsa: CUUR0000        # + item_code
+  months_only: true                  # keep M01-M12, drop M13 (annual avg)
+  item_codes_from: mapping.yaml      # filter to mapping item codes

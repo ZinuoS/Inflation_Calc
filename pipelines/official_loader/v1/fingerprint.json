@@ -1,0 +1,12 @@
+{
+  "sheet": "official", "sheet_index": 0, "header_row": 1,
+  "columns": [
+    {"name": "source", "type": "string", "strictness": "strict"},
+    {"name": "series_id", "type": "string", "strictness": "strict"},
+    {"name": "item_code", "type": "string", "strictness": "strict"},
+    {"name": "seasonal", "type": "string", "strictness": "strict"},
+    {"name": "frequency", "type": "string", "strictness": "strict"},
+    {"name": "period", "type": "string", "strictness": "strict"},
+    {"name": "value", "type": "string", "strictness": "strict"}
+  ]
+}

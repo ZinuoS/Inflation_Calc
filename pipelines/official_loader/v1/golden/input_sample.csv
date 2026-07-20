@@ -1,0 +1,3 @@
+source,series_id,item_code,seasonal,frequency,period,value
+bls_cpi,CUSR0000SEHA,SEHA,SA,monthly,2020-01-01,338.5
+bls_cpi,CUUR0000SEHA,SEHA,NSA,monthly,2020-01-01,337.9

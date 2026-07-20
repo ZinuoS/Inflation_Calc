@@ -1,0 +1,7 @@
+series_id	year	period	value	footnote_codes
+CUSR0000SEHA     	1981	M01	        84.7	
+CUSR0000SEHA     	1981	M02	        85.2	
+CUUR0000SEHA     	1981	M01	        84.0	
+CUUR0000SEHA     	1981	M02	        84.5	
+CUSR0000SEHA     	1981	M13	        86.0	
+CUSR0000SETB01   	1981	M01	        30.0	

@@ -5074,3 +5074,26 @@ reconciliation:
     r2: null
     proxy_quality: monitor
     optimistic: true
+group_c_official:
+  note: 'Session 2B Group C: official_current series in the official_current table (methodology replication 3A/3B
+    only, NEVER backtest targets).'
+  bls_cpi_series:
+    published_strata_covered: 181/181 (100%)
+    series: 231 SA + 270 NSA item_codes
+    range: 1913..2026
+    rows: 268386
+    unsampled_strata_absent_by_design: 23
+  ppi_series:
+    final_demand: 12 SA + 12 NSA (WPS*/WPU*)
+    pce_source_ppis: 3 of 4 present (hospitals/physicians/home-health/nursing, air transport, P&C insurance)
+    absence: 'PCU523920523920 (portfolio management) DISCONTINUED 2022-12; BLS API returns empty. Historical 2002-2022
+      on FRED. Post-2022 -> PCE-bridge S&P500-path approximation (financial_services_without_payment). Follow-up:
+      ingest 2002-2022 from FRED if 3B needs it.'
+  bls_seasonal_factors:
+    status: SA series present as CUSR0000* alongside NSA CUUR0000*; implied factors = NSA/SA derivable. Explicit
+      BLS seasonal-factor files not separately ingested (not needed while SA+NSA both present).
+  bea_pce_detail:
+    status: 'NOT INGESTED — requires a BEA API key (like FRED, user-provided) or BEA underlying-detail downloads.
+      The PCE bridge''s OFFICIAL INPUTS (CPI + PPI feeders) ARE covered, so 3A can proceed; 3B PCE-reconstruction
+      VALIDATION needs BEA Table 2.4.4U underlying detail. USER ACTION: provide a BEA API key to enable.'
+  pce_bridge_bea_imputed_absent_by_design: 5

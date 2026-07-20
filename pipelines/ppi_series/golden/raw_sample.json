@@ -1,0 +1,36 @@
+{
+ "Results": {
+  "series": [
+   {
+    "seriesID": "WPSFD4",
+    "data": [
+     {
+      "year": "2024",
+      "period": "M01",
+      "value": "143.2"
+     },
+     {
+      "year": "2024",
+      "period": "M13",
+      "value": "143.5"
+     }
+    ]
+   },
+   {
+    "seriesID": "PCU622110622110",
+    "data": [
+     {
+      "year": "2024",
+      "period": "M01",
+      "value": "180.1"
+     },
+     {
+      "year": "2024",
+      "period": "M02",
+      "value": "-"
+     }
+    ]
+   }
+  ]
+ }
+}

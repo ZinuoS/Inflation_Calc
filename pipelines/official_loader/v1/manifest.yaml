@@ -1,0 +1,6 @@
+name: official_loader
+version: v1
+sheet: official
+target_table: official_current
+key: [series_id, period]
+source_format: csv

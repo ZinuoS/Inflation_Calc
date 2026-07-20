@@ -135,3 +135,44 @@ Pipelines frozen with provenance + golden tests; 47 tests green; reconciliation_
 written; mapping.yaml updated (proxy_quality + vintage_status + reconciliation block);
 naru_gaps.md unchanged this task (no new gaps — archive-crawling ergonomics not hit since
 Group A sources were APIs/static files, not crawls). checkpoint log appended.
+
+## Session-2B completion — pre-step + Group C
+
+### Pre-step (vintage_floor) — DONE
+`series_vintage_floor` view (earliest ref with <=70-day release lag = genuine
+first-release, per series). timebase raises `PreVintageFloor` for `_for_ref` below the
+floor; `asof_mom` skips; reconcile counts `pre_floor_months`. **FLAG:** the Checkpoint-1
+premise that gasoline `n` is "unchanged" was off — the floor DROPS gasoline-vs-SETB01
+n 430→184, excluding **246 pre-2011 months** computed off the 2011 bulk vintage
+(restated-as-first-release, a real leak now closed by construction). R² held ~0.75
+(the leak wasn't inflating it). ZORI pairs unchanged (proxy starts 2015, post-floor).
+
+### TASK 2 — Group C official micro-detail  ·  CHECKPOINT 2
+
+New `official_current` table (source, series_id, item_code, seasonal, period, value),
+loaded by a shared `official_loader` naru artifact. `vintage_status: official_current`
+— methodology replication (3A/3B) ONLY, never a backtest target (targets stay on ALFRED
+vintages). All via db.connect; golden parse tests each; provenance rows present.
+
+| pipeline | source | rows | series | range | coverage |
+|---|---|---|---|---|---|
+| bls_cpi_series | BLS flat files | 268,386 | 501 (231 SA + 270 NSA codes) | 1913→2026 | **181/181 published strata (100%)** |
+| ppi_series | BLS API | 2,396 | 30 | 2006→2026 | 12 SA + 12 NSA final demand + 3/4 PCE-source PPIs |
+
+**Every mapping stratum has its official series present or an explicit absence note:**
+- CPI: 181/181 published strata covered (100%). 23 unsampled strata = absence by design
+  (no published index; weight 2.08).
+- PPI: 30/31. **PCU523920523920 (portfolio management) DISCONTINUED 2022-12** (BLS API
+  empty; FRED has 2002-2022). Post-2022 → PCE-bridge S&P500-path approximation. Documented.
+- BLS seasonal factors: SA (CUSR) + NSA (CUUR) both present → implied factors derivable;
+  explicit factor files not separately ingested (unnecessary while SA+NSA both present).
+- PCE bridge: 5 bea_imputed components = absence by design (no official price series).
+
+**Not ingested (needs a key — user action):** BEA PCE underlying detail (Table 2.4.4U).
+Requires a BEA API key (like FRED). The bridge's official INPUTS (CPI+PPI feeders) ARE
+covered so 3A can proceed; 3B PCE-reconstruction VALIDATION needs BEA detail.
+
+**naru#7 (new gap):** naru's per-row supersede UPDATE has no key index → O(n²) bulk
+load; the 268k-row CPI load didn't finish in 2 min. Shim: create a `(series_id, period)`
+index on official_current before loading (load then completes in seconds). A DB rebuild
+must create this index before the big load.

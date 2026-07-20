@@ -95,3 +95,40 @@ def test_indeed_wage_parse_filters_us_and_parses_month():
     assert rows[0]["period"] == "2019-01-01"  # "Jan-19" -> first-of-month
     assert rows[0]["value"] == "0.03626943"
     assert rows[0]["vintage_status"] == "revised_latest_only"
+
+
+# ---------- bls_cpi_series (Group C, official flat files) ----------
+
+def test_bls_cpi_parse_filters_codes_and_drops_m13():
+    mod, cfg = _load_source("bls_cpi_series")
+    raw = (PIPELINES / "bls_cpi_series" / "golden" / "raw_sample.txt").read_text()
+    rows = mod.parse_flat(raw, {"SEHA"}, cfg, observed_date="2026-07-19")
+    # 2 SA + 2 NSA monthly rows; the M13 annual-average row is dropped
+    assert len(rows) == 4
+    assert {r["seasonal"] for r in rows} == {"SA", "NSA"}
+    assert {r["item_code"] for r in rows} == {"SEHA"}
+    sa = [r for r in rows if r["seasonal"] == "SA"][0]
+    assert sa["series_id"] == "CUSR0000SEHA"
+    assert sa["period"] == "1981-01-01"  # year 1981 + M01
+    assert sa["value"] == "84.7"
+    # only requested codes come through: SEHA yields rows, SETB01 (also in sample) is
+    # excluded when not requested; a code absent from the sample yields nothing
+    assert all(r["item_code"] == "SEHA" for r in rows)  # SETB01 line filtered out
+    assert mod.parse_flat(raw, {"SAF11"}, cfg, observed_date="2026-07-19") == []
+
+
+# ---------- ppi_series (Group C, BLS API) ----------
+
+def test_ppi_parse_seasonal_by_prefix_and_drops_invalid():
+    import json
+
+    mod, cfg = _load_source("ppi_series")
+    payload = json.loads((PIPELINES / "ppi_series" / "golden" / "raw_sample.json").read_bytes())
+    rows = mod.parse_bls(payload, cfg, observed_date="2026-07-19")
+    # WPSFD4 M01 (M13 dropped) + PCU M01 ("-" M02 dropped) = 2 rows
+    assert len(rows) == 2
+    by = {r["series_id"]: r for r in rows}
+    assert by["WPSFD4"]["seasonal"] == "SA"       # WPS -> SA
+    assert by["PCU622110622110"]["seasonal"] == "NSA"  # PCU -> NSA
+    assert by["WPSFD4"]["period"] == "2024-01-01"
+    assert by["WPSFD4"]["source"] == "ppi"

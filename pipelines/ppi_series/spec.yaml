@@ -1,0 +1,14 @@
+# ppi_series pipeline spec (Session 2B, Group C)
+source: ppi
+description: >
+  PPI final-demand structure (SA WPS*, NSA WPU*) + the four PCE-source industry PPIs
+  (PCU*: health care, air transport, portfolio mgmt, insurance) per mapping.yaml.
+  For methodology replication + PCE bridge (3A/3B) only.
+vintage_status: official_current
+methodology_replication_only: true
+api:
+  base_url: https://api.bls.gov/publicAPI/v2/timeseries/data/
+  startyear: 2006
+  endyear: 2026
+seasonal_by_prefix: {WPS: SA, WPU: NSA, PCU: NSA}
+series_from: mapping.yaml   # ppi.final_demand (SA+NSA) + ppi.pce_feeders

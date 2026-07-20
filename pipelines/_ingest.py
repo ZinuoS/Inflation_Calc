@@ -37,8 +37,12 @@ STAGED_COLUMNS = [
 ]
 
 
-def fetch(url: str, headers: dict | None = None, timeout: int = 90) -> tuple[bytes, int]:
-    req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
+def fetch(url: str, headers: dict | None = None, timeout: int = 90,
+          method_body: bytes | None = None) -> tuple[bytes, int]:
+    """GET, or POST when method_body is given (e.g. the BLS API batch endpoint)."""
+    req = urllib.request.Request(
+        url, data=method_body, headers={"User-Agent": UA, **(headers or {})}
+    )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read(), resp.status
 

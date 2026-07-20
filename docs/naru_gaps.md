@@ -193,6 +193,24 @@ a context manager that sets WAL + a 30s busy_timeout and guarantees close. All
 repo-side DB access (timebase, views, provenance) goes through it. WAL is now enabled
 persistently on nowcast.sqlite.
 
+## naru#7 — Bulk-load is O(n²): supersede UPDATE has no key index  ·  severity: HIGH
+
+**Observed (Session 2B, Group C).** Loading the bls_cpi_series staged CSV (~268k rows)
+via `naru run` did not finish in 2 minutes. Root cause: `store.load_final_rows` runs,
+per row, `UPDATE {table} SET _superseded_by_run_id=? WHERE _superseded_by_run_id IS NULL
+AND {key}=?`. naru's `create_final_table` creates NO index on the natural key, so each
+UPDATE is a full table scan — cumulative **O(n²)** for the load. At 268k rows this is
+hundreds of millions of row-scans.
+
+**Desired API.** `create_final_table` should create an index on the manifest `key`
+columns (and ideally on `(key, _superseded_by_run_id)`) at table-creation time, so the
+supersede probe is O(log n). Optionally a batched executemany load path.
+
+**Local shim.** `# SHIM: pending naru#7` — before a large load, create the key index
+manually: `CREATE INDEX ix_official_key ON official_current(series_id, period)` (+ a
+`(series_id, _superseded_by_run_id)` index). With the index the same load completes in
+seconds.
+
 ## Status log
 
 | date | gap | state |
