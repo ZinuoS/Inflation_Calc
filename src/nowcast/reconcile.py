@@ -139,6 +139,56 @@ def reconcile_pair(db_path, tb, pair: Pair, forecast_time) -> Result:
     return res
 
 
+@dataclass
+class LeadProfile:
+    label: str
+    leads: list[dict] = field(default_factory=list)  # per lead: k, n, beta, r2, skipped, pre_floor
+    peak_lead: int | None = None
+    peak_r2: float | None = None
+    quality: str = ""
+
+
+def lead_scan(db_path, pair: "Pair", max_lead: int = 6, forecast_time=None) -> LeadProfile:
+    """Regress official first-release MoM at reference month M+k on proxy MoM at M, for
+    k = 0..max_lead, with the SAME vintage-safe discipline as the contemporaneous stats
+    (official via asof_mom_for_ref, vintage_floor + skip excluded, never imputed).
+    Formalizes the Checkpoint-0b ad-hoc scan so the numbers are reproducible from code.
+
+    `stable_leading`: a clear peak at lead>0 (peak R² >= 0.10 and >= 2x the contemporaneous
+    R², sign-stable beta) — admissible in Session 4 ONLY as a lagged feature at peak_lead,
+    NEVER contemporaneously. Otherwise `leading_weak`."""
+    forecast_time = forecast_time or dt.datetime.now(ET)
+    pm = alignment.monthly_mom(db_path, pair.proxy_source, pair.proxy_series_key)
+    months = sorted(pm)
+
+    def _add_months(iso: str, k: int) -> str:
+        d = dt.date.fromisoformat(iso)
+        mo = d.month - 1 + k
+        return dt.date(d.year + mo // 12, mo % 12 + 1, 1).isoformat()
+
+    prof = LeadProfile(label=pair.label)
+    with open_timebase(db_path) as tb:
+        need = sorted({_add_months(m, k) for m in months for k in range(max_lead + 1)})
+        official, _, _ = _official_mom(tb, pair.official_series, need, forecast_time)
+    for k in range(max_lead + 1):
+        pairs_xy = [(pm[m], official[_add_months(m, k)]) for m in months if _add_months(m, k) in official]
+        if len(pairs_xy) < WINDOW_MONTHS:
+            continue
+        x = np.array([a for a, _ in pairs_xy])
+        y = np.array([b for _, b in pairs_xy])
+        beta, r2 = _ols(x, y)
+        prof.leads.append({"k": k, "n": len(pairs_xy), "beta": round(beta, 4), "r2": round(r2, 4)})
+    if prof.leads:
+        best = max(prof.leads, key=lambda d: d["r2"])
+        contemp = next((d["r2"] for d in prof.leads if d["k"] == 0), 0.0)
+        prof.peak_lead, prof.peak_r2 = best["k"], best["r2"]
+        if best["k"] >= 1 and best["r2"] >= 0.10 and best["r2"] >= 2 * max(contemp, 1e-9) and best["beta"] > 0:
+            prof.quality = "stable_leading"
+        else:
+            prof.quality = "leading_weak"
+    return prof
+
+
 def build_pairs(mapping_path) -> list[Pair]:
     """The Session-2B (proxy, official) pairs that have data on both sides.
     Weights pulled from mapping.yaml. Availability/granularity caveats in `note`."""

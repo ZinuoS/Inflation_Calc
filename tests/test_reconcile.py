@@ -87,3 +87,23 @@ def test_gate2_findings():
     assert results["Indeed wage tracker"].proxy_quality == "monitor"
     # skipped_months are counted, never imputed (shutdown/series-start)
     assert rent.skipped_months >= 0 and gas.skipped_months >= 0
+
+
+@pytest.mark.skipif(not DB.exists(), reason="nowcast.sqlite not built")
+def test_lead_scan_manheim_used_cars():
+    """Amendment A: the Manheim lead structure must be reproducible from committed code
+    (not the ad-hoc Checkpoint-0b scan). Manheim wholesale leads CPI used-car retail ~2mo."""
+    import yaml
+
+    from nowcast.reconcile import Pair, lead_scan
+
+    w = {d["item_code"]: d["weight_cpi_u"]
+         for d in yaml.safe_load(open(MAPPING))["cpi"]["items"] if d.get("item_code")}
+    p = Pair("manheim", "US_full_month", "CUSR0000SETA02", "Manheim vs CPI Used cars",
+             w.get("SETA02", 0.0), "unrevised", "")
+    prof = lead_scan(str(DB), p, max_lead=6)
+    assert prof.peak_lead == 2                      # 2-month wholesale->retail lead
+    assert prof.peak_r2 > 0.25                      # clean peak (~0.35)
+    assert prof.quality == "stable_leading"         # admissible only as a lagged feature
+    contemp = next(d["r2"] for d in prof.leads if d["k"] == 0)
+    assert contemp < 0.05                           # contemporaneously ~0 (correctly unstable)

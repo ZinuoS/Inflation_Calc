@@ -5121,3 +5121,145 @@ group_c_official:
       The PCE bridge''s OFFICIAL INPUTS (CPI + PPI feeders) ARE covered, so 3A can proceed; 3B PCE-reconstruction
       VALIDATION needs BEA Table 2.4.4U underlying detail. USER ACTION: provide a BEA API key to enable.'
   pce_bridge_bea_imputed_absent_by_design: 5
+lead_profiles:
+  Manheim vs CPI Used cars (SETA02):
+    peak_lead: 2
+    peak_r2: 0.3456
+    quality: stable_leading
+    leads:
+    - k: 0
+      n: 177
+      beta: 0.1031
+      r2: 0.015
+    - k: 1
+      n: 178
+      beta: 0.3297
+      r2: 0.153
+    - k: 2
+      n: 179
+      beta: 0.4971
+      r2: 0.3456
+    - k: 3
+      n: 180
+      beta: 0.3703
+      r2: 0.1918
+    - k: 4
+      n: 181
+      beta: 0.0848
+      r2: 0.0101
+    - k: 5
+      n: 182
+      beta: -0.1141
+      r2: 0.0183
+    - k: 6
+      n: 183
+      beta: -0.0283
+      r2: 0.0011
+    - k: 7
+      n: 184
+      beta: 0.032
+      r2: 0.0014
+    - k: 8
+      n: 184
+      beta: 0.1133
+      r2: 0.0181
+    - k: 9
+      n: 184
+      beta: 0.1417
+      r2: 0.0282
+    - k: 10
+      n: 184
+      beta: 0.1854
+      r2: 0.0483
+    - k: 11
+      n: 184
+      beta: 0.1623
+      r2: 0.037
+    - k: 12
+      n: 184
+      beta: -0.0193
+      r2: 0.0005
+    note: stable_leading = admissible in Session 4 ONLY as a lagged feature at peak_lead, never contemporaneous
+  ZORI vs CPI OER (SEHC01):
+    peak_lead: 14
+    peak_r2: 0.4699
+    quality: stable_leading
+    leads:
+    - k: 0
+      n: 135
+      beta: 0.0451
+      r2: 0.01
+    - k: 1
+      n: 134
+      beta: 0.0756
+      r2: 0.0282
+    - k: 2
+      n: 133
+      beta: 0.105
+      r2: 0.0544
+    - k: 3
+      n: 132
+      beta: 0.1325
+      r2: 0.0864
+    - k: 4
+      n: 131
+      beta: 0.1603
+      r2: 0.1256
+    - k: 5
+      n: 130
+      beta: 0.1814
+      r2: 0.1596
+    - k: 6
+      n: 129
+      beta: 0.2023
+      r2: 0.1975
+    - k: 7
+      n: 128
+      beta: 0.2253
+      r2: 0.2458
+    - k: 8
+      n: 127
+      beta: 0.2447
+      r2: 0.2894
+    - k: 9
+      n: 126
+      beta: 0.2603
+      r2: 0.3286
+    - k: 10
+      n: 125
+      beta: 0.2767
+      r2: 0.3729
+    - k: 11
+      n: 124
+      beta: 0.287
+      r2: 0.4019
+    - k: 12
+      n: 123
+      beta: 0.3055
+      r2: 0.4542
+    - k: 13
+      n: 122
+      beta: 0.3095
+      r2: 0.4628
+    - k: 14
+      n: 121
+      beta: 0.312
+      r2: 0.4699
+    - k: 15
+      n: 120
+      beta: 0.3094
+      r2: 0.4601
+    - k: 16
+      n: 119
+      beta: 0.2928
+      r2: 0.4115
+    - k: 17
+      n: 118
+      beta: 0.281
+      r2: 0.3779
+    - k: 18
+      n: 117
+      beta: 0.2543
+      r2: 0.3092
+    note: 'stable_leading = admissible in Session 4 ONLY as a lagged feature at peak_lead, never contemporaneous.
+      H2: shelter leads ~1yr+.'
