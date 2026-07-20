@@ -1,0 +1,9 @@
+{
+  "sheet": "weights", "sheet_index": 0, "header_row": 1,
+  "columns": [
+    {"name": "weight_year", "type": "string", "strictness": "strict"},
+    {"name": "item_code", "type": "string", "strictness": "strict"},
+    {"name": "weight_cpi_u", "type": "string", "strictness": "strict"},
+    {"name": "weight_cpi_w", "type": "string", "strictness": "strict"}
+  ]
+}

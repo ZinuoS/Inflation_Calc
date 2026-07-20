@@ -1,0 +1,8 @@
+row_count:
+  min: 1
+key_uniqueness:
+  - columns: [weight_year, item_code]
+null_policy:
+  - {column: weight_year, nulls_allowed: false}
+  - {column: item_code, nulls_allowed: false}
+  - {column: weight_cpi_u, nulls_allowed: false}

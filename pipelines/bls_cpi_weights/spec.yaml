@@ -1,0 +1,12 @@
+# bls_cpi_weights pipeline spec (Session 3A, Task 2)
+source: bls_cpi_weights
+description: >
+  Vintaged BLS CPI relative-importance weights (per year), for as-of-date weight
+  serving in src/nowcast/weights.py. BLS Handbook of Methods, CPI ch. 17.
+url_template: https://www.bls.gov/cpi/tables/relative-importance/{year}.xlsx
+years: [2020, 2021, 2022, 2023, 2024, 2025]   # available at this URL; earlier 404
+parse:
+  sheet: Table 1
+  panel: expenditure_category            # stop at 'Special aggregate indexes'
+  name_to_code_via: cu.item              # data/raw/bls_cpi_weights/2026-07-18/cu_item.txt
+  weight_year_rule: file_year            # {year}.xlsx -> weight_year={year}

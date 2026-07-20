@@ -1,0 +1,6 @@
+name: cpi_weights_loader
+version: v1
+sheet: weights
+target_table: cpi_weights
+key: [weight_year, item_code]
+source_format: csv
