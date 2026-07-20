@@ -85,3 +85,53 @@ nadac/usda index construction, and move toward Groups B/C + the reconciliation h
 where the highest-weight official-vs-proxy pairs already have data (shelter, gasoline).
 
 ## Groups B, C, alignment.py, reconciliation — not started (gated on this checkpoint)
+
+## Task 2 — alignment.py  ·  DONE
+`src/nowcast/alignment.py`: monthly alignment to BLS reference conventions, each cited.
+Weekly/daily energy → monthly MEAN of within-month observations (BLS collects prices
+throughout the month; mirrors FRED GASREGM-from-GASREGW). Monthly proxies → identity.
+Manheim mid- vs full-month recorded as the binding "keep DISTINCT series" convention for
+when it lands (Group B). Offline, via db.connect.
+
+## Task 3 — reconcile.py + nb02  ·  CHECKPOINT FINAL
+
+`src/nowcast/reconcile.py` + `notebooks/nb02_reconciliation.ipynb` (executes clean, 2
+figures) + `docs/reconciliation_report.md`. Amendment 2 enforced: official MoM via
+`timebase.asof_mom_for_ref` (first-release, within-vintage) only; shutdown/series-start
+months counted in `skipped`, never imputed; every revised_latest_only proxy stat
+optimism-flagged. Results written back to mapping.yaml under `reconciliation:`.
+
+### Reconciliation table (sorted by CPI weight × R²)
+
+| pair | CPI wt | n | skip | beta | R² | quality | optimistic |
+|---|--:|--:|--:|--:|--:|---|:--:|
+| EIA gasoline vs CPI Energy | 2.90 | 428 | 3 | +0.438 | 0.758 | **stable** | |
+| ZORI vs CPI Shelter (SAH1) | 35.62 | 135 | 2 | +0.089 | 0.031 | unstable | ✓ |
+| ZORI vs CPI Rent | 7.84 | 135 | 2 | +0.042 | 0.007 | unstable | ✓ |
+| EIA heating-oil spot vs CPI Energy | 0.08 | 478 | 3 | +0.153 | 0.266 | unstable | |
+| Atlanta Fed wage tracker | — | 353 | 0 | — | — | monitor | ✓ |
+| Indeed wage tracker | — | 90 | 0 | — | — | monitor | ✓ |
+
+Optimism-flagged pairs: 4. UNSTABLE: 3 (diagnoses in reconciliation_report.md).
+
+### Feature-admission read (decides Session 4)
+- **Admit:** gasoline (stable, R²=0.76) — caveat: reconciled vs Energy AGGREGATE (SETB01
+  stratum vintages not yet loaded) and NSA-proxy vs SA-official; tighten in Session 3A.
+- **Do NOT admit as contemporaneous next-print feature:** ZORI. R²≈0.01, sign-flipping
+  beta — the pre-registered **H2** result (market-rent leads all-tenant CPI rent by ~1yr).
+  Its value is as a LEADING indicator, a Session-4 lead/lag question, not next-print rent MoM.
+- **Monitors:** Atlanta Fed, Indeed — context only.
+
+### Honest limitations (for your review)
+1. Official gasoline stratum (CUSR0000SETB01) vintages not loaded → gasoline reconciled
+   vs CPI Energy aggregate (coarse) with an SA/NSA mismatch. A tighter pair needs SETB01
+   first-release vintages (small 2A-style add) + SA of the proxy (Session 3A).
+2. OER (SEHC01) has no official vintages loaded → ZORI reconciled vs Rent (SEHA) + Shelter
+   (SAH1) only. The 25% OER weight is represented by the rent pair as a stand-in.
+3. Deferred sources (apartment_list, nadac, usda) not in the table — no data yet.
+
+## Definition of done
+Pipelines frozen with provenance + golden tests; 47 tests green; reconciliation_report.md
+written; mapping.yaml updated (proxy_quality + vintage_status + reconciliation block);
+naru_gaps.md unchanged this task (no new gaps — archive-crawling ergonomics not hit since
+Group A sources were APIs/static files, not crawls). checkpoint log appended.

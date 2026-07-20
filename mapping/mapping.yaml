@@ -5014,3 +5014,55 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+reconciliation:
+  note: 'Session 2B Gate 2. quality: stable|weak|unstable|monitor|insufficient_overlap. optimistic=stat from revised_latest_only
+    proxy.'
+  pairs:
+  - label: EIA gasoline vs CPI Energy
+    cpi_weight: 2.895
+    n_overlap: 428
+    skipped_months: 3
+    beta: 0.4377
+    r2: 0.7579
+    proxy_quality: stable
+    optimistic: false
+  - label: ZORI vs CPI Shelter (SAH1)
+    cpi_weight: 35.625
+    n_overlap: 135
+    skipped_months: 2
+    beta: 0.0885
+    r2: 0.0308
+    proxy_quality: unstable
+    optimistic: true
+  - label: ZORI vs CPI Rent of primary residence
+    cpi_weight: 7.84
+    n_overlap: 135
+    skipped_months: 2
+    beta: 0.0416
+    r2: 0.0072
+    proxy_quality: unstable
+    optimistic: true
+  - label: EIA heating-oil spot vs CPI Energy
+    cpi_weight: 0.083
+    n_overlap: 478
+    skipped_months: 3
+    beta: 0.1534
+    r2: 0.2658
+    proxy_quality: unstable
+    optimistic: false
+  - label: Atlanta Fed wage tracker
+    cpi_weight: 0.0
+    n_overlap: 353
+    skipped_months: 0
+    beta: null
+    r2: null
+    proxy_quality: monitor
+    optimistic: true
+  - label: Indeed wage tracker
+    cpi_weight: 0.0
+    n_overlap: 90
+    skipped_months: 0
+    beta: null
+    r2: null
+    proxy_quality: monitor
+    optimistic: true
