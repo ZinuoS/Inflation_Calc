@@ -1283,7 +1283,7 @@ wheels = [
 [[package]]
 name = "naru-data"
 version = "0.1.0"
-source = { git = "file:///Users/zinuoshi/naru?rev=35a26120db5db7c06e8e7e4d7238d9a2b5211311#35a26120db5db7c06e8e7e4d7238d9a2b5211311" }
+source = { git = "https://github.com/ZinuoS/naru-data?rev=35a26120db5db7c06e8e7e4d7238d9a2b5211311#35a26120db5db7c06e8e7e4d7238d9a2b5211311" }
 dependencies = [
     { name = "openpyxl" },
     { name = "pandas" },
@@ -1406,7 +1406,7 @@ dependencies = [
 requires-dist = [
     { name = "jupyter", specifier = "==1.1.1" },
     { name = "matplotlib", specifier = "==3.11.1" },
-    { name = "naru-data", git = "file:///Users/zinuoshi/naru?rev=35a26120db5db7c06e8e7e4d7238d9a2b5211311" },
+    { name = "naru-data", git = "https://github.com/ZinuoS/naru-data?rev=35a26120db5db7c06e8e7e4d7238d9a2b5211311" },
     { name = "numpy", specifier = "==2.5.1" },
     { name = "pandas", specifier = "==3.0.3" },
     { name = "pytest", specifier = "==9.1.1" },

@@ -15,15 +15,14 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-# naru is pinned to an EXACT commit for reproducibility (a path/branch install
-# builds from the working tree, which is not reproducible). Installed non-editable
-# from a local git source: a full wheel unpack carries the real modules AND the
-# force-included examples, side-stepping the editable-install shadow bug (naru#5).
-# commit 35a2612 = the CSV/TSV source reader (naru#1). When naru advances, bump rev
-# and run: uv sync --reinstall-package naru-data.
-# ACTION FOR ASH: push branch feat/csv-tsv-source-reader and, once on GitHub, swap
-# this to git = "https://github.com/ZinuoS/naru-data" with the same rev.
-naru-data = { git = "file:///Users/zinuoshi/naru", rev = "35a26120db5db7c06e8e7e4d7238d9a2b5211311" }
+# naru is pinned to an EXACT commit on GitHub for reproducibility (a path/branch
+# install builds from the working tree, which is not reproducible). Installed
+# non-editable from the git source: a full wheel unpack carries the real modules AND
+# the force-included examples, side-stepping the editable-install shadow bug (naru#5).
+# commit 35a2612 = the CSV/TSV source reader (naru#1), on branch
+# feat/csv-tsv-source-reader. When naru advances, bump rev and run:
+# uv sync --reinstall-package naru-data.
+naru-data = { git = "https://github.com/ZinuoS/naru-data", rev = "35a26120db5db7c06e8e7e4d7238d9a2b5211311" }
 
 [build-system]
 requires = ["hatchling"]
