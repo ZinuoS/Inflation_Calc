@@ -176,3 +176,48 @@ covered so 3A can proceed; 3B PCE-reconstruction VALIDATION needs BEA detail.
 load; the 268k-row CPI load didn't finish in 2 min. Shim: create a `(series_id, period)`
 index on official_current before loading (load then completes in seconds). A DB rebuild
 must create this index before the big load.
+
+## TASK 3 — finish Group A (nadac, usda_ams, apartment_list)  ·  CHECKPOINT 3
+
+Carries done (post-floor report + pre_floor column; naru#7 shim in bls_cpi_series;
+BEA skip-folder). Target-side vintages added: **SAM1** (medical-care commodities, drugs
+stand-in) + **SAF11** (food-at-home) — alfred now 23 series.
+
+**Honest outcome: all three new sources hit real, documented barriers; none yields a
+clean quotable reconciliation row this session.** Built what's genuinely buildable,
+documented the rest, fabricated nothing.
+
+| source | built? | reconciliation | barrier |
+|---|---|---|---|
+| nadac | **YES** (pipeline + index) | `insufficient_overlap` (n=10) | Placeholder index is 1-year bounded (2025 file = 139 MB; prior-year URLs 404/inconsistent). 14 monthly points < 36-month rolling window. Drugs stratum SEMF01 has NO ALFRED vintages → official side = SAM1 (medical-care commodities), coarse. |
+| usda_ams | no (folder+spec+STATUS) | — | Needs a free `USDA_AMS_API_KEY` **and** a matched-commodity feature-report parser (real index construction). SAF11 official side is ready. |
+| apartment_list | no (folder+spec+STATUS) | — | JS-gated download, no static CSV URL (won't drive a headless browser per rule 5). ZORI already covers shelter + shows the H2 result. Official side (SEHA) ready. |
+
+**NADAC pipeline (real deliverable):** CMS NADAC 2025 per-NDC → monthly **matched-model
+geomean-of-relatives** index (Jevons-style, ≥50 matched NDCs/month), clearly marked
+PLACEHOLDER for the 3A weighted matched-model upgrade. License note + spec basket rule +
+golden parse test. 14 index points (2024-01..2026-01), loaded to proxy_observations.
+
+### Full updated reconciliation table (post-floor)
+
+| pair | CPI wt | n | skip | pre_floor | R² | quality | opt |
+|---|--:|--:|--:|--:|--:|---|:-:|
+| EIA gasoline vs CPI Gasoline (SETB01) | 2.90 | 184 | 1 | 246 | 0.746 | **stable** | |
+| ZORI vs CPI Shelter (SAH1) | 35.62 | 135 | 2 | 0 | 0.031 | unstable | ✓ |
+| ZORI vs CPI OER (SEHC01) | 25.23 | 135 | 2 | 0 | 0.010 | unstable | ✓ |
+| ZORI vs CPI Rent | 7.84 | 135 | 2 | 0 | 0.007 | unstable | ✓ |
+| EIA heating-oil spot vs CPI Energy | 0.08 | 354 | 3 | 124 | 0.330 | stable | |
+| NADAC vs CPI Medical-care commodities | 0.97 | 10 | 2 | 0 | — | insufficient_overlap | |
+| Atlanta Fed wage tracker | — | 353 | 0 | 0 | — | monitor | ✓ |
+| Indeed wage tracker | — | 90 | 0 | 0 | — | monitor | ✓ |
+
+**Admission read (decides Session 4):** ADMIT gasoline (stable, R²=0.75, post-floor,
+unrevised). DO NOT admit ZORI as a contemporaneous next-print feature (H2: R²≈0.01,
+sign-flipping). Monitors = context only. NADAC/USDA/AL = not yet admissible (need
+full-history / data access). **Optimism-flagged: 5** (all ZORI pairs + both monitors —
+revised_latest_only). **Floor/skip exclusions:** 370 pre_floor + 10 skip across the table.
+
+**Decisions for you:** (a) provide `USDA_AMS_API_KEY` + `BEA_API_KEY` in `.env` to unblock
+those; (b) accept the NADAC 1-year placeholder for now (full multi-year is a 3A-scale
+build), or prioritize a NADAC history backfill; (c) Apartment List — leave as ZORI's
+documented backup, or you manually drop its CSV into data/raw/ for me to parse.

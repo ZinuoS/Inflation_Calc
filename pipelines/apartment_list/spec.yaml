@@ -1,0 +1,14 @@
+# apartment_list pipeline spec (Session 2B, Task 3) — data-access blocked (JS gate)
+source: apartment_list
+description: >
+  Apartment List national Rent Estimate (median new-lease rent). Published-proxy /
+  backup for CPI Rent (SEHA) alongside ZORI.
+vintage_status: revised_latest_only
+url_note: JS-gated download (no static CSV URL); see STATUS.md
+parse:
+  format: long_csv                 # when obtained: location_name==United States, monthly cols
+  select_location: United States
+  frequency: monthly
+series_key: US
+mapped_strata: [SEHA, SEHC01]
+status: SKIPPED_js_gated

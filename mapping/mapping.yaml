@@ -5058,6 +5058,14 @@ reconciliation:
     r2: 0.3296
     proxy_quality: stable
     optimistic: false
+  - label: NADAC vs CPI Medical-care commodities
+    cpi_weight: 0.973
+    n_overlap: 10
+    skipped_months: 2
+    beta: null
+    r2: null
+    proxy_quality: insufficient_overlap
+    optimistic: false
   - label: Atlanta Fed wage tracker
     cpi_weight: 0.0
     n_overlap: 353

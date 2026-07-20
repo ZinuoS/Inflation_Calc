@@ -13,6 +13,7 @@ Official-side MoM read via `timebase.asof_mom_for_ref` (first-release, within-vi
 | ZORI vs CPI OER (SEHC01) | 25.23 | 135 | 2 | 0 | +0.045 | 0.010 | unstable | ✓ |
 | ZORI vs CPI Rent of primary residence | 7.84 | 135 | 2 | 0 | +0.042 | 0.007 | unstable | ✓ |
 | EIA heating-oil spot vs CPI Energy | 0.08 | 354 | 3 | 124 | +0.188 | 0.330 | stable |  |
+| NADAC vs CPI Medical-care commodities | 0.97 | 10 | 2 | 0 | — | — | insufficient_overlap |  |
 | Atlanta Fed wage tracker | 0.00 | 353 | 0 | 0 | — | — | monitor | ✓ |
 | Indeed wage tracker | 0.00 | 90 | 0 | 0 | — | — | monitor | ✓ |
 

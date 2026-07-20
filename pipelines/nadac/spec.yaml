@@ -1,0 +1,29 @@
+# nadac pipeline spec (Session 2B, Group A / Task 3)
+source: nadac
+description: >
+  CMS NADAC per-NDC retail drug acquisition cost -> a monthly drug-price index.
+  Published-proxy for CPI Prescription drugs (SEMF01). Reconciled against medical-care
+  commodities (SAM1) as the finest ALFRED-vintaged official stand-in (SEMF01 has no
+  ALFRED vintages).
+vintage_status: unrevised
+
+base_url: https://download.medicaid.gov/data/
+year_file: nadac-national-average-drug-acquisition-cost-12-31-{year}.csv
+# Only the current-year file resolves at this stable path; prior years live under
+# per-dataset UUIDs whose downloadURL metadata is inconsistent. This placeholder
+# ingests the one reliably-addressable year (2025 file spans ~late-2024..2025);
+# FULL multi-year history is a documented 3A-scale follow-up (see STATUS note in log).
+years: [2025]
+date_format: "%m/%d/%Y"
+
+# index construction (PLACEHOLDER -- 3A upgrade to weighted matched-model)
+basket_rule:
+  aggregate_ndc_to: monthly_mean_per_ndc     # mean nadac_per_unit within month per NDC
+  index_formula: matched_model_geomean_relatives  # Jevons-style, NDCs in both months
+  base: 100.0
+  min_matched_ndcs: 50                        # months with fewer matched NDCs -> skip
+columns: {ndc: "NDC", price: "NADAC Per Unit", date: "Effective Date"}
+
+series_key: US_drug_index
+mapped_strata: [SEMF01]
+proxy_history_start_planned: 2013

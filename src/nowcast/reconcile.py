@@ -163,6 +163,12 @@ def build_pairs(mapping_path) -> list[Pair]:
              "rent leads all-tenant OER ~1yr; ALFRED first-release from ~2011."),
         Pair("eia_heating_oil", "US_NYH_SPOT", "CPIENGSL", "EIA heating-oil spot vs CPI Energy",
              w.get("SEHE01", 0.083), "unrevised", "VERY COARSE: wholesale spot vs energy aggregate"),
+        Pair("nadac", "US_drug_index", "CUSR0000SAM1", "NADAC vs CPI Medical-care commodities",
+             w.get("SEMF01", 0.973), "unrevised",
+             "PLACEHOLDER index, 1-year bounded (2024-25) -> too short for the rolling "
+             "harness (insufficient_overlap expected). Official side = SAM1 (medical-care "
+             "commodities) since drugs stratum SEMF01 has no ALFRED vintages. 3A: full "
+             "history + proper weighted matched-model + drug-specific official."),
         Pair("atlanta_fed_wage", "US_overall_median", "", "Atlanta Fed wage tracker",
              0.0, "revised_latest_only", "", True),
         Pair("indeed_wage", "US_posted_wage_growth_yoy", "", "Indeed wage tracker",

@@ -1,0 +1,20 @@
+# usda_ams pipeline spec (Session 2B, Task 3) — DEPENDENCY + COMPLEXITY blocked
+source: usda_ams
+description: >
+  USDA AMS retail food prices -> a monthly food-at-home price index. Published-proxy
+  for CPI Food at home (SAF11, which has ALFRED vintages, added in Task 3).
+vintage_status: unrevised
+api:
+  provider: USDA_AMS_MARS
+  base_url: https://marsapi.ams.usda.gov/services/v1.2/reports
+  requires_env_key: USDA_AMS_API_KEY   # free, https://mymarketnews.ams.usda.gov/
+# index construction (PLACEHOLDER for 3A): AMS retail reports are per-commodity weekly
+# "National Retail Report" feature-price ranges; a deterministic monthly index requires
+# matched-commodity mean-of-relatives across many reports (meats, dairy, produce).
+basket_rule:
+  aggregate: monthly_mean_per_commodity_advertised_price
+  index_formula: matched_model_geomean_relatives   # placeholder, mirrors Jevons
+  base: 100.0
+series_key: US_food_at_home_index
+mapped_strata: [SAF11]
+status: SKIPPED_pending_key_and_parser   # see STATUS.md

@@ -47,6 +47,9 @@ series:
   # periods share that bulk vintage, so genuine first-release MoM begins ~2011.
   - {alfred_id: CUSR0000SETB01,  role: cpi_gasoline_all_types,        mapping_series_id: CUSR0000SETB01}
   - {alfred_id: CUSR0000SEHC01,  role: cpi_owners_equivalent_rent,    mapping_series_id: CUSR0000SEHC01}
+  # --- Task-3 adds: official stand-ins for NADAC (drugs) and USDA (food-at-home) ---
+  - {alfred_id: CUSR0000SAM1,    role: cpi_medical_care_commodities,  mapping_series_id: CUSR0000SAM1}
+  - {alfred_id: CUSR0000SAF11,   role: cpi_food_at_home,              mapping_series_id: CUSR0000SAF11}
 
 output_csv_columns:              # canonical staged CSV -> naru artifact input
   - series_id                    # ALFRED series id (the vintage identifier)

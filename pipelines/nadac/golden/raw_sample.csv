@@ -1,0 +1,5 @@
+NDC Description,NDC,NADAC Per Unit,Effective Date,Pricing Unit,Pharmacy Type Indicator,OTC,Explanation Code,Classification for Rate Setting,Corresponding Generic Drug NADAC Per Unit,Corresponding Generic Drug Effective Date,As of Date
+DRUG A,111,1.00000,01/10/2024,EA,C/I,N,1,G,,,01/01/2025
+DRUG A,111,1.10000,02/14/2024,EA,C/I,N,1,G,,,01/01/2025
+DRUG B,222,2.00000,01/10/2024,EA,C/I,N,1,G,,,01/01/2025
+DRUG B,222,2.20000,02/14/2024,EA,C/I,N,1,G,,,01/01/2025

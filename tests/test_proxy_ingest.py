@@ -10,6 +10,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 PIPELINES = Path(__file__).parent.parent / "pipelines"
@@ -148,3 +149,21 @@ def test_official_key_index_created_before_bulk_load(tmp_path):
         "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='official_current'")}
     conn.close()
     assert "ix_official_key" in idx  # supersede UPDATE probe is O(log n), not O(n)
+
+
+# ---------- nadac (Group A / Task 3, placeholder matched-model index) ----------
+
+def test_nadac_matched_model_index():
+    mod, cfg = _load_source("nadac")
+    raw = (PIPELINES / "nadac" / "golden" / "raw_sample.csv").read_bytes()
+    acc = {}
+    mod.monthly_ndc_means(raw, cfg["columns"], acc, cfg["date_format"])
+    # 2 NDCs x 2 months = 4 (ndc, month) buckets
+    assert len(acc) == 4
+    # both drugs rose +10% -> geomean-of-relatives = 1.10 -> index 100 -> 110
+    cfg = {**cfg, "basket_rule": {**cfg["basket_rule"], "min_matched_ndcs": 1}}
+    rows, skipped = mod.build_index(acc, cfg)
+    assert [r["period"] for r in rows] == ["2024-01-01", "2024-02-01"]
+    assert float(rows[0]["value"]) == pytest.approx(100.0)
+    assert float(rows[1]["value"]) == pytest.approx(110.0)
+    assert rows[0]["vintage_status"] == "unrevised"
