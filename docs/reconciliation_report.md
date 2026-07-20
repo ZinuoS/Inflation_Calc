@@ -17,6 +17,7 @@ Official-side MoM read via `timebase.asof_mom_for_ref` (first-release, within-vi
 | Manheim vs CPI Used cars (SETA02) | 2.76 | 10 | 0 | 0 | — | — | insufficient_overlap |  |
 | Atlanta Fed wage tracker | 0.00 | 353 | 0 | 0 | — | — | monitor | ✓ |
 | Indeed wage tracker | 0.00 | 90 | 0 | 0 | — | — | monitor | ✓ |
+| TSA throughput (airfare demand) | 0.00 | 6 | 0 | 0 | — | — | monitor |  |
 
 **Optimism-flagged pairs (proxy vintage unavailable): 5**
 
@@ -31,3 +32,4 @@ Official-side MoM read via `timebase.asof_mom_for_ref` (first-release, within-vi
 
 - **Atlanta Fed wage tracker**:  | MONITOR: wage-growth rate, not regressed as a price proxy
 - **Indeed wage tracker**:  | MONITOR: wage-growth rate, not regressed as a price proxy
+- **TSA throughput (airfare demand)**: demand monitor for airfares, not a price proxy; ~6mo | MONITOR: wage-growth rate, not regressed as a price proxy

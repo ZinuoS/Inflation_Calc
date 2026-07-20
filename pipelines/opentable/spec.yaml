@@ -1,0 +1,4 @@
+source: opentable
+description: OpenTable seated-diner data (former) -- dining-out demand context.
+vintage_status: n/a
+status: VENDOR_ONLY_discontinued      # dead URL dated 2026-07-19 in license_note.md

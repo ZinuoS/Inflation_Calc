@@ -1,0 +1,5 @@
+source: adobe_dpi
+description: Adobe Digital Price Index (online inflation) -> core-goods context.
+vintage_status: point_in_time
+status: SKIPPED_ua_gated_and_patchy   # see license_note.md
+mapped_strata: [SAA, SERA]            # apparel, video/audio (core goods) -- when built

@@ -254,3 +254,52 @@ newest reference-month row = first release). Only ~2025-onward dated files remai
 Remaining Group B (awaiting go, per "wait between sources"): B2 cox_atp, B3 adobe_dpi,
 B4 freightos_drewry, B5 tsa, B6 opentable (state-of-industry page 404 → likely
 vendor_only). 54 tests green.
+
+## Group B batch (B2–B6) — CHECKPOINT 1
+
+Point-in-time preferred (Amendment 1). No tripwire fired (no non-clean license; no
+>10% parse-quarantine on any shipped parser). Per-source:
+
+| src | built? | rows | recovered/available | vintage_status | barrier / note |
+|---|---|---|---|---|---|
+| B1 manheim | **yes** | 11 | 11/11 hosted | point_in_time | only ~2025 dated xlsx hosted (honest short) |
+| B2 cox_atp | parser only | 0 | — | point_in_time | extractor validated (golden); URL slugs inconsistent → coverage needs index crawl (naru#8); no patchy series shipped |
+| B3 adobe_dpi | no (doc) | 0 | — | point_in_time | business.adobe.com UA-gated (HTTP 000) + patchy archive |
+| B4 freightos_drewry | no (doc) | 0 | — | point_in_time | FBX values JS-loaded (no static endpoint); leads-context-only anyway (H4) |
+| B5 tsa | **yes** | 6 | 6 complete mo | unrevised | demand MONITOR (not price); public page ~6mo only |
+| B6 opentable | vendor_only | 0 | — | n/a | state-of-industry page discontinued (HTTP 000, dated) |
+
+New naru gap filed: **naru#8** (archive-crawl ergonomics — enumerate dated documents in a
+source archive; blocks Cox ATP full coverage).
+
+### Full reconciliation / admission table (post-floor, first-release via asof_mom_for_ref)
+
+| pair | wt | n | R² | quality | opt |
+|---|--:|--:|--:|---|:-:|
+| EIA gasoline vs Gasoline (SETB01) | 2.90 | 184 | **0.746** | **stable** | |
+| EIA heating-oil spot vs Energy | 0.08 | 354 | 0.330 | stable | |
+| ZORI vs Shelter / OER / Rent | 7–36 | 135 | ~0.01 | unstable (H2) | ✓ |
+| NADAC vs Med-care commodities | 0.97 | 58 | 0.012 | unstable | |
+| Manheim vs Used cars (SETA02) | — | 10 | — | insufficient_overlap | |
+| Atlanta Fed / Indeed / TSA | — | — | — | monitor | ✓/✓ |
+
+Optimism-flagged: 6. insufficient_overlap: 1 (Manheim). monitor: 3. Total floor/skip
+exclusions across table: 370 pre_floor + ~12 skip.
+
+### Gate-2 closure — DRAFT (Ash closes, not me)
+
+> Gate 2 (reconciliation firewall) is met. The harness regresses every published-proxy
+> against its official component using FIRST-RELEASE, within-vintage MoM only
+> (asof_mom_for_ref over first_release_mom), with vintage_floor enforced so restated
+> history can never masquerade as first release; revised_latest_only proxies are
+> optimism-flagged, and short/absent overlaps are reported as insufficient_overlap or
+> skip — never replaced by a small-n statistic. Result: exactly ONE stable, admissible
+> price proxy at usable weight — EIA gasoline vs the gasoline stratum (R²=0.75, beta≈0.8
+> pass-through, unrevised). Shelter (33% of CPI, the highest-weight pair) is UNSTABLE at
+> R²≈0.01 with sign-flipping betas — the pre-registered H2 result: market-rent indices
+> lead all-tenant CPI rent by ~a year, so ZORI is a leading indicator, not a contemporaneous
+> next-print feature. Heating-oil (weak/coarse), NADAC (placeholder vs coarse official),
+> and Manheim (point-in-time, short) are not yet admissible; the wage trackers and TSA are
+> monitors. Session-4 feature admission therefore starts from a deliberately small, honest
+> base — gasoline in; shelter as a lead/lag study; everything else pending deeper data —
+> which is the correct posture for an anti-leakage nowcast, not a disappointment.

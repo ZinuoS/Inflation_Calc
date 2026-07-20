@@ -1,0 +1,5 @@
+source: freightos_drewry
+description: Freightos FBX / Drewry WCI weekly container freight -> H4 leads context only.
+vintage_status: point_in_time
+role: leads_context_only              # no contemporaneous admission (H4)
+status: SKIPPED_js_gated              # see license_note.md

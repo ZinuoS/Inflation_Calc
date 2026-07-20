@@ -180,3 +180,24 @@ def test_manheim_extract_newest_from_dated_xlsx():
     period, value = rec
     assert period == "2025-11-01"
     assert value > 200  # UVVI is ~200s in 2025 (1997=100 base)
+
+
+# ---------- tsa (Group B / B5, HTML table -> monthly mean, monitor) ----------
+
+def test_tsa_parse_monthly_mean_complete_months():
+    mod, cfg = _load_source("tsa")
+    html = (PIPELINES / "tsa" / "golden" / "raw_sample.html").read_text()
+    rows = mod.parse(html, cfg, observed_date="2026-07-19")
+    by = {r["period"]: r for r in rows}
+    assert by["2026-01-01"]["value"] == "2150000.0"  # mean(2.1M, 2.2M)
+    assert by["2026-02-01"]["value"] == "2400000.0"
+    assert rows[0]["vintage_status"] == "unrevised"
+
+
+# ---------- cox_atp (Group B / B2, deterministic press-release anchor) ----------
+
+def test_cox_atp_anchor_extraction():
+    mod, cfg = _load_source("cox_atp")
+    html = (PIPELINES / "cox_atp" / "golden" / "raw_sample.html").read_text()
+    val = mod.extract_atp(html, cfg)
+    assert val == 49758.0  # anchored on "New-Vehicle Average Transaction Price"

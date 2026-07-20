@@ -1,0 +1,15 @@
+# tsa pipeline spec (Session 2B-final, Group B / B5) — MONITOR (demand)
+source: tsa
+description: >
+  TSA daily checkpoint throughput -> monthly average. Demand-context monitor for
+  Airline fares (SETG01); NOT a price proxy. Public page holds ~6 months daily.
+vintage_status: unrevised
+url: https://www.tsa.gov/travel/passenger-volumes
+parse:
+  format: html_table            # <tr><td>M/D/YYYY</td><td>N,NNN,NNN</td></tr>
+  date_format: "%m/%d/%Y"
+  aggregate: monthly_mean_daily_throughput
+  complete_months_only: true    # drop the partial current month; never interpolate
+series_key: US_throughput
+role: monitor
+mapped_strata: [SETG01]

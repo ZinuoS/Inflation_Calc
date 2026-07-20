@@ -1,0 +1,15 @@
+# cox_atp pipeline spec (Session 2B-final, Group B / B2) — parser validated, coverage blocked
+source: cox_atp
+description: >
+  Cox/KBB New-Vehicle Average Transaction Price from dated monthly press releases.
+  Published-proxy for CPI New vehicles (SETA01).
+vintage_status: point_in_time
+report_url_template: "https://www.coxautoinc.com/insights/{month}-{year}-atp-report/"
+parse:
+  format: html_press_release
+  anchor: "New-Vehicle Average Transaction Price"   # deterministic value rule
+  value_regex: '\$([0-9]{2},[0-9]{3})'
+  window_chars: 120
+series_key: US_new_vehicle_atp
+mapped_strata: [SETA01]
+status: PARSER_VALIDATED_coverage_blocked   # see STATUS.md; needs index crawl (naru#8)

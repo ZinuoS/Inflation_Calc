@@ -211,6 +211,23 @@ manually: `CREATE INDEX ix_official_key ON official_current(series_id, period)` 
 `(series_id, _superseded_by_run_id)` index). With the index the same load completes in
 seconds.
 
+## naru#8 — Archive-crawl ergonomics (enumerate dated documents in a source archive)  ·  severity: MEDIUM
+
+**Observed (Session 2B-final, Group B).** Point-in-time proxies live in dated document
+archives (Manheim monthly xlsx, Cox ATP press releases). Manheim's URL pattern is
+regular (enumerable), but Cox ATP's report slugs are INCONSISTENT month-to-month, so URL
+enumeration recovers only patchy, non-consecutive months. There is no naru primitive for
+"enumerate the dated documents in a source's archive index/sitemap" deterministically.
+
+**Desired API.** A design-time archive-manifest step: given a source index/sitemap URL +
+a link pattern, produce a frozen, reviewable manifest of `(reference_period -> document
+URL)` that the pipeline then fetches deterministically. Keeps run-time deterministic (the
+manifest is frozen), matches naru's compile-time-intelligence doctrine.
+
+**Local handling.** Manheim ships (regular pattern). Cox ATP ships the validated
+extractor but its full-series coverage is blocked pending this (documented in
+pipelines/cox_atp/STATUS.md); no patchy series is loaded. No shim — flagged, not hidden.
+
 ## Status log
 
 | date | gap | state |

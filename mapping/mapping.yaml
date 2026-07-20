@@ -5090,6 +5090,14 @@ reconciliation:
     r2: null
     proxy_quality: monitor
     optimistic: true
+  - label: TSA throughput (airfare demand)
+    cpi_weight: 0.0
+    n_overlap: 6
+    skipped_months: 0
+    beta: null
+    r2: null
+    proxy_quality: monitor
+    optimistic: false
 group_c_official:
   note: 'Session 2B Group C: official_current series in the official_current table (methodology replication 3A/3B
     only, NEVER backtest targets).'

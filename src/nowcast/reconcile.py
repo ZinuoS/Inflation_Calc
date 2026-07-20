@@ -178,6 +178,8 @@ def build_pairs(mapping_path) -> list[Pair]:
              0.0, "revised_latest_only", "", True),
         Pair("indeed_wage", "US_posted_wage_growth_yoy", "", "Indeed wage tracker",
              0.0, "revised_latest_only", "", True),
+        Pair("tsa", "US_throughput", "", "TSA throughput (airfare demand)",
+             0.0, "unrevised", "demand monitor for airfares, not a price proxy; ~6mo", True),
     ]
 
 
