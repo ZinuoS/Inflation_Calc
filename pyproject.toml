@@ -28,6 +28,11 @@ naru-data = { git = "https://github.com/ZinuoS/naru-data", rev = "35a26120db5db7
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[dependency-groups]
+dev = [
+    "hypothesis>=6.157.2",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/nowcast"]
 
