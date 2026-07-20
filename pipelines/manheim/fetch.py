@@ -33,6 +33,26 @@ def _pub_months(start_ym: str) -> list[tuple[int, int]]:
     return out
 
 
+def full_series(xlsx_bytes: bytes, spec: dict) -> list[tuple[str, float]]:
+    """ALL (reference_period first-of-month, index) rows from a UVVI xlsx DATA sheet.
+
+    Used for the historical ingest (Session-3A Task 0b): the point-in-time archive's 11
+    months matched the latest download EXACTLY (see license_note), so the full-month MUVVI
+    is unrevised post-publication and the historical download equals the first-release
+    series. Pure/testable."""
+    import openpyxl
+
+    a = spec["archive"]
+    wb = openpyxl.load_workbook(io.BytesIO(xlsx_bytes), read_only=True, data_only=True)
+    ws = wb[a["data_sheet"]]
+    out = []
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        d, val = row[a["date_col_index"]], row[a["index_col_index"]]
+        if isinstance(d, dt.datetime) and isinstance(val, (int, float)):
+            out.append((d.date().replace(day=1).isoformat(), float(val)))
+    return sorted(out)
+
+
 def extract_newest(xlsx_bytes: bytes, spec: dict) -> tuple[str, float] | None:
     """Newest (reference_period first-of-month, index value) from a dated UVVI xlsx. Pure."""
     import openpyxl

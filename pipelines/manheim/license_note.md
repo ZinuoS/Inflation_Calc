@@ -14,12 +14,24 @@ retained in provenance and any published derivative. We fetch static xlsx files 
 /wp-content/uploads/ once each, identified UA, well under human-browsing intensity. No
 auth wall, no CAPTCHA.
 
-**Vintage status.** `point_in_time` — each dated monthly xlsx is the index AS PUBLISHED
-that month; the newest reference-month row in a given file is that month's FIRST-RELEASE
-value (what the market traded). Only ~2025-onward dated files remain hosted (older
-publications 404), so point-in-time coverage is intentionally SHORT and honest rather
-than long-and-revised (Amendment 1). The full revised history back to 1997 exists in the
-latest file but would be `revised_latest_only` (optimism-flagged) — not ingested here.
+**Vintage status.** `unrevised` — VERIFIED (Session-3A Task 0b). The point-in-time archive
+(11 dated files, Jan–Nov 2025, each file's newest row = that month's first release) was
+compared value-by-value against the same months in the latest full download: **all 11
+months matched EXACTLY (diff 0.0000)**. Manheim's methodology confirms the only historical
+"recalculation" was the one-time 1995→1997 rebasing; "revised" in their notes refers to
+the full-month superseding the preliminary MID-month, not restatement of published
+full-month values. So the full-month MUVVI is not restated post-publication, and the
+historical download (1997→2025, 347 months) equals the first-release series — ingested as
+`unrevised`, giving H1 a proper long overlap instead of 11 starved months.
+
+**Residual caveat (honest).** The exact-match evidence spans 2025 only (older dated files
+404, so no point-in-time comparison is possible pre-2025). No rolling/within-year revision
+is observed and the methodology gives no annual-restatement mechanism, but an annual
+SA-factor revision of pre-2025 history cannot be positively ruled out from available
+point-in-time files. Re-verify at a year boundary when a Dec/Jan dated file is captured.
+
+**Mid-month series** remains a distinct H1 follow-up (separate publication; alignment.py
+keeps mid vs full-month distinct).
 
 **Mid-month vs full-month.** This pipeline ingests the FULL-MONTH index (the xlsx).
 Manheim's separate MID-MONTH release (~15th) is a distinct publication; alignment.py

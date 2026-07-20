@@ -5050,6 +5050,14 @@ reconciliation:
     r2: 0.0072
     proxy_quality: unstable
     optimistic: true
+  - label: Manheim vs CPI Used cars (SETA02)
+    cpi_weight: 2.759
+    n_overlap: 177
+    skipped_months: 0
+    beta: 0.1031
+    r2: 0.015
+    proxy_quality: unstable
+    optimistic: false
   - label: EIA heating-oil spot vs CPI Energy
     cpi_weight: 0.083
     n_overlap: 354
@@ -5065,14 +5073,6 @@ reconciliation:
     beta: -0.0091
     r2: 0.012
     proxy_quality: unstable
-    optimistic: false
-  - label: Manheim vs CPI Used cars (SETA02)
-    cpi_weight: 2.759
-    n_overlap: 10
-    skipped_months: 0
-    beta: null
-    r2: null
-    proxy_quality: insufficient_overlap
     optimistic: false
   - label: Atlanta Fed wage tracker
     cpi_weight: 0.0

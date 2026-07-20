@@ -3,7 +3,7 @@ source: manheim
 description: >
   Manheim Used Vehicle Value Index (full-month), first-release from the dated monthly
   xlsx archive. Published-proxy for CPI Used cars and trucks (SETA02) — H1 feedstock.
-vintage_status: point_in_time
+vintage_status: unrevised   # VERIFIED Task 0b: 11-mo point-in-time == latest download exactly (see license_note)
 archive:
   url_template: "https://site.manheim.com/wp-content/uploads/sites/2/{pub_year}/{pub_month:02d}/{ref_mon}-{ref_year}-Manheim-Used-Vehicle-Value-Index.xlsx"
   # publication is ~the month after the reference month; enumerate pub months and keep
