@@ -147,10 +147,14 @@ def build_pairs(mapping_path) -> list[Pair]:
              "smoothed all-tenant series lagging market by ~1yr (research plan H2)."),
         Pair("zori", "US", "CUSR0000SAH1", "ZORI vs CPI Shelter (SAH1)",
              w.get("SAH1", 0.0), "revised_latest_only", "coarser: shelter incl OER + lodging"),
-        Pair("eia_gasoline", "US", "CPIENGSL", "EIA gasoline vs CPI Energy",
+        Pair("eia_gasoline", "US", "CUSR0000SETB01", "EIA gasoline vs CPI Gasoline (SETB01)",
              w.get("SETB01", 2.895), "unrevised",
-             "COARSE: CPI Energy aggregate, not the gasoline stratum (SETB01 vintages "
-             "not loaded); NSA proxy vs SA official (SA is Session 3A)."),
+             "stratum-level (Session-2B add); beta ~pass-through. NSA proxy vs SA official "
+             "caps R² (SA is Session 3A); ALFRED first-release from ~2011."),
+        Pair("zori", "US", "CUSR0000SEHC01", "ZORI vs CPI OER (SEHC01)",
+             w.get("SEHC01", 25.23), "revised_latest_only",
+             "OER direct (Session-2B add, 25% weight). H2 again: R²~0, unstable — market "
+             "rent leads all-tenant OER ~1yr; ALFRED first-release from ~2011."),
         Pair("eia_heating_oil", "US_NYH_SPOT", "CPIENGSL", "EIA heating-oil spot vs CPI Energy",
              w.get("SEHE01", 0.083), "unrevised", "VERY COARSE: wholesale spot vs energy aggregate"),
         Pair("atlanta_fed_wage", "US_overall_median", "", "Atlanta Fed wage tracker",

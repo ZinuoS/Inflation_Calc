@@ -44,8 +44,13 @@ def _fetch_json(url: str) -> tuple[bytes, int]:
         return resp.read(), resp.status
 
 
-def fetch(as_of: str | None = None) -> Path:
+def fetch(as_of: str | None = None, only: set[str] | None = None) -> Path:
+    """Fetch ALFRED vintages. `only` (a set of alfred_ids) restricts the pull to a
+    subset -- used for incremental Session-2B adds so existing series are not
+    re-superseded. Default (None) fetches every series in spec.yaml."""
     spec = yaml.safe_load((PIPE / "spec.yaml").read_text())
+    if only is not None:
+        spec = {**spec, "series": [s for s in spec["series"] if s["alfred_id"] in only]}
     api = spec["api"]
     key = os.environ.get("FRED_API_KEY")
     if not key:

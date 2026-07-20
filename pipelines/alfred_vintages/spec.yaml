@@ -42,6 +42,11 @@ series:
   - {alfred_id: CUSR0000SEHA,    role: cpi_rent_primary,              mapping_series_id: CUSR0000SEHA}
   - {alfred_id: CUSR0000SETA01,  role: cpi_new_vehicles,              mapping_series_id: CUSR0000SETA01}
   - {alfred_id: CUSR0000SETA02,  role: cpi_used_cars_and_trucks,      mapping_series_id: CUSR0000SETA02}
+  # --- Session-2B target-side adds (Task 1): stratum-level vintages for reconciliation ---
+  # NOTE: ALFRED archives these CU strata only from ~2011-04-15; pre-2011 reference
+  # periods share that bulk vintage, so genuine first-release MoM begins ~2011.
+  - {alfred_id: CUSR0000SETB01,  role: cpi_gasoline_all_types,        mapping_series_id: CUSR0000SETB01}
+  - {alfred_id: CUSR0000SEHC01,  role: cpi_owners_equivalent_rent,    mapping_series_id: CUSR0000SEHC01}
 
 output_csv_columns:              # canonical staged CSV -> naru artifact input
   - series_id                    # ALFRED series id (the vintage identifier)

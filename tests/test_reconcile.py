@@ -73,11 +73,13 @@ def test_ols_recovers_known_slope():
 @pytest.mark.skipif(not DB.exists(), reason="nowcast.sqlite not built")
 def test_gate2_findings():
     results = {r.label: r for r in reconcile.run(str(DB), reconcile.build_pairs(str(MAPPING)))}
-    gas = results["EIA gasoline vs CPI Energy"]
+    gas = results["EIA gasoline vs CPI Gasoline (SETB01)"]
     rent = results["ZORI vs CPI Rent of primary residence"]
 
-    # gasoline tracks the energy aggregate well and is stable (unrevised proxy)
+    # gasoline tracks the gasoline stratum well and is stable (unrevised proxy);
+    # beta is now ~the mechanical retail->CPI pass-through (>0.5)
     assert gas.proxy_quality == "stable" and gas.r2 > 0.5 and not gas.optimistic
+    assert gas.beta > 0.5
     # ZORI does NOT track contemporaneous CPI rent MoM -> unstable (pre-registered H2),
     # and is optimism-flagged (revised_latest_only)
     assert rent.proxy_quality == "unstable" and rent.r2 < 0.1 and rent.optimistic
