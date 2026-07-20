@@ -17,6 +17,7 @@ Covers (Task 2 + Amendment C):
 
 import datetime as dt
 import random
+import sqlite3
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -25,6 +26,7 @@ import pytest
 from nowcast.timebase import (
     NoMomExists,
     NotYetReleased,
+    PreVintageFloor,
     RELEASE_TIME_ET,
     Timebase,
     open_timebase,
@@ -97,17 +99,54 @@ def test_exact_release_instant_is_strictly_before(tb, print_type):
     assert tb.asof(series, exact + dt.timedelta(microseconds=1)) == ref_value
 
 
-def test_series_start_boundary(tb):
+def test_gap_boundary_raises_nomomexists(tb):
+    # a POST-floor month whose prior month was never released (2025 shutdown dropped
+    # CPIAUCSL 2025-10) has no within-vintage MoM -> NoMomExists (not imputed). The
+    # series-start month (1947) is instead below the vintage floor (PreVintageFloor,
+    # tested separately), so we use the shutdown gap for the NoMomExists path.
     series = "CPIAUCSL"
-    start = tb.conn.execute(
-        "SELECT MIN(reference_period) FROM first_release WHERE series_id=?", (series,)
-    ).fetchone()[0]
-    long_after = dt.datetime(2026, 1, 1, tzinfo=ET)
-    # asof_mom_for_ref on the series-start month -> NoMomExists (structural absence)
+    long_after = dt.datetime(2026, 7, 1, tzinfo=ET)
+    assert tb._vintage_floor[series] <= "2025-11-01"  # gap is above the floor
     with pytest.raises(NoMomExists):
-        tb.asof_mom_for_ref(series, start, long_after)
-    # asof_mom just skips it and returns some later, observable MoM
+        tb.asof_mom_for_ref(series, "2025-11-01", long_after)
+    # asof_mom skips both gap and pre-floor months, returns a later observable MoM
     assert isinstance(tb.asof_mom(series, long_after), float)
+
+
+def test_pre_vintage_floor_refused_for_ref(tb):
+    """A pre-2011 gasoline-stratum ref (ALFRED bulk-archived at 2011-04-15) must raise
+    PreVintageFloor via _for_ref -- its 'first release' is a restated value. asof_mom
+    skips it and returns a genuine post-floor MoM instead."""
+    floor = tb._vintage_floor["CUSR0000SETB01"]
+    assert floor >= "2011-01-01"  # bulk-archived stratum
+    long_after = dt.datetime(2026, 7, 1, tzinfo=ET)
+    with pytest.raises(PreVintageFloor):
+        tb.asof_mom_for_ref("CUSR0000SETB01", "2005-01-01", long_after)
+    # a post-floor ref is fine
+    assert isinstance(tb.asof_mom_for_ref("CUSR0000SETB01", "2015-06-01", long_after), float)
+    # asof_mom never returns a pre-floor month
+    assert isinstance(tb.asof_mom("CUSR0000SETB01", long_after), float)
+
+
+def test_reconcile_overlap_excludes_pre_floor():
+    """The gasoline pair's regression must include ONLY genuine post-floor months --
+    restated-as-first impossible by construction (not by documentation)."""
+    from nowcast import reconcile
+
+    results = {r.label: r for r in reconcile.run(str(DB), reconcile.build_pairs(
+        str(Path(__file__).parent.parent / "mapping" / "mapping.yaml")))}
+    gas = results["EIA gasoline vs CPI Gasoline (SETB01)"]
+    assert gas.pre_floor_months > 0  # pre-2011 months were present and excluded
+    # every overlap month is at/above the floor (checked via a direct floor query)
+    with open_timebase(DB) as tb:
+        floor = tb._vintage_floor["CUSR0000SETB01"]
+    conn = sqlite3.connect(DB)
+    below = conn.execute(
+        "SELECT COUNT(*) FROM first_release_mom WHERE series_id='CUSR0000SETB01' AND reference_period < ?",
+        (floor,),
+    ).fetchone()[0]
+    conn.close()
+    assert below == gas.pre_floor_months or below >= gas.pre_floor_months  # all pre-floor refused
 
 
 def _mom(tb: Timebase, series: str, ref: str):

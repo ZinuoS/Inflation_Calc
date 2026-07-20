@@ -6,20 +6,21 @@ Official-side MoM read via `timebase.asof_mom_for_ref` (first-release, within-vi
 
 | pair | CPI wt | n | skip | beta | R² | quality | optimistic |
 |---|--:|--:|--:|--:|--:|---|:--:|
-| EIA gasoline vs CPI Energy | 2.90 | 428 | 3 | +0.438 | 0.758 | stable |  |
+| EIA gasoline vs CPI Gasoline (SETB01) | 2.90 | 184 | 1 | +0.810 | 0.746 | stable |  |
 | ZORI vs CPI Shelter (SAH1) | 35.62 | 135 | 2 | +0.089 | 0.031 | unstable | ✓ |
+| ZORI vs CPI OER (SEHC01) | 25.23 | 135 | 2 | +0.045 | 0.010 | unstable | ✓ |
 | ZORI vs CPI Rent of primary residence | 7.84 | 135 | 2 | +0.042 | 0.007 | unstable | ✓ |
-| EIA heating-oil spot vs CPI Energy | 0.08 | 478 | 3 | +0.153 | 0.266 | unstable |  |
+| EIA heating-oil spot vs CPI Energy | 0.08 | 354 | 3 | +0.188 | 0.330 | stable |  |
 | Atlanta Fed wage tracker | 0.00 | 353 | 0 | — | — | monitor | ✓ |
 | Indeed wage tracker | 0.00 | 90 | 0 | — | — | monitor | ✓ |
 
-**Optimism-flagged pairs (proxy vintage unavailable): 4**
+**Optimism-flagged pairs (proxy vintage unavailable): 5**
 
 ## UNSTABLE pairs — one-line diagnoses
 
 - **ZORI vs CPI Shelter (SAH1)** (R²=0.031): beta sign flips across windows (-0.47..+0.89); R² collapses in stress window(s) ['2018-02-01..2021-01-01', '2020-02-01..2023-01-01', '2022-02-01..2025-01-01']. coarser: shelter incl OER + lodging
+- **ZORI vs CPI OER (SEHC01)** (R²=0.010): beta sign flips across windows (-0.36..+0.64); R² collapses in stress window(s) ['2018-02-01..2021-01-01', '2020-02-01..2023-01-01', '2022-02-01..2025-01-01']. OER direct (Session-2B add, 25% weight). H2 again: R²~0, unstable — market rent leads all-tenant OER ~1yr; ALFRED first-release from ~2011.
 - **ZORI vs CPI Rent of primary residence** (R²=0.007): beta sign flips across windows (-0.21..+0.78); R² collapses in stress window(s) ['2018-02-01..2021-01-01', '2019-02-01..2022-01-01', '2020-02-01..2023-01-01']. SA vs SA; primary shelter pair. ZORI is a market-rent index; CPI rent is a smoothed all-tenant series lagging market by ~1yr (research plan H2).
-- **EIA heating-oil spot vs CPI Energy** (R²=0.266): beta sign flips across windows (-0.02..+0.38). VERY COARSE: wholesale spot vs energy aggregate
 
 ## Monitors (not regressed)
 

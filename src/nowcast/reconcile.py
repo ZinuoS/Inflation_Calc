@@ -26,7 +26,7 @@ from zoneinfo import ZoneInfo
 import numpy as np
 
 from nowcast import alignment
-from nowcast.timebase import NoMomExists, NotYetReleased, open_timebase
+from nowcast.timebase import NoMomExists, NotYetReleased, PreVintageFloor, open_timebase
 
 ET = ZoneInfo("America/New_York")
 STRESS_WINDOWS = (("2021-01-01", "2022-12-31"), ("2025-01-01", "2026-12-31"))
@@ -53,6 +53,7 @@ class Result:
     cpi_weight: float
     n_overlap: int
     skipped_months: int
+    pre_floor_months: int = 0
     beta: float | None = None
     r2: float | None = None
     rolling_betas: list[float] = field(default_factory=list)
@@ -71,19 +72,22 @@ def _ols(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
     return beta, r * r
 
 
-def _official_mom(tb, series: str, months: list[str], forecast_time) -> tuple[dict[str, float], int]:
+def _official_mom(tb, series: str, months: list[str], forecast_time) -> tuple[dict[str, float], int, int]:
     """First-release within-vintage official MoM per month via the sanctioned path.
-    Returns (mom_by_month, skipped_months)."""
+    Returns (mom_by_month, skipped_months, pre_floor_months)."""
     out: dict[str, float] = {}
     skipped = 0
+    pre_floor = 0
     for m in months:
         try:
             out[m] = tb.asof_mom_for_ref(series, m, forecast_time)
+        except PreVintageFloor:
+            pre_floor += 1  # restated-as-first -- excluded by construction, counted
         except NoMomExists:
             skipped += 1  # series-start or shutdown gap -- never imputed
         except NotYetReleased:
             skipped += 1  # not public yet at forecast_time
-    return out, skipped
+    return out, skipped, pre_floor
 
 
 def reconcile_pair(db_path, tb, pair: Pair, forecast_time) -> Result:
@@ -97,10 +101,12 @@ def reconcile_pair(db_path, tb, pair: Pair, forecast_time) -> Result:
         )
 
     proxy_mom = alignment.monthly_mom(db_path, pair.proxy_source, pair.proxy_series_key)
-    official_mom, skipped = _official_mom(tb, pair.official_series, sorted(proxy_mom), forecast_time)
+    official_mom, skipped, pre_floor = _official_mom(
+        tb, pair.official_series, sorted(proxy_mom), forecast_time
+    )
     common = sorted(set(proxy_mom) & set(official_mom))
     res = Result(label=pair.label, cpi_weight=pair.cpi_weight, n_overlap=len(common),
-                 skipped_months=skipped, note=pair.note,
+                 skipped_months=skipped, pre_floor_months=pre_floor, note=pair.note,
                  optimistic=(pair.proxy_vintage_status == "revised_latest_only"))
     if len(common) < WINDOW_MONTHS:
         res.proxy_quality = "insufficient_overlap"

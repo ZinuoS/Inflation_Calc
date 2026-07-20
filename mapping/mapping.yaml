@@ -5018,12 +5018,12 @@ reconciliation:
   note: 'Session 2B Gate 2. quality: stable|weak|unstable|monitor|insufficient_overlap. optimistic=stat from revised_latest_only
     proxy.'
   pairs:
-  - label: EIA gasoline vs CPI Energy
+  - label: EIA gasoline vs CPI Gasoline (SETB01)
     cpi_weight: 2.895
-    n_overlap: 428
-    skipped_months: 3
-    beta: 0.4377
-    r2: 0.7579
+    n_overlap: 184
+    skipped_months: 1
+    beta: 0.8096
+    r2: 0.7455
     proxy_quality: stable
     optimistic: false
   - label: ZORI vs CPI Shelter (SAH1)
@@ -5032,6 +5032,14 @@ reconciliation:
     skipped_months: 2
     beta: 0.0885
     r2: 0.0308
+    proxy_quality: unstable
+    optimistic: true
+  - label: ZORI vs CPI OER (SEHC01)
+    cpi_weight: 25.23
+    n_overlap: 135
+    skipped_months: 2
+    beta: 0.0451
+    r2: 0.01
     proxy_quality: unstable
     optimistic: true
   - label: ZORI vs CPI Rent of primary residence
@@ -5044,11 +5052,11 @@ reconciliation:
     optimistic: true
   - label: EIA heating-oil spot vs CPI Energy
     cpi_weight: 0.083
-    n_overlap: 478
+    n_overlap: 354
     skipped_months: 3
-    beta: 0.1534
-    r2: 0.2658
-    proxy_quality: unstable
+    beta: 0.1879
+    r2: 0.3296
+    proxy_quality: stable
     optimistic: false
   - label: Atlanta Fed wage tracker
     cpi_weight: 0.0

@@ -104,10 +104,29 @@ JOIN observations prev
 """
 
 
+_SERIES_VINTAGE_FLOOR = """
+CREATE VIEW IF NOT EXISTS series_vintage_floor AS
+-- Earliest reference period with a GENUINE first-release vintage, derived from the
+-- data: the release lag (first-release vintage minus reference-period start) must be
+-- <= 70 days, the normal publication lag. ALFRED bulk-archives a series' whole prior
+-- history at one snapshot date; those pre-archive reference periods carry that
+-- snapshot as their "first" vintage with a lag of months-to-decades -- restated
+-- values masquerading as first release. 70 days cleanly separates them (genuine
+-- CPI/PPI/PCE/Employment lags are ~13-60 days) from the bulk (>=73 days at the
+-- boundary). timebase enforces this floor so restated-as-first-release is impossible
+-- by construction, not by documentation.
+SELECT series_id, MIN(reference_period) AS vintage_floor
+FROM first_release
+WHERE julianday(first_release_vintage) - julianday(reference_period) <= 70
+GROUP BY series_id;
+"""
+
+
 def create_views(db_path: str | Path) -> None:
     with db.connect(db_path) as conn:
         conn.executescript(_INDEX)
         conn.executescript(_FIRST_RELEASE)
         conn.executescript(_LATEST_VALUE)
         conn.executescript(_FIRST_RELEASE_MOM)
+        conn.executescript(_SERIES_VINTAGE_FLOOR)
         conn.commit()

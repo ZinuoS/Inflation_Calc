@@ -63,6 +63,14 @@ class NoMomExists(TimebaseError):
     a structural absence the caller must handle, never silently substitute."""
 
 
+class PreVintageFloor(TimebaseError):
+    """The reference period is below the series' vintage_floor -- ALFRED bulk-archived
+    it, so its 'first release' is actually a restated value, not what was published in
+    real time. Sibling of NoMomExists: a structural absence, never a usable first
+    release. Using it as first-release would be exactly the restated-history leak the
+    floor exists to make impossible."""
+
+
 def _series_print(series_id: str) -> str:
     """Which release prints this series: CPI, PPI, or PCE."""
     if series_id == "PPIFIS":
@@ -105,6 +113,11 @@ class Timebase:
                 "SELECT print, release_date, release_datetime_et FROM release_calendar"
             )
         }
+        # per-series vintage floor: earliest ref with a genuine (non-bulk-archived)
+        # first release. MoM below the floor is restated-as-first -> refused.
+        self._vintage_floor: dict[str, str] = dict(
+            conn.execute("SELECT series_id, vintage_floor FROM series_vintage_floor")
+        )
 
     # -- resolution ------------------------------------------------------------
 
@@ -149,11 +162,14 @@ class Timebase:
         Omitted-boundary reference months are naturally skipped."""
         sid = self.resolve(series_id)
         ft = _normalize_forecast_time(forecast_time)
+        floor = self._vintage_floor.get(sid)
         best: tuple[str, float] | None = None
         for ref, mom, vintage in self.conn.execute(
             "SELECT reference_period, mom, vintage FROM first_release_mom WHERE series_id = ?",
             (sid,),
         ):
+            if floor is not None and ref < floor:
+                continue  # below vintage floor: restated-as-first, skipped
             if self._observable_dt(sid, vintage) < ft and (best is None or ref > best[0]):
                 best = (ref, mom)
         if best is None:
@@ -173,6 +189,12 @@ class Timebase:
         sid = self.resolve(series_id)
         ref = _normalize_ref(ref_period)
         ft = _normalize_forecast_time(forecast_time)
+        floor = self._vintage_floor.get(sid)
+        if floor is not None and ref < floor:
+            raise PreVintageFloor(
+                f"{sid} {ref}: below vintage_floor {floor} -- ALFRED bulk-archived, "
+                "first release is restated not real-time"
+            )
         row = self.conn.execute(
             "SELECT mom, vintage FROM first_release_mom WHERE series_id = ? AND reference_period = ?",
             (sid, ref),
