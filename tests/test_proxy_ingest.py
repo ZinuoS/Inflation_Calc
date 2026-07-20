@@ -167,3 +167,16 @@ def test_nadac_matched_model_index():
     assert float(rows[0]["value"]) == pytest.approx(100.0)
     assert float(rows[1]["value"]) == pytest.approx(110.0)
     assert rows[0]["vintage_status"] == "unrevised"
+
+
+# ---------- manheim (Group B / B1, point-in-time xlsx archive) ----------
+
+def test_manheim_extract_newest_from_dated_xlsx():
+    mod, cfg = _load_source("manheim")
+    raw = (PIPELINES / "manheim" / "golden" / "raw_sample.xlsx").read_bytes()
+    rec = mod.extract_newest(raw, cfg)
+    # the Nov-2025 dated file's newest reference-month row is Nov-2025 (first release)
+    assert rec is not None
+    period, value = rec
+    assert period == "2025-11-01"
+    assert value > 200  # UVVI is ~200s in 2025 (1997=100 base)

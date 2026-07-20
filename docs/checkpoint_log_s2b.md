@@ -221,3 +221,36 @@ revised_latest_only). **Floor/skip exclusions:** 370 pre_floor + 10 skip across 
 those; (b) accept the NADAC 1-year placeholder for now (full multi-year is a 3A-scale
 build), or prioritize a NADAC history backfill; (c) Apartment List — leave as ZORI's
 documented backup, or you manually drop its CSV into data/raw/ for me to parse.
+
+## Session 2B-final — conditionals + Group B
+
+### Conditionals (all resolved)
+- **C1 usda_ams** — `USDA_AMS_API_KEY` ABSENT → stays SKIPPED (folder + spec + STATUS).
+- **C2 bea_pce_detail** — `BEA_API_KEY` ABSENT → stays SKIPPED (folder + spec + SKIPPED.md).
+- **C3 keepa** — `KEEPA_API_KEY` ABSENT → `pipelines/keepa/SKIPPED.md` created (with the H6
+  pre-registration to state before any future run).
+- **C4 apartment_list** — no CSV in data/raw → stays documented backup (ZORI covers shelter).
+- **C5 NADAC backfill — SUCCEEDED (in timebox).** Enumerated per-year dataset URLs
+  DETERMINISTICALLY from the data.medicaid.gov catalog API (search fulltext=NADAC), stored
+  in spec.yaml (no guessing). Backfilled 2021–2025 (5×139 MB; header drift underscore↔space
+  handled deterministically). Index now **62 monthly points (2020-01..2026-01)** →
+  reconciliation cleared insufficient_overlap: **n=58, R²=0.012, unstable** (placeholder
+  unweighted index vs coarse SAM1 official; low R² expected, not leakage; 3A weighted
+  index + drug-specific official may improve). Full 2013–2026 available in the catalog.
+
+### B1 manheim — CHECKPOINT (per-source)  ·  point_in_time
+Point-in-time UVVI full-month index from the DATED monthly xlsx archive (each file's
+newest reference-month row = first release). Only ~2025-onward dated files remain hosted
+(older 404), so coverage is honestly short — Amendment 1 (short honest > long optimistic).
+
+- rows: **11** point-in-time months (2025-01..2025-11); months theoretically available in
+  the hosted archive: 11 (all recovered); parse-failure quarantine: 0.
+- vintage_status: point_in_time. license: reviewed (Cox/Manheim; derived-index-only per D1).
+- reconciliation vs SETA02 (used cars, H1 feedstock): n=10 → **insufficient_overlap**
+  (valid verdict; the honest cost of preferring point-in-time). NOT optimism-flagged.
+- Mid-month release (H1 distinct series) = documented follow-up; alignment rule already exists.
+- Golden: saved dated xlsx + `extract_newest` parse test.
+
+Remaining Group B (awaiting go, per "wait between sources"): B2 cox_atp, B3 adobe_dpi,
+B4 freightos_drewry, B5 tsa, B6 opentable (state-of-industry page 404 → likely
+vendor_only). 54 tests green.

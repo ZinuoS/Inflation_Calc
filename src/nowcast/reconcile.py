@@ -163,6 +163,11 @@ def build_pairs(mapping_path) -> list[Pair]:
              "rent leads all-tenant OER ~1yr; ALFRED first-release from ~2011."),
         Pair("eia_heating_oil", "US_NYH_SPOT", "CPIENGSL", "EIA heating-oil spot vs CPI Energy",
              w.get("SEHE01", 0.083), "unrevised", "VERY COARSE: wholesale spot vs energy aggregate"),
+        Pair("manheim", "US_full_month", "CUSR0000SETA02", "Manheim vs CPI Used cars (SETA02)",
+             w.get("SETA02", 0.0), "point_in_time",
+             "H1 feedstock. POINT-IN-TIME (first-release), honestly short: only ~2025 dated "
+             "UVVI files remain hosted -> insufficient_overlap. Mid-month is a separate "
+             "publication (H1), a documented follow-up."),
         Pair("nadac", "US_drug_index", "CUSR0000SAM1", "NADAC vs CPI Medical-care commodities",
              w.get("SEMF01", 0.973), "unrevised",
              "PLACEHOLDER index, 1-year bounded (2024-25) -> too short for the rolling "

@@ -7,13 +7,17 @@ description: >
   ALFRED vintages).
 vintage_status: unrevised
 
-base_url: https://download.medicaid.gov/data/
-year_file: nadac-national-average-drug-acquisition-cost-12-31-{year}.csv
-# Only the current-year file resolves at this stable path; prior years live under
-# per-dataset UUIDs whose downloadURL metadata is inconsistent. This placeholder
-# ingests the one reliably-addressable year (2025 file spans ~late-2024..2025);
-# FULL multi-year history is a documented 3A-scale follow-up (see STATUS note in log).
-years: [2025]
+# Per-year download URLs enumerated DETERMINISTICALLY from the data.medicaid.gov
+# catalog API (search fulltext=NADAC), not guessed. Backfill window 2021-2025 pulled
+# (C5, Session 2B-final) to clear insufficient_overlap; full 2013-2026 available in the
+# catalog if deeper history is wanted (each file ~139 MB).
+year_urls:
+  2021: https://download.medicaid.gov/data/national-average-drug-acquisition-cost-12-29-2021.csv
+  2022: https://download.medicaid.gov/data/nadac-national-average-drug-acquisition-cost-2022.csv
+  2023: https://download.medicaid.gov/data/nadac-national-average-drug-acquisition-cost-12-27-2023.csv
+  2024: https://download.medicaid.gov/data/nadac-national-average-drug-acquisition-cost-12-25-2024.csv
+  2025: https://download.medicaid.gov/data/nadac-national-average-drug-acquisition-cost-12-31-2025.csv
+years: [2021, 2022, 2023, 2024, 2025]
 date_format: "%m/%d/%Y"
 
 # index construction (PLACEHOLDER -- 3A upgrade to weighted matched-model)

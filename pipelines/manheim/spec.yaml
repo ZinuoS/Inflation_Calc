@@ -1,0 +1,19 @@
+# manheim pipeline spec (Session 2B-final, Group B / B1) — POINT-IN-TIME archive
+source: manheim
+description: >
+  Manheim Used Vehicle Value Index (full-month), first-release from the dated monthly
+  xlsx archive. Published-proxy for CPI Used cars and trucks (SETA02) — H1 feedstock.
+vintage_status: point_in_time
+archive:
+  url_template: "https://site.manheim.com/wp-content/uploads/sites/2/{pub_year}/{pub_month:02d}/{ref_mon}-{ref_year}-Manheim-Used-Vehicle-Value-Index.xlsx"
+  # publication is ~the month after the reference month; enumerate pub months and keep
+  # those that resolve (200). Older files 404 -> honest short coverage, never interpolated.
+  enumerate_pub_from: "2025-01"
+  data_sheet: DATA
+  date_col_index: 0            # column A = reference month date
+  index_col_index: 1          # column B = Index (1/97 = 100)
+  take_row: newest            # each dated file's newest ref-month row = first release
+series_key: US_full_month
+frequency: monthly
+mapped_strata: [SETA02]        # Used cars and trucks
+midmonth_followup: true        # mid-month release is a separate publication (H1)

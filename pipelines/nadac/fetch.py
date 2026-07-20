@@ -13,9 +13,15 @@ REPO = Path(__file__).resolve().parents[2]
 
 
 def monthly_ndc_means(csv_bytes: bytes, cols: dict, acc: dict, date_format: str) -> None:
-    """Accumulate sum/count of NADAC per unit per (ndc, month) across files. Pure-ish."""
+    """Accumulate sum/count of NADAC per unit per (ndc, month) across files. Pure-ish.
+
+    Header drift across NADAC vintages is deterministic: older files use underscores
+    (NADAC_Per_Unit, Effective_Date), newer files use spaces. We normalize
+    underscore->space so one spec column mapping matches both -- no per-file guessing.
+    """
     r = csv.DictReader(io.StringIO(csv_bytes.decode("utf-8", "replace")))
     for rec in r:
+        rec = {k.replace("_", " "): v for k, v in rec.items()}
         try:
             price = float(rec[cols["price"]])
             d = dt.datetime.strptime(rec[cols["date"]], date_format).date()
@@ -57,9 +63,9 @@ def fetch(as_of: str | None = None):
     out = _ingest.raw_dir(spec["source"], as_of)
     acc, prov = {}, []
     for year in spec["years"]:
-        url = spec["base_url"] + spec["year_file"].format(year=year)
+        url = spec["year_urls"][year]  # deterministic, catalog-enumerated (no guessing)
         try:
-            raw, status = _ingest.fetch(url, timeout=180)
+            raw, status = _ingest.fetch(url, timeout=300)
         except Exception as e:
             print(f"nadac: {year} fetch failed ({e}); skipping"); continue
         (out / f"nadac_{year}.csv").write_bytes(raw)
