@@ -1,0 +1,6 @@
+name: seasonal_factors_loader
+version: v1
+sheet: seasonal_factors
+target_table: bls_seasonal_factors
+key: [series_id, reference_period]
+source_format: csv

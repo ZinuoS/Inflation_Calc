@@ -1,0 +1,10 @@
+row_count:
+  min: 1
+key_uniqueness:
+  - columns: [series_id, reference_period]
+null_policy:
+  - {column: series_id, nulls_allowed: false}
+  - {column: item_code, nulls_allowed: false}
+  - {column: reference_period, nulls_allowed: false}
+  - {column: projected_factor, nulls_allowed: false}
+  - {column: published_asof, nulls_allowed: false}

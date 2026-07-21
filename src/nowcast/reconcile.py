@@ -90,6 +90,69 @@ def _official_mom(tb, series: str, months: list[str], forecast_time) -> tuple[di
     return out, skipped, pre_floor
 
 
+def _fit_stability(res: Result, common: list[str], x: np.ndarray, y: np.ndarray) -> Result:
+    """Shared fit + rolling-window/stress stability, used by both the SA (timebase) and
+    NSA (official_current) reconciliation paths so their quality verdicts are identical."""
+    if len(common) < WINDOW_MONTHS:
+        res.proxy_quality = "insufficient_overlap"
+        return res
+    res.beta, res.r2 = _ols(x, y)
+    for start in range(0, len(common) - WINDOW_MONTHS + 1, 12):
+        wx, wy = x[start:start + WINDOW_MONTHS], y[start:start + WINDOW_MONTHS]
+        b, r2 = _ols(wx, wy)
+        if not np.isnan(b):
+            res.rolling_betas.append(round(b, 4))
+        wmonths = common[start:start + WINDOW_MONTHS]
+        for lo, hi in STRESS_WINDOWS:
+            if any(lo <= m <= hi for m in wmonths) and not np.isnan(r2):
+                res.stress_r2[f"{wmonths[0]}..{wmonths[-1]}"] = round(r2, 3)
+    sign_flip = res.rolling_betas and (min(res.rolling_betas) < 0 < max(res.rolling_betas))
+    stress_collapse = any(v < R2_COLLAPSE for v in res.stress_r2.values())
+    if sign_flip or stress_collapse:
+        res.proxy_quality = "unstable"
+    elif res.r2 is not None and res.r2 < R2_COLLAPSE:
+        res.proxy_quality = "weak"
+    else:
+        res.proxy_quality = "stable"
+    return res
+
+
+def official_nsa_mom(db_path, nsa_series: str, months: list[str]) -> dict[str, float]:
+    """First-release NSA MoM per month from official_current. LEAKAGE-SAFE ONLY FOR NSA:
+    the NSA CPI index is never revised (BLS Handbook CPI ch.17; verified here — 0 changed
+    reference values across 154-183 ALFRED vintages), so its latest-pull official_current
+    value IS its first release, and MoM = value[m]/value[m-1] - 1 has no restatement leak.
+    Do NOT call this for SA (CUSR*) series — those are revised and must go through timebase."""
+    from nowcast import db as _db
+    assert nsa_series.startswith("CUUR"), f"official_nsa_mom is NSA-only, got {nsa_series}"
+    with _db.connect(db_path) as conn:
+        lvl = {p: v for p, v in conn.execute(
+            "SELECT period, value FROM official_current WHERE series_id=? "
+            "AND _superseded_by_run_id IS NULL", (nsa_series,))}
+    out: dict[str, float] = {}
+    for m in months:
+        d = dt.date.fromisoformat(m)
+        pm = dt.date(d.year - (d.month == 1), d.month - 1 or 12, 1).isoformat()
+        if m in lvl and pm in lvl and lvl[pm]:
+            out[m] = lvl[m] / lvl[pm] - 1.0
+    return out
+
+
+def reconcile_nsa_pair(db_path, pair: Pair, nsa_official: str) -> Result:
+    """NSA-vs-NSA reconciliation (Session 3A, Task 4): the proxy NSA MoM regressed on the
+    OFFICIAL NSA MoM (official_current, unrevised) instead of the SA official. Removes the
+    NSA-proxy-vs-SA-official seasonality mismatch that capped the Session-2B R²."""
+    proxy_mom = alignment.monthly_mom(db_path, pair.proxy_source, pair.proxy_series_key)
+    official = official_nsa_mom(db_path, nsa_official, sorted(proxy_mom))
+    common = sorted(set(proxy_mom) & set(official))
+    res = Result(label=pair.label + " [NSA-vs-NSA]", cpi_weight=pair.cpi_weight,
+                 n_overlap=len(common), skipped_months=0, note=pair.note,
+                 optimistic=(pair.proxy_vintage_status == "revised_latest_only"))
+    x = np.array([proxy_mom[m] for m in common])
+    y = np.array([official[m] for m in common])
+    return _fit_stability(res, common, x, y)
+
+
 def reconcile_pair(db_path, tb, pair: Pair, forecast_time) -> Result:
     if pair.is_monitor:
         levels = alignment.monthly_levels(db_path, pair.proxy_source, pair.proxy_series_key)
@@ -108,35 +171,9 @@ def reconcile_pair(db_path, tb, pair: Pair, forecast_time) -> Result:
     res = Result(label=pair.label, cpi_weight=pair.cpi_weight, n_overlap=len(common),
                  skipped_months=skipped, pre_floor_months=pre_floor, note=pair.note,
                  optimistic=(pair.proxy_vintage_status == "revised_latest_only"))
-    if len(common) < WINDOW_MONTHS:
-        res.proxy_quality = "insufficient_overlap"
-        return res
-
     x = np.array([proxy_mom[m] for m in common])
     y = np.array([official_mom[m] for m in common])
-    res.beta, res.r2 = _ols(x, y)
-
-    # rolling 36-month windows (step 12) for stability
-    for start in range(0, len(common) - WINDOW_MONTHS + 1, 12):
-        wx, wy = x[start:start + WINDOW_MONTHS], y[start:start + WINDOW_MONTHS]
-        b, r2 = _ols(wx, wy)
-        if not np.isnan(b):
-            res.rolling_betas.append(round(b, 4))
-        # record R2 for windows overlapping a stress period
-        wmonths = common[start:start + WINDOW_MONTHS]
-        for lo, hi in STRESS_WINDOWS:
-            if any(lo <= m <= hi for m in wmonths) and not np.isnan(r2):
-                res.stress_r2[f"{wmonths[0]}..{wmonths[-1]}"] = round(r2, 3)
-
-    sign_flip = res.rolling_betas and (min(res.rolling_betas) < 0 < max(res.rolling_betas))
-    stress_collapse = any(v < R2_COLLAPSE for v in res.stress_r2.values())
-    if sign_flip or stress_collapse:
-        res.proxy_quality = "unstable"
-    elif res.r2 is not None and res.r2 < R2_COLLAPSE:
-        res.proxy_quality = "weak"
-    else:
-        res.proxy_quality = "stable"
-    return res
+    return _fit_stability(res, common, x, y)
 
 
 @dataclass
@@ -166,10 +203,30 @@ def lead_scan(db_path, pair: "Pair", max_lead: int = 6, forecast_time=None) -> L
         mo = d.month - 1 + k
         return dt.date(d.year + mo // 12, mo % 12 + 1, 1).isoformat()
 
-    prof = LeadProfile(label=pair.label)
     with open_timebase(db_path) as tb:
         need = sorted({_add_months(m, k) for m in months for k in range(max_lead + 1)})
         official, _, _ = _official_mom(tb, pair.official_series, need, forecast_time)
+    return _lead_from(pair.label, pm, months, official, max_lead, _add_months)
+
+
+def lead_scan_nsa(db_path, pair: "Pair", nsa_official: str, max_lead: int = 6) -> "LeadProfile":
+    """NSA-vs-NSA lead scan (Session 3A, Task 4): official NSA MoM (official_current,
+    unrevised) at M+k on proxy NSA MoM at M. Same admission rule as lead_scan; used to
+    re-measure the Manheim/CPI used-car lead without the SA-vs-NSA seasonality mismatch."""
+    def _add_months(iso: str, k: int) -> str:
+        d = dt.date.fromisoformat(iso)
+        mo = d.month - 1 + k
+        return dt.date(d.year + mo // 12, mo % 12 + 1, 1).isoformat()
+
+    pm = alignment.monthly_mom(db_path, pair.proxy_source, pair.proxy_series_key)
+    months = sorted(pm)
+    need = sorted({_add_months(m, k) for m in months for k in range(max_lead + 1)})
+    official = official_nsa_mom(db_path, nsa_official, need)
+    return _lead_from(pair.label + " [NSA-vs-NSA]", pm, months, official, max_lead, _add_months)
+
+
+def _lead_from(label, pm, months, official, max_lead, _add_months) -> "LeadProfile":
+    prof = LeadProfile(label=label)
     for k in range(max_lead + 1):
         pairs_xy = [(pm[m], official[_add_months(m, k)]) for m in months if _add_months(m, k) in official]
         if len(pairs_xy) < WINDOW_MONTHS:

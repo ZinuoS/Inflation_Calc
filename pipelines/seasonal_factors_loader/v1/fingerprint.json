@@ -1,0 +1,11 @@
+{
+  "sheet": "seasonal_factors", "sheet_index": 0, "header_row": 1,
+  "columns": [
+    {"name": "series_id", "type": "string", "strictness": "strict"},
+    {"name": "item_code", "type": "string", "strictness": "strict"},
+    {"name": "reference_period", "type": "string", "strictness": "strict"},
+    {"name": "projected_factor", "type": "string", "strictness": "strict"},
+    {"name": "factor_year", "type": "string", "strictness": "strict"},
+    {"name": "published_asof", "type": "string", "strictness": "strict"}
+  ]
+}

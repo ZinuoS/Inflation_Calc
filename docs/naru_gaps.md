@@ -238,3 +238,20 @@ pipelines/cox_atp/STATUS.md); no patchy series is loaded. No shim — flagged, n
 | 2026-07-19 | naru#4 | logged; deferred, not needed in 2A |
 | 2026-07-19 | naru#5 | workaround: nowcast installs naru non-editable (pinned git rev 35a2612); proper fix is a naru packaging change |
 | 2026-07-19 | naru#6 | shim: src/nowcast/db.connect (WAL + busy_timeout + context manager); proper fix is WAL/timeout/session defaults in naru |
+| 2026-07-20 | naru#7 | logged; cosmetic, not blocking (see below) |
+
+---
+
+## naru#7 — `naru lint` requires `golden/input_sample.xlsx` even for `source_format: csv`  ·  severity: COSMETIC
+
+**Symptom.** For a loader whose `manifest.source_format: csv`, `naru lint` fails with
+`golden/input_sample.xlsx: required file missing`, even though `naru test` (the real gate)
+passes reading `golden/input_sample.csv`. `run_golden_test` correctly resolves the sample as
+`input_sample.{source_format}`, but the lint's required-files check is hard-coded to `.xlsx`.
+
+**Desired.** Lint should resolve the golden input extension from `manifest.source_format`,
+mirroring `run_golden_test`.
+
+**Local handling.** No shim — cosmetic. Every CSV-source loader in this repo
+(`cpi_weights_loader`, now `seasonal_factors_loader`) shows the identical lint line; `naru test`
+is used as the loader gate instead. Flagged, not worked around.

@@ -107,3 +107,45 @@ def test_lead_scan_manheim_used_cars():
     assert prof.quality == "stable_leading"         # admissible only as a lagged feature
     contemp = next(d["r2"] for d in prof.leads if d["k"] == 0)
     assert contemp < 0.05                           # contemporaneously ~0 (correctly unstable)
+
+
+# ---------- Task 4: NSA-vs-NSA reconciliation ----------
+
+def test_official_nsa_mom_is_nsa_only():
+    """official_nsa_mom must refuse SA (CUSR*) series — its leakage-safety rests entirely
+    on NSA being unrevised; using it for a revised SA series would silently leak."""
+    with pytest.raises(AssertionError):
+        reconcile.official_nsa_mom(str(DB), "CUSR0000SETB01", ["2024-01-01"])
+
+
+@pytest.mark.skipif(not DB.exists(), reason="nowcast.sqlite not built")
+def test_nsa_vs_nsa_gasoline_beats_sa_bounded():
+    """Task 4: regressing the NSA gasoline proxy on NSA official (not SA) removes the
+    seasonality mismatch AND the ~2011 vintage floor -> R² rises well above the 0.746
+    SA-bounded value, beta toward unit pass-through, more overlap, still stable."""
+    from nowcast.timebase import open_timebase
+    pairs = {p.label: p for p in reconcile.build_pairs(str(MAPPING))}
+    gas = pairs["EIA gasoline vs CPI Gasoline (SETB01)"]
+    with open_timebase(str(DB)) as tb:
+        old = reconcile.reconcile_pair(str(DB), tb, gas, __import__("datetime").datetime.now(reconcile.ET))
+    new = reconcile.reconcile_nsa_pair(str(DB), gas, "CUUR0000SETB01")
+    assert new.r2 > old.r2 and new.r2 > 0.90          # 0.746 -> ~0.98
+    assert new.beta > 0.85                             # near-unit pass-through
+    assert new.n_overlap > old.n_overlap               # NSA unrevised -> full history
+    assert new.proxy_quality == "stable"
+
+
+@pytest.mark.skipif(not DB.exists(), reason="nowcast.sqlite not built")
+def test_nsa_vs_nsa_manheim_lead_persists_but_weaker():
+    """Task 4 asymmetry finding: the 2-month lead survives NSA-vs-NSA (still
+    stable_leading, peak lead-2) but its peak R² is LOWER than against the SA target —
+    a 2-month shift misaligns NSA seasonality, so a leading pair is cleaner against SA."""
+    import yaml
+    w = {d["item_code"]: d["weight_cpi_u"]
+         for d in yaml.safe_load(open(MAPPING))["cpi"]["items"] if d.get("item_code")}
+    p = reconcile.Pair("manheim", "US_full_month", "CUSR0000SETA02", "Manheim vs CPI Used cars",
+                       w.get("SETA02", 0.0), "unrevised", "")
+    sa = reconcile.lead_scan(str(DB), p, max_lead=6)
+    nsa = reconcile.lead_scan_nsa(str(DB), p, "CUUR0000SETA02", max_lead=6)
+    assert nsa.peak_lead == 2 and nsa.quality == "stable_leading"
+    assert nsa.peak_r2 < sa.peak_r2                    # seasonality misalignment under the shift

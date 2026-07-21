@@ -89,3 +89,127 @@ this floor table + per-stratum implication). Decision needed: tune per-series X-
 to match BLS, or carry these strata as lead/monitor rather than contemporaneous SA-MoM.
 Gasoline note for Task 4: recoverable headroom on its NSA/SA reconciliation gap is bounded
 by this 72.9bp SA-method residual.
+
+## TASK 3b — reroute: factors.py + factor-extrapolation floor · CHECKPOINT 3b (HALT: 3 of 4 > 10bp ex-Feb)
+
+`src/nowcast/factors.py`: `implied_factor` (NSA/SA), `factor_asof` (carry-forward =
+latest same-cal-month implied factor, vintage-safe via observations), `factor_extrapolation_error`.
+
+**NSA-never-revised verified**: 0 changed reference values across 154–183 ALFRED vintages
+(gasoline/used-cars/airfares) → NSA side needs no vintage; official_current = first release.
+
+### Factor-extrapolation floor (carry-forward factor_asof), MoM MAE bp, trailing 8y
+
+| stratum | code | n exFeb | MAE exFeb | MAE Feb | MAE all |
+|---|---|--:|--:|--:|--:|
+| Apparel | SAA | 85 | **9.19** ✅ | 17.97 | 9.95 |
+| Gasoline | SETB01 | 88 | **18.16** ❌ | 119.53 | 26.61 |
+| Used cars | SETA02 | 88 | **16.85** ❌ | 48.93 | 19.52 |
+| Airfares | SETG01 | 85 | **14.45** ❌ | 115.44 | 23.14 |
+
+New gate = MAE exFeb < 10bp/MoM. Apparel passes; gasoline/used-cars/airfares FAIL → **HALT**
+(pre-defined as "a real finding"). Reroute still HALVES the §2 floor (gasoline 72.9→18.2,
+airfares 95.4→14.5 exFeb). February isolates the annual revision: 18–120bp per stratum
+(the 3.5bp headline exhibit, generalized).
+
+### Key diagnosis — the ex-Feb residual is the CARRY-FORWARD penalty, not irreducible
+Factor itself drifts YoY 25–122bp exFeb (apparel 25 / used cars 59 / gasoline 101 /
+airfares 123); MoM impact smaller (9–18bp) via adjacent-month cancellation. BLS PUBLISHES
+projected factors and applies them at first release, so first-release factor = BLS published
+projected factor → harvesting those files drives exFeb→~0, leaving Feb as the only material
+floor. Carry-forward number is an UPPER BOUND.
+
+**Decision options (sa_floor.md §4):** (a) harvest BLS published projected factors
+[new pipeline, recommended — expected pass], (b) accept carry-forward + carry the 3 volatile
+strata as lead/monitor, (c) model factor drift (same-month AR). Headline/core rows deferred:
+no all-items NSA loaded (CUUR0000SA0/SA0L1E absent) — derived by aggregation in Task 5.
+
+Sanity implied factors economically correct: gasoline Jul 1.054 (summer high) / Jan 0.941
+(winter low); apparel Jul 0.985 (clearance). 72 tests green. **WAIT for go.**
+
+## TASK 3b RESOLUTION — option (a): harvest BLS published projected factors
+
+User chose (a). Built `pipelines/bls_seasonal_factors/` (edge fetch + license_note + spec)
+and naru artifact `pipelines/seasonal_factors_loader/v1/` (golden test passes). Harvested
+the annual "Seasonal factors table, YYYY" XLSX for 2021–2026 → **11,604 rows / 194
+directly-adjusted series** into `bls_seasonal_factors`, keyed (series_id, reference_period),
+stamped `published_asof` = Jan-YYYY CPI release date (from release_calendar).
+
+**Access:** BLS blocks unidentified bots ("Access Denied"); the repo's identifying contact
+UA (per _ingest.py) returns files normally. robots.txt permits /cpi/tables/seasonal-adjustment/
+*.xlsx (only /*.PDF$ disallowed → pre-2021 PDFs deliberately out of scope). Not a
+circumvention; consistent with rule 5. license_note.md records it.
+
+**Identity validation:** harvested published factor == NSA/SA_firstrelease to **0.01 bp** →
+it IS the factor BLS applies at first release (test_factors.py).
+
+**Operative floor (factor_conversion_error), MoM MAE bp, trailing 8y:**
+
+| stratum | clean (Mar–Dec) | n | boundary (Jan/Feb) | n |
+|---|--:|--:|--:|--:|
+| Gasoline SETB01 | **0.02** ✅ | 54 | 130.4 | 10 |
+| Used cars SETA02 | **0.02** ✅ | 54 | 44.4 | 10 |
+| Airfares SETG01 | **0.02** ✅ | 51 | 130.3 | 10 |
+
+10/12 months/year ~0.02 bp (~750× under carry-forward, 3 orders under the 10 bp gate) →
+SA floor **essentially eliminated** for directly-adjusted strata. Residual = the Jan/Feb
+annual seam (factors introduced with Jan's own release → real-time forecaster holds prior
+year's factor; Feb inherits Jan base). Irreducible calendar fact, carried explicitly.
+
+Apparel/food-at-home/headline are INDIRECTLY adjusted (no direct factor; "–" in file) →
+published_factor_asof returns None; SA via component aggregation (Task 5). sa_floor.md §5
+rewritten. 6 new tests in test_factors.py. **GATE PASSED for directly-adjusted strata.**
+
+## TASK 4 — NSA-vs-NSA reconciliation reruns
+
+`.env` rechecked: Keepa/USDA/BEA keys still ABSENT → keepa/usda_ams/bea_pce_detail stay
+SKIPPED (no builds). reconcile.py: added `official_nsa_mom` (NSA-only, asserts CUUR; leakage-
+safe because NSA unrevised), `reconcile_nsa_pair`, `lead_scan_nsa`; refactored shared
+`_fit_stability` + `_lead_from` (existing tests green).
+
+**Gasoline (EIA retail vs CPI gasoline), old vs new:**
+| pairing | official | n | beta | R² | quality |
+|---|---|--:|--:|--:|---|
+| OLD | SA CUSR0000SETB01 | 184 | 0.810 | 0.746 | stable |
+| NEW | NSA CUUR0000SETB01 | 430 | 0.965 | 0.978 | stable |
+
+R² 0.746→0.978, beta→near-unit pass-through; n doubles (NSA unrevised drops the ~2011 vintage
+floor → history back to ~1990); stress R²~0.99 through COVID. The SA-bound was the artifact.
+
+**Manheim used-cars lead scan, old vs new:** lead survives (peak lead-2, stable_leading) but
+peak R² FALLS 0.346 (→SA) → 0.197 (→NSA). ASYMMETRY: NSA-vs-NSA helps CONTEMPORANEOUS pairs
+(seasonality aligns at lag 0, gasoline) but a leading shift MISALIGNS NSA seasonality →
+noisier. Op consequence: use Manheim (lead-2) to predict the deseasonalized used-car part,
+then re-apply the harvested factor — do NOT regress NSA-on-NSA for the lead.
+
+3 new tests (test_reconcile.py, 8 total). Report addendum in docs/reconciliation_report.md.
+
+## TASK 5 — CPI aggregation replication + SA-conversion overhead · FINAL CHECKPOINT
+
+Loaded aggregate targets into official_current (were absent): CUUR0000SA0 (1361), CUUR0000SA0L1E
+(833), + SA versions — incremental naru official_loader from the existing 2026-07-19 raw pull
+(new series_ids, existing rows untouched), 5646 rows.
+
+`src/nowcast/aggregate.py`: price-updated Laspeyres (Dec pivot, annual reweighting) over the
+COARSEST complete published partition (each published aggregate embeds BLS's exact
+sub-aggregation → coarser is MORE faithful; verified 135-leaf ~2bp worse than 8 majors).
+Headline = 8 major groups; core = 15 comps carving out food SAF1 + energy SETB/SEHE/SEHF (~80% wt).
+
+**NSA reconstruction vs official (MoM MAE bp):**
+| aggregate | comps | MAE 2023+ | 2021 | full | median |
+|---|--:|--:|--:|--:|--:|
+| Headline | 8 | **0.50** ✅ | 5.33 | 1.83 | 0.84 |
+| Core | 15 | 1.32 | 3.70 | 1.74 | 1.14 |
+
+**Headline MEETS ≤1bp under current (2023+) annual-weight methodology** (2025=0.19bp). Residual
+is a methodology-era effect: pre-2023 BLS used BIENNIAL weights → published-RI price-updating
+can't reproduce the 2021 surge (5.33bp). Not a machinery error. Rounding floor ~0.2-0.3bp.
+
+**SA-conversion overhead (SA recon − NSA recon, 2023+): headline −0.01bp, core +0.04bp** —
+essentially ZERO. Headline/core are INDIRECTLY SA'd (aggregate of component SAs, no headline
+factor); aggregate SA error = same top-level weight approx as NSA. Combined with sa_floor §5
+(directly-adjusted strata NSA→SA ~0.02bp clean months), the SA pathway is ~free for a good NSA
+forecast except the Jan/Feb seam.
+
+nb03_cpi_replication.ipynb (executed), docs/aggregation_error.md, test_aggregate.py (5 tests).
+84 tests green. **SESSION 3A COMPLETE.**

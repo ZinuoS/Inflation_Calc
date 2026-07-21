@@ -34,3 +34,52 @@ Official-side MoM read via `timebase.asof_mom_for_ref` (first-release, within-vi
 - **Atlanta Fed wage tracker**:  | MONITOR: wage-growth rate, not regressed as a price proxy
 - **Indeed wage tracker**:  | MONITOR: wage-growth rate, not regressed as a price proxy
 - **TSA throughput (airfare demand)**: demand monitor for airfares, not a price proxy; ~6mo | MONITOR: wage-growth rate, not regressed as a price proxy
+
+---
+
+# Task 4 (Session 3A) — NSA-vs-NSA reconciliation reruns
+
+The Session-2B pairs above regressed **NSA proxies on the SA official** stratum — a
+seasonality mismatch that capped R² and was flagged in each `note`. The Checkpoint-2 reroute
+forecasts in NSA space, so the operative pairing is NSA-proxy vs **NSA-official**
+(`official_current`, unrevised — leakage-safe only because the NSA index is never revised;
+`reconcile.official_nsa_mom` asserts CUUR-only). Below, old vs new side by side.
+
+## Gasoline — EIA retail vs CPI gasoline
+
+| pairing | official series | n | beta | R² | quality |
+|---|---|--:|--:|--:|---|
+| OLD (Session 2B) | SA `CUSR0000SETB01` | 184 | +0.810 | **0.746** | stable |
+| NEW (Task 4) | NSA `CUUR0000SETB01` | 430 | +0.965 | **0.978** | stable |
+
+NSA-vs-NSA does two things at once: (1) it removes the SA-vs-NSA seasonality mismatch, and
+(2) it drops the ~2011 ALFRED vintage floor (NSA is unrevised, so `official_current` needs no
+vintage — the overlap more than doubles, 184 → 430 months back to ~1990). Beta rises to a
+**near-unit retail→CPI pass-through (0.965)**, R² to **0.978**, rolling betas stay in
+0.79–1.01, and the stress-window R² is ~0.99 through COVID. **Gasoline is a strong
+contemporaneous NSA feature** — the SA-bounded 0.746 was an artifact of the mismatch, not the
+proxy's true tracking.
+
+## Used cars — Manheim wholesale (lead scan)
+
+| target | contemp R² (k0) | peak lead | peak R² | quality |
+|---|--:|--:|--:|---|
+| OLD: SA `CUSR0000SETA02` | 0.015 | 2 | **0.346** | stable_leading |
+| NEW: NSA `CUUR0000SETA02` | 0.017 | 2 | **0.197** | stable_leading |
+
+The **2-month wholesale→retail lead survives** NSA-vs-NSA (still `stable_leading`, peak at
+lead-2), but its peak R² **falls** 0.346 → 0.197 — the opposite direction from gasoline. This
+is a genuine asymmetry: for a **contemporaneous** pair (gasoline, lag 0) the two sides'
+seasonality aligns and NSA-vs-NSA helps; for a **leading** pair, shifting the proxy 2 months
+**misaligns** its seasonal component against the target's, adding noise. So Manheim's lead
+signal is cleanest against the **deseasonalized/SA** used-car change. Operational consequence
+for the NSA framework: use Manheim (lead-2) to predict the **non-seasonal** part of the
+used-car MoM, then re-apply the harvested seasonal factor (§ sa_floor.md §5) — do not regress
+it NSA-on-NSA. Both scans are reproducible from `reconcile.lead_scan` / `lead_scan_nsa`
+(`test_reconcile.py`).
+
+## Conditional builds (Keepa / USDA / BEA)
+
+`.env` rechecked 2026-07-20: `KEEPA_API_KEY`, `USDA_AMS_API_KEY`, `BEA_API_KEY` all still
+**absent** (only `FRED_API_KEY` present). keepa / usda_ams / bea_pce_detail remain **SKIPPED**
+(folders + specs + STATUS notes stand); no builds this task.

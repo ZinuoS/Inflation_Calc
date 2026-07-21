@@ -1,0 +1,31 @@
+# bls_seasonal_factors pipeline spec (Session 3A, Task 3b reroute)
+# BLS published PROJECTED CPI-U seasonal factors: the "Seasonal factors table, YYYY"
+# XLSX, one file per calendar year. These are the factors BLS PROJECTS each January and
+# applies mechanically to that year's first releases (Handbook of Methods, CPI ch. 17).
+# Harvesting them (rather than re-estimating SA, or approximating with last year's factor)
+# is the Checkpoint-2 reroute: forecast NSA, convert via NSA / projected_factor = SA.
+
+source: bls_seasonal_factors
+
+# Machine-readable XLSX exist for 2021+; pre-2021 are PDF-only AND robots-disallowed
+# (robots.txt: `Disallow:/*.PDF$`), so they are out of scope. 2021-2026 = 6 factor years.
+url_template: https://www.bls.gov/cpi/tables/seasonal-adjustment/seasonal-factors-{year}.xlsx
+years: [2021, 2022, 2023, 2024, 2025, 2026]
+
+sheet: CPI-U          # All Urban Consumers (matches CUUR0000*/CUSR0000* ids); CPI-W ignored
+
+# published_asof (the vintage key) = the January-YYYY CPI release date, read from the
+# release_calendar table: that is when the projected factors are introduced, hence the
+# earliest a forecaster could know them. Keeps the factor knowable-before-the-month.
+
+output_csv_columns:
+  - series_id          # CUSR0000{item_code}
+  - item_code          # mapped from the file's item name via cu.item
+  - reference_period   # month the factor applies to, YYYY-MM-01
+  - projected_factor   # NSA/SA ratio = published pct / 100
+  - factor_year        # the file's calendar year
+  - published_asof     # Jan-YYYY CPI release date (introduction / vintage key)
+
+paths:
+  raw_dir: data/raw/bls_seasonal_factors
+  staged_csv: staged.csv
