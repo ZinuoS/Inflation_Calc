@@ -1,0 +1,16 @@
+# equity_path pipeline spec (Session 3B, Task 1) — S&P-500 path for PCE bridge
+# Portfolio-management PPI (PCU523920523920) is DISCONTINUED 2022-12; the mapping prescribes
+# an equity-market path post-2022 (AUM-based fees track the market level). Also feeds the
+# equity-linked portion of financial_services_without_payment (BEA user-cost method).
+source: sp500
+fred_series_id: SP500          # S&P 500 index (FRED daily, ~10y); covers the 5y eval + 2026 holdout
+series_key: US
+frequency: daily
+vintage_status: unrevised      # daily index close is final; knowable in real time
+
+publication:                    # Task 2d
+  kind: scheduled
+  rule: same_day                # equity index close is final and known same day
+  observed_asof_estimated: false
+  cite: FRED SP500 (daily close)
+  note: "market close known in real time; equity path for AUM-based fees"

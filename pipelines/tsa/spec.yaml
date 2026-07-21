@@ -13,3 +13,11 @@ parse:
 series_key: US_throughput
 role: monitor
 mapped_strata: [SETG01]
+
+publication:
+  kind: scheduled
+  rule: tsa_month_end           # complete-month average available day after month end
+  lag_days: 1
+  observed_asof_estimated: false
+  cite: https://www.tsa.gov/travel/passenger-volumes
+  note: "daily checkpoint counts posted next day; monthly mean of complete months"

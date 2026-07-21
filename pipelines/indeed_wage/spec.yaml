@@ -17,3 +17,11 @@ series_key: US_posted_wage_growth_yoy
 role: monitor
 mapped_aggregate: SASLE
 proxy_history_start_planned: 2019
+
+publication:
+  kind: estimated
+  rule: monthly_release_lag
+  lag_days: 40                  # Indeed Wage Tracker (hiring-lab) ~5wk after month-end + conservatism
+  observed_asof_estimated: true
+  cite: https://github.com/hiring-lab/indeed-wage-tracker
+  note: "ESTIMATED observed_asof; monitor-only; optimism-flagged"

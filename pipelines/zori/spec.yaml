@@ -21,3 +21,11 @@ parse:
 series_key: US
 mapped_strata: [SEHA, SEHC]        # Rent of primary residence, OER
 proxy_history_start_planned: 2015  # verify actual depth on ingest, record in mapping
+
+publication:
+  kind: estimated               # revised_latest_only: history restated, no archive
+  rule: monthly_release_lag
+  lag_days: 25                  # Zillow ZORI ~18d after month-end + 7d conservatism margin
+  observed_asof_estimated: true
+  cite: https://www.zillow.com/research/data/
+  note: "ESTIMATED observed_asof (not recorded) — ~3rd week of M+1; carries optimism flag"

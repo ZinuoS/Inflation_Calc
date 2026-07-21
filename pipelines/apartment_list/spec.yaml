@@ -12,3 +12,11 @@ parse:
 series_key: US
 mapped_strata: [SEHA, SEHC01]
 status: SKIPPED_js_gated
+
+publication:
+  kind: estimated
+  rule: monthly_release_lag
+  lag_days: 14                  # Apartment List National Rent Report ~end of M + conservatism
+  observed_asof_estimated: true
+  cite: https://www.apartmentlist.com/research/category/data-rent-estimates
+  note: "ESTIMATED observed_asof; revised_latest_only; not currently ingested"

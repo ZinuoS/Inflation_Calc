@@ -11,3 +11,11 @@ series_key: US_overall_median
 role: monitor
 mapped_aggregate: SASLE          # Services less energy services (monitor)
 proxy_history_start_planned: 1997
+
+publication:
+  kind: estimated
+  rule: monthly_release_lag
+  lag_days: 45                  # Atlanta Fed Wage Growth Tracker ~mid M+1 + 7d conservatism
+  observed_asof_estimated: true
+  cite: https://www.atlantafed.org/chcs/wage-growth-tracker
+  note: "ESTIMATED observed_asof; monitor-only; optimism-flagged"

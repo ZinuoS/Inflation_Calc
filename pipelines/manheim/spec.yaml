@@ -17,3 +17,11 @@ series_key: US_full_month
 frequency: monthly
 mapped_strata: [SETA02]        # Used cars and trucks
 midmonth_followup: true        # mid-month release is a separate publication (H1)
+
+publication:
+  kind: point_in_time
+  rule: manheim_full_month      # ref month M full-month index published early M+1
+  lag_days: 6                   # ~first week of M+1 (conservative)
+  observed_asof_estimated: false
+  cite: https://site.manheim.com/  # VERIFIED: archive URLs /YYYY/MM/ = M+1 (provenance.json)
+  note: "full-month UVVI in first week of next month; mid-month update ~17th of M (midmonth_followup)"

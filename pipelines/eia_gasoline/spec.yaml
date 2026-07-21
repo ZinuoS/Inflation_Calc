@@ -12,3 +12,11 @@ frequency: weekly
 series_key: US
 mapped_strata: [SETB01]       # Gasoline (all types)
 proxy_history_start_planned: 1993
+
+publication:                    # Task 2d: information-timing firewall metadata
+  kind: scheduled
+  rule: eia_weekly              # Monday price; published Mon PM (pre-2025-04) / Tue ~10am ET (since)
+  lag_days: 1                   # observed_asof = Monday period + 1 day (conservative for the Tue move)
+  observed_asof_estimated: false
+  cite: https://www.eia.gov/petroleum/gasdiesel/notice.php   # GDFU publication-time notice
+  note: "collected 8am Mondays (Form EIA-878); data always represent Monday prices"

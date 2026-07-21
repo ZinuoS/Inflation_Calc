@@ -11,3 +11,10 @@ series_key: US_NYH_SPOT
 mapped_strata: [SEHE01]        # Fuel oil (approx)
 proxy_history_start_planned: 1990
 proxy_caveat: wholesale_spot_not_retail
+
+publication:
+  kind: scheduled
+  rule: daily_next_bday         # daily NY Harbor spot, available next business day
+  observed_asof_estimated: false
+  cite: https://www.eia.gov/petroleum/gasdiesel/
+  note: "daily spot published final next business day"

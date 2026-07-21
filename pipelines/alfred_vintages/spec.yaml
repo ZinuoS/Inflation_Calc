@@ -50,6 +50,24 @@ series:
   # --- Task-3 adds: official stand-ins for NADAC (drugs) and USDA (food-at-home) ---
   - {alfred_id: CUSR0000SAM1,    role: cpi_medical_care_commodities,  mapping_series_id: CUSR0000SAM1}
   - {alfred_id: CUSR0000SAF11,   role: cpi_food_at_home,              mapping_series_id: CUSR0000SAF11}
+  # --- Session 3A Task 3b: airfares SA vintages for factor-extrapolation floor ---
+  - {alfred_id: CUSR0000SETG01,  role: cpi_airline_fares,             mapping_series_id: CUSR0000SETG01}
+  # --- Session 3B Task 1: PCE-bridge CPI feeder first-release vintages (ALFRED-archived
+  #     subset; the other feeders are not on FRED and stay latest-vintage-flagged / NSA+factor) ---
+  - {alfred_id: CUSR0000SEEB,    role: cpi_education,                 mapping_series_id: CUSR0000SEEB}
+  - {alfred_id: CUSR0000SEHB,    role: cpi_household_operations,      mapping_series_id: CUSR0000SEHB}
+  - {alfred_id: CUSR0000SEHC,    role: cpi_owners_equiv_rent_agg,     mapping_series_id: CUSR0000SEHC}
+  - {alfred_id: CUSR0000SERA,    role: cpi_video_audio,               mapping_series_id: CUSR0000SERA}
+  - {alfred_id: CUSR0000SEEE01,  role: cpi_telephone_services,        mapping_series_id: CUSR0000SEEE01}
+  - {alfred_id: CUSR0000SEHE,    role: cpi_fuel_oil_other_fuels,      mapping_series_id: CUSR0000SEHE}
+  - {alfred_id: CUSR0000SEGA,    role: cpi_tobacco,                   mapping_series_id: CUSR0000SEGA}
+  - {alfred_id: CUSR0000SEFV,    role: cpi_food_away_from_home,       mapping_series_id: CUSR0000SEFV}
+  - {alfred_id: CUSR0000SETD,    role: cpi_motor_vehicle_maintenance, mapping_series_id: CUSR0000SETD}
+  - {alfred_id: CUSR0000SEHF01,  role: cpi_electricity,               mapping_series_id: CUSR0000SEHF01}
+  - {alfred_id: CUSR0000SEHF02,  role: cpi_utility_gas,               mapping_series_id: CUSR0000SEHF02}
+  - {alfred_id: CUSR0000SEFW,    role: cpi_alcoholic_beverages,       mapping_series_id: CUSR0000SEFW}
+  - {alfred_id: CUSR0000SERA02,  role: cpi_video_audio_products,      mapping_series_id: CUSR0000SERA02}
+  - {alfred_id: CUSR0000SEGD03,  role: cpi_legal_services,            mapping_series_id: CUSR0000SEGD03}
 
 output_csv_columns:              # canonical staged CSV -> naru artifact input
   - series_id                    # ALFRED series id (the vintage identifier)
