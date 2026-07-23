@@ -30,19 +30,24 @@ isolates the bridge failure (§b) to the PCE weights, not the assembly.
 
 ## §b — PCE bridge holdout (post-CPI+PPI call vs first-release core PCE)
 
-| ref month | bridge (bp) | actual first-release (bp) | error (bp) | correct side? |
-|---|--:|--:|--:|:--:|
-| 2026-01 | +23.0 | +36.4 | **−13.4** | ✗ |
-| 2026-02 | +21.0 | +36.7 | **−15.7** | ✗ (Feb factor seam) |
-| 2026-03 | +19.6 | +29.3 | **−9.7** | ✗ |
-| 2026-04 | +35.1 | +23.9 | **+11.2** | ✗ (coin-flip) |
-| 2026-05 | +24.9 | +32.0 | **−7.1** | ✗ (coin-flip) |
+**Valid weights (BEA 2.4.5U):**
 
-**MAE 11.4 bp, 0/5 correct side.** The bridge **under-predicts** 2026 core PCE (actual runs hot
-at ~30–37 bp; bridge ~20–35), the **opposite sign** to its 2020–22 over-prediction — direct
-evidence the error is regime-dependent weight error, not a constant bias (see
-`pce_bridge_acceptance.md`). Consistent with the tariff regime lifting goods/healthcare
-categories that the CPI-RI proxy under-weights or cannot see.
+| ref month | bridge (bp) | actual first-release (bp) | error (bp) |
+|---|--:|--:|--:|
+| 2026-01 | +5.3 | +36.4 | **−31.1** |
+| 2026-02 | +14.4 | +36.7 | **−22.3** |
+| 2026-03 | +18.6 | +29.3 | **−10.8** |
+| 2026-04 | +51.8 | +23.9 | **+27.9** |
+| 2026-05 | +44.3 | +32.0 | **+12.3** |
+
+**MAE 20.9 bp (valid) vs 11.4 bp (degraded), 0/5 correct side.** The 2026 holdout is **worse than
+the trailing-5y 9.1 bp** and worse than the degraded run — a genuine regime signal. With true
+weights the volatile-proxy components (financial charges, air transport) and the frozen imputed
+lines now carry full weight, and the tariff regime amplifies exactly those: Jan–Mar under-predict
+(−11 to −31 bp), Apr–May over-predict (+12 to +28 bp), sign-mixed rather than a clean bias. The
+CPI machinery (§a) still nails the aggregates OOS, so this is the **bridge's component-proxy error
+under a new regime**, not an aggregation problem — and it sharpens the K1 diagnosis:
+`pce_bridge_acceptance.md` drivers 1–5 are precisely what breaks in 2026.
 
 ## §c — PPI machinery check — NOT RUN (weights unavailable)
 

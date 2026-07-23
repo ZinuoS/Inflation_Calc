@@ -110,7 +110,9 @@ def test_no_orphan_parent_codes(cpi_items):
 
 
 def test_no_orphan_bridge_references(mapping, cpi_items):
-    cpi_codes = {d["item_code"] for d in cpi_items if d["item_code"]} | {"SA0"}
+    # SS68021 = CPI special series "Checking account and other bank services" (BEA's cited
+    # deflator for financial service charges, H9a) — valid CPI series, outside the SE*/SA* hierarchy.
+    cpi_codes = {d["item_code"] for d in cpi_items if d["item_code"]} | {"SA0", "SS68021"}
     ppi_ids = {f["series_id"] for f in mapping["ppi"]["pce_feeders"]}
     orphans = []
     for c in mapping["pce_bridge"]["components"]:

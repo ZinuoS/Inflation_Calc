@@ -36,12 +36,17 @@ def test_imputed_no_analogue_components_are_frozen_and_flagged():
     (a KNOWN unattributable gap, not a silent guess); financial-services needs the S&P path."""
     from nowcast import db
     with db.connect(str(DB)) as conn:
-        for name in ("health_insurance_margin", "life_insurance", "npish_final_consumption"):
+        # health-insurance margin + life insurance: still frozen-zero (no analogue)
+        for name in ("health_insurance_margin", "life_insurance"):
             rel, vint, method = B._imputed_relative(name, "2024-09-01", None, conn, set(), None, {})
             assert rel == 1.0 and vint == "imputed" and "frozen" in method
-        # financial services now follows the S&P equity path (data ingested)
+        # npish: H9c drift FALSIFIED OOS -> null restored (freeze-at-zero)
+        rel, vint, method = B._imputed_relative("npish_final_consumption", "2024-09-01", None, conn, set(), None, {})
+        assert rel == 1.0 and "freeze_zero" in method
+        # financial-services-without-payment: S&P path (H9b) + drift (H9c) both falsified ->
+        # null restored (freeze-at-zero). Residue (Instrument A only).
         rel, vint, method = B._imputed_relative("financial_services_without_payment", "2024-09-01", None, conn, set(), None, {})
-        assert rel is not None and method == "sp500_path" and vint == "equity_path"
+        assert rel == 1.0 and "freeze_zero" in method
 
 
 def test_portfolio_ppi_discontinued_boundary():
@@ -51,7 +56,7 @@ def test_portfolio_ppi_discontinued_boundary():
     from nowcast.timebase import open_timebase
     with db.connect(str(DB)) as conn, open_timebase(str(DB)) as tb:
         rel, _, m_post = B._ppi_relative(tb, conn, "PCU523920523920", "2024-09-01", dt.datetime(2100, 1, 1))
-        assert m_post == "sp500_path" and rel is not None  # post-2022 uses the equity path
+        assert "frozen" in m_post and rel == 1.0  # PPI dead 2022-12; S&P a poor price proxy -> frozen
 
 
 def test_assemble_runs_and_reports_leakage_and_coverage():

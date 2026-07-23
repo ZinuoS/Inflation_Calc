@@ -23,14 +23,18 @@ def test_evaluate_and_summary_shape():
     assert isinstance(s["tier1_pass"], bool)
 
 
-def test_gate_fails_and_is_systematic():
-    """The documented result: the CPI-RI-proxy bridge fails Tier 1 by a wide margin with a
-    systematic (not noise) error — this test locks the finding in so a future weight fix is
-    visibly an improvement."""
-    acc = A.evaluate("2020-08-01", "2025-12-01")
+def test_valid_gate_fails_on_true_weights():
+    """Valid-gate result (BEA 2.4.5U weights): FAILS Tier 1 (full core, Instrument A). True
+    weights removed the WEIGHT bias (degraded was +10.3 bp); the R1 residue respec then added a
+    small drift-driven bias (+3.3 bp, H9c over-corrected OOS — documented in R2). Locks in that
+    the full-core precision claim fails and runs on true weights."""
+    import numpy as np
+    acc = A.evaluate("2020-08-01", "2025-12-01")           # instrument A (full core)
     s = A.summarize(acc)
-    assert s["tier1_pass"] is False and s["mae_bp"] > 5.0
-    assert s["mean_latest_vintage_weight"] < 0.5   # vintage exposure is the minor factor
+    assert "bea_2.4.5U" in acc.weights_basis               # runs on true BEA weights
+    assert s["tier1_pass"] is False and 2.0 < s["mae_bp"] < 12.0
+    signed = float(np.mean([x.err_bp for x in acc.months]))
+    assert abs(signed) < 6.0                               # far below the +10.3 degraded bias
 
 
 def test_no_fitted_parameters_marker():

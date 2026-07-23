@@ -169,8 +169,10 @@ def _ppi_relative(tb, conn, sid: str, ref: str, ft) -> tuple[float | None, str, 
     post-boundary uses the S&P-500 equity path (AUM-based fees). PPI feeders have no ALFRED
     vintages -> latest-vintage, flagged."""
     if sid == "PCU523920523920" and ref > PORTFOLIO_PPI_DISCONTINUED:
-        m = _sp500_mom(conn, ref)
-        return (None, "absent", "sp500_path_unavailable") if m is None else (1.0 + m, "equity_path", "sp500_path")
+        # PPI portfolio-mgmt discontinued 2022-12. The S&P monthly change is a POOR proxy for
+        # BEA's asset-based portfolio-mgmt price (DPMIRG) — poorly correlated, sometimes opposite
+        # sign (verified against 2.4.4U). No forecastable price signal at forecast time -> frozen.
+        return 1.0, "imputed", "frozen(portfolio_no_forecastable_price)"
     mom, flag = (None, "latest_vintage")
     if _has_series(conn, sid):
         mom = _official_sa_mom(conn, sid, ref)
@@ -193,33 +195,80 @@ def _imputed_relative(name: str, ref: str, tb, conn, vint: set[str], ft, ri: dic
         # bp MoM (documented placeholder; a KNOWN unattributable gap, flagged low-confidence).
         return 1.0, "imputed", "frozen_zero(no_analogue)"
     if name == "financial_services_without_payment":
-        # Imputed bank services (BEA user-cost). Equity-linked management fees follow the equity
-        # market; approximate the whole component by the S&P-500 path (documented, low-conf).
-        m = _sp500_mom(conn, ref)
-        return (None, "absent", "sp500_path_unavailable") if m is None else (1.0 + m, "equity_path", "sp500_path")
+        # H9c FALSIFIED OOS (drift +1.85bp over-corrected 2023+; regime shift as rates rose) ->
+        # null restored: freeze-at-zero carry. Residue (Instrument A only). Standing rule: the
+        # carry spec is re-selected each January on data through prior year-end (see mapping note).
+        return 1.0 + _drift(name), "imputed", "freeze_zero(H9c_falsified)"
     if name == "life_insurance":
         return 1.0, "imputed", "frozen_zero(expected_benefit_margin)"
     if name == "npish_final_consumption":
-        # Input-cost, no market price; BEA carries a trend. Frozen small trend placeholder.
-        return 1.0, "imputed", "frozen_zero(input_cost_trend)"
+        # H9c FALSIFIED OOS (drift +0.98bp over-corrected 2023+) -> null restored: freeze-at-zero.
+        # Residue (Instrument A only). Standing rule: carry spec re-selected each January (mapping).
+        return 1.0 + _drift(name), "imputed", "freeze_zero(H9c_falsified)"
     return None, "absent", "unknown_imputed"
 
 
-def pce_weights(allow_approximate: bool = False, db_path=DEFAULT_DB) -> tuple[dict[str, float], str]:
-    """(weights_by_component, basis). Reads bea_pce_detail-derived PCE weights if that pipeline
-    is built; else, when allowed, returns CPI-relative-importance-derived PROXY weights (loudly
-    flagged — CPI and PCE weights differ most exactly where the bridge is hardest: healthcare
-    via third-party payers, financial services, NPISH). Raises WeightsUnavailable otherwise."""
+def _drift(name: str) -> float:
+    for c in _components():
+        if c["component"] == name and c.get("frozen_drift_bp") is not None:
+            return c["frozen_drift_bp"] / 10000.0
+    return 0.0
+
+
+def is_residue(name: str) -> bool:
+    """A residue component (Instrument A only): no adequate CPI/PPI proxy after the H9 audit
+    (corr vs BEA 2.4.4U < 0.5 or carry-only). Excluded from Instrument B (trackable core)."""
+    return any(c["component"] == name and c.get("residue") for c in _components())
+
+
+def _has_bea(conn) -> bool:
+    return conn.execute("SELECT 1 FROM official_current WHERE source='bea_pce_detail' LIMIT 1").fetchone() is not None
+
+
+def bea_weights(ref_year: int, db_path=DEFAULT_DB) -> dict[str, float]:
+    """True PCE weights = BEA 2.4.5U nominal shares (bea_weight_code, RC) for the in-core
+    components. VINTAGE-APPROPRIATE: the PRIOR calendar year's annual mean nominal — a
+    structural annual input, knowable well before any month of ref_year (the user's frequency-
+    roles clarification), so it introduces no forecast look-ahead. REVISION HANDLING: annual
+    expenditure shares barely move under BEA's monthly/annual/comprehensive revisions, so we
+    take the latest-vintage prior-year annual level; bias direction is negligible and, being a
+    slow structural share (not a monthly print), does not leak the target. Missing prior-year
+    (< 2010) falls back to the earliest available year."""
+    py = ref_year - 1
+    out: dict[str, float] = {}
     with db.connect(db_path) as conn:
-        has_bea = conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='bea_pce_detail'").fetchone()
-    if has_bea:
-        raise NotImplementedError("bea_pce_detail present — wire real PCE weights here")
+        for c in _components():
+            if not c.get("in_core"):
+                continue
+            code = c.get("bea_weight_code")
+            if not code:
+                continue
+            rows = conn.execute(
+                "SELECT value FROM official_current WHERE series_id=? AND period LIKE ? "
+                "AND _superseded_by_run_id IS NULL", (code, f"{py}-%")).fetchall()
+            if not rows:  # prior year out of range -> earliest available
+                rows = conn.execute(
+                    "SELECT value FROM official_current WHERE series_id=? AND period LIKE '2010-%' "
+                    "AND _superseded_by_run_id IS NULL", (code,)).fetchall()
+            out[c["component"]] = sum(float(v) for (v,) in rows) / len(rows) if rows else 0.0
+    return out
+
+
+def pce_weights(ref_month: str | None = None, allow_approximate: bool = False,
+                db_path=DEFAULT_DB) -> tuple[dict[str, float], str]:
+    """(weights_by_component, basis). Real path: BEA 2.4.5U prior-year annual nominal shares
+    (needs ref_month for the vintage year). Fallback (allow_approximate): CPI-relative-
+    importance PROXY weights, loudly flagged (the degraded-gate weights — CPI and PCE diverge
+    most where the bridge is hardest: healthcare, financial, NPISH). Raises otherwise."""
+    with db.connect(db_path) as conn:
+        has_bea = _has_bea(conn)
+    if has_bea and ref_month is not None:
+        yr = int(ref_month[:4])
+        return bea_weights(yr, db_path), f"bea_2.4.5U_annual_prioryear({yr - 1})"
     if not allow_approximate:
         raise WeightsUnavailable(
-            "PCE weights require bea_pce_detail (Table 2.4.5U), which is BEA-API-key-blocked. "
-            "Pass allow_approximate=True to use CPI-RI proxy weights (flagged, gate-degrading).")
-    # CPI-RI proxy: sum the CPI relative importances of each component's source strata.
+            "PCE weights require bea_pce_detail (Table 2.4.5U) and a ref_month for the vintage "
+            "year. Pass allow_approximate=True for CPI-RI proxy weights (flagged, gate-degrading).")
     ri = weights.weights_as_of("2022-06-01", db_path=db_path)  # frozen pre-2023 vintage
     out: dict[str, float] = {}
     for c in _components():
@@ -231,15 +280,15 @@ def pce_weights(allow_approximate: bool = False, db_path=DEFAULT_DB) -> tuple[di
 
 
 def assemble_core_pce_mom(ref_month: str, forecast_time, allow_approximate_weights: bool = False,
-                          db_path=DEFAULT_DB) -> BridgeResult:
+                          exclude_residue: bool = False, db_path=DEFAULT_DB) -> BridgeResult:
     """Assemble unrounded core PCE MoM for ref_month as known at forecast_time (post CPI+PPI
     release). Laspeyres-weighted mean of core component relatives (Fisher approximation).
-    Every component records its vintage flag and method; covered / latest-vintage weight are
-    reported so the gate can see the leakage exposure and the priced share."""
+    `exclude_residue=True` gives Instrument B (trackable core = core ex the 3 H9-residue
+    components, renormalized). Every component records its vintage flag and method."""
     from nowcast.timebase import open_timebase
 
     ft = forecast_time
-    wts, basis = pce_weights(allow_approximate=allow_approximate_weights, db_path=db_path)
+    wts, basis = pce_weights(ref_month=ref_month, allow_approximate=allow_approximate_weights, db_path=db_path)
     res = BridgeResult(ref_month=ref_month, forecast_time=str(ft), core_pce_mom=None, weights_basis=basis)
     ri = weights.weights_as_of(f"{int(ref_month[:4])}-06-01", db_path=db_path) if _year_covered(ref_month, db_path) \
         else weights.weights_as_of("2022-06-01", db_path=db_path)
@@ -250,6 +299,8 @@ def assemble_core_pce_mom(ref_month: str, forecast_time, allow_approximate_weigh
         vint = _vintaged_series(conn)
         for c in _components():
             if not c.get("in_core"):
+                continue
+            if exclude_residue and c.get("residue"):
                 continue
             name, st = c["component"], c["source_type"]
             w = wts.get(name, 0.0)
@@ -268,7 +319,8 @@ def assemble_core_pce_mom(ref_month: str, forecast_time, allow_approximate_weigh
                     latest_w += w
     if den > 0:
         res.core_pce_mom = num / den - 1.0
-        total_w = sum(w for c in _components() if c.get("in_core") for w in [wts.get(c["component"], 0.0)])
+        total_w = sum(wts.get(c["component"], 0.0) for c in _components()
+                      if c.get("in_core") and not (exclude_residue and c.get("residue")))
         res.covered_weight = den / total_w if total_w else 0.0
         res.latest_vintage_weight = latest_w / total_w if total_w else 0.0
     return res

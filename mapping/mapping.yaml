@@ -3,14 +3,14 @@
 meta:
   generated: '2026-07-18'
   session: S1/Task2
-  weight_source_file: data/raw/bls_cpi_weights/2026-07-18/relative_importance_2025.xlsx (sha256 6e7baa9b...55, CPI-U
-    relative importance, Dec 2025)
+  weight_source_file: data/raw/bls_cpi_weights/2026-07-18/relative_importance_2025.xlsx (sha256 6e7baa9b...55, CPI-U relative importance, Dec
+    2025)
   weight_asof: 2025-12
   regeneration: bls_cpi_weights naru pipeline (Session 2) replaces this hand pull
-  formula_exceptions_citation: BLS Handbook of Methods ch.17 — arithmetic-mean strata = shelter + selected utilities/gov-charges;
-    VERIFY full list in Session 2
-  alt_table_provenance: research plan §1.4/§2/§5.2 (docs/research_plan.md, v0.1); standalone 20-row draft table
-    was not available — reconstructed, rows cite plan_ref
+  formula_exceptions_citation: BLS Handbook of Methods ch.17 — arithmetic-mean strata = shelter + selected utilities/gov-charges; VERIFY full
+    list in Session 2
+  alt_table_provenance: research plan §1.4/§2/§5.2 (docs/research_plan.md, v0.1); standalone 20-row draft table was not available — reconstructed,
+    rows cite plan_ref
 targets:
   note: 'D2 targets: MoM surprise vs consensus, unrounded where available; first-release (ALFRED) values.'
   series:
@@ -1531,8 +1531,8 @@ cpi:
       proxy_history_start: 2015
       license_status: published_download
       confidence: medium
-      note: 'also apartment_list (2017), zumper, bls_new_tenant_rent (2005, quarterly); H2: new-lease indices lead
-        ~1y, expected NOT to help next print'
+      note: 'also apartment_list (2017), zumper, bls_new_tenant_rent (2005, quarterly); H2: new-lease indices lead ~1y, expected NOT to help next
+        print'
       vintage_status: revised_latest_only
       proxy_history_actual: 2015-01
       ingested: true
@@ -4618,9 +4618,8 @@ cpi:
       license_status: null
       confidence: null
 ppi:
-  note: Final demand structure; ids are BLS PPI series. WPS* = SA, WPU* = NSA. pce_feeders are the industry PPIs
-    BEA uses (or that best approximate what BEA uses) for PCE deflation; confidence low where BEA's exact source
-    detail is not public.
+  note: Final demand structure; ids are BLS PPI series. WPS* = SA, WPU* = NSA. pce_feeders are the industry PPIs BEA uses (or that best approximate
+    what BEA uses) for PCE deflation; confidence low where BEA's exact source detail is not public.
   final_demand:
   - name: Final demand
     series_id_nsa: WPUFD4
@@ -4682,19 +4681,20 @@ ppi:
     name: PPI scheduled passenger air transportation
     confidence: medium
   - pce_component: portfolio_management
-    series_id: PCU523920523920
+    series_id: PCU5239205239202
     name: PPI portfolio management and investment advice
     confidence: medium
+    note: live successor (old PCU523920523920 discontinued 2022-12)
   - pce_component: property_casualty_insurance
     series_id: PCU524126524126
     name: PPI direct property and casualty insurers
     confidence: low
     note: BEA nets expected losses; premium PPI is an approximation
 pce_bridge:
-  note: 'Core-PCE assembly table (plan §1.3): after CPI+PPI print, PCE is arithmetic. source_series lists reference
-    cpi item_codes (S*) and PPI series (PCU*) defined above; bea_imputed rows have source_series null and an approximation
-    note. confidence: low rows are best-documented approximations, NOT verified BEA practice — review list in docs/checkpoint_log_s1.md.
-    Core excludes food-off-premises and energy goods+services.'
+  note: 'Core-PCE assembly table (plan §1.3): after CPI+PPI print, PCE is arithmetic. source_series lists reference cpi item_codes (S*) and PPI
+    series (PCU*) defined above; bea_imputed rows have source_series null and an approximation note. confidence: low rows are best-documented
+    approximations, NOT verified BEA practice — review list in docs/checkpoint_log_s1.md. Core excludes food-off-premises and energy goods+services.
+    | BEA crosswalk added (bea_stem/weight_code/price_code): 2.4.5U RC=weight, 2.4.4U RG=price; imperfect mappings carry bea_mapping_note.'
   components:
   - component: new_motor_vehicles
     source_type: cpi_relative
@@ -4704,6 +4704,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DNMV
+    bea_weight_code: DNMVRC
+    bea_price_code: DNMVRG
   - component: used_motor_vehicles
     source_type: cpi_relative
     source_series:
@@ -4712,6 +4715,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DNPV
+    bea_weight_code: DNPVRC
+    bea_price_code: DNPVRG
   - component: furnishings_durable_household_equipment
     source_type: cpi_relative
     source_series:
@@ -4722,6 +4728,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DFDH
+    bea_weight_code: DFDHRC
+    bea_price_code: DFDHRG
   - component: recreational_goods_vehicles
     source_type: cpi_relative
     source_series:
@@ -4734,6 +4743,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DREQ
+    bea_weight_code: DREQRC
+    bea_price_code: DREQRG
   - component: other_durable_goods
     source_type: cpi_relative
     source_series:
@@ -4743,6 +4755,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DODG
+    bea_weight_code: DODGRC
+    bea_price_code: DODGRG
   - component: clothing_footwear
     source_type: cpi_relative
     source_series:
@@ -4751,6 +4766,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DCLF
+    bea_weight_code: DCLFRC
+    bea_price_code: DCLFRG
   - component: pharmaceutical_other_medical_products
     source_type: cpi_relative
     source_series:
@@ -4760,6 +4778,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DPHM
+    bea_weight_code: DPHMRC
+    bea_price_code: DPHMRG
   - component: household_supplies
     source_type: cpi_relative
     source_series:
@@ -4768,6 +4789,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DHOU
+    bea_weight_code: DHOURC
+    bea_price_code: DHOURG
   - component: personal_care_products
     source_type: cpi_relative
     source_series:
@@ -4776,6 +4800,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DOPC
+    bea_weight_code: DOPCRC
+    bea_price_code: DOPCRG
   - component: tobacco
     source_type: cpi_relative
     source_series:
@@ -4784,6 +4811,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DTOB
+    bea_weight_code: DTOBRC
+    bea_price_code: DTOBRG
   - component: food_beverages_off_premises
     source_type: cpi_relative
     source_series:
@@ -4793,6 +4823,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: false
     confidence: medium
+    bea_stem: DFXA
+    bea_weight_code: DFXARC
+    bea_price_code: DFXARG
   - component: gasoline_other_energy_goods
     source_type: cpi_relative
     source_series:
@@ -4802,6 +4835,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: false
     confidence: medium
+    bea_stem: DGAS
+    bea_weight_code: DGASRC
+    bea_price_code: DGASRG
   - component: housing_tenant_rent
     source_type: cpi_relative
     source_series:
@@ -4810,6 +4846,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: high
+    bea_stem: DTEN
+    bea_weight_code: DTENRC
+    bea_price_code: DTENRG
   - component: housing_oer
     source_type: cpi_relative
     source_series:
@@ -4818,6 +4857,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: high
+    bea_stem: DOWN
+    bea_weight_code: DOWNRC
+    bea_price_code: DOWNRG
   - component: group_housing
     source_type: bea_imputed
     source_series: null
@@ -4825,6 +4867,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DGRH
+    bea_weight_code: DGRHRC
+    bea_price_code: DGRHRG
   - component: household_utilities_water_waste
     source_type: cpi_relative
     source_series:
@@ -4834,6 +4879,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DWRS
+    bea_weight_code: DWRSRC
+    bea_price_code: DWRSRG
   - component: electricity_natural_gas
     source_type: cpi_relative
     source_series:
@@ -4843,15 +4891,21 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: false
     confidence: medium
+    bea_stem: DHUE
+    bea_weight_code: DHUERC
+    bea_price_code: DHUERG
   - component: physician_outpatient_services
     source_type: ppi_relative
     source_series:
     - PCU621111621111
-    scope_adjustment_note: PCE covers all-payer (Medicare/Medicaid/employer), CPI only out-of-pocket — this is why
-      PPI not CPI
+    scope_adjustment_note: PCE covers all-payer (Medicare/Medicaid/employer), CPI only out-of-pocket — this is why PPI not CPI
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DPHY
+    bea_weight_code: DPHYRC
+    bea_price_code: DPHYRG
+    bea_mapping_note: DPHY is BEA Physician services; outpatient-care-center detail (DOUS) not separately captured
   - component: dental_services
     source_type: cpi_relative
     source_series:
@@ -4860,6 +4914,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DDEN
+    bea_weight_code: DDENRC
+    bea_price_code: DDENRG
   - component: home_health_care
     source_type: ppi_relative
     source_series:
@@ -4868,6 +4925,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DHHC
+    bea_weight_code: DHHCRC
+    bea_price_code: DHHCRG
   - component: hospital_services
     source_type: ppi_relative
     source_series:
@@ -4876,6 +4936,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DHSP
+    bea_weight_code: DHSPRC
+    bea_price_code: DHSPRG
   - component: nursing_homes
     source_type: ppi_relative
     source_series:
@@ -4884,6 +4947,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DNRS
+    bea_weight_code: DNRSRC
+    bea_price_code: DNRSRG
   - component: health_insurance_margin
     source_type: bea_imputed
     source_series: null
@@ -4891,6 +4957,10 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DHIN
+    bea_weight_code: DHINRC
+    bea_price_code: DHINRG
+    bea_mapping_note: DHIN Net health insurance = BEA premiums-less-benefits margin (exact concept match)
   - component: motor_vehicle_services
     source_type: cpi_relative
     source_series:
@@ -4901,6 +4971,10 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DMVS
+    bea_weight_code: DMVSRC
+    bea_price_code: DMVSRG
+    bea_mapping_note: DMVS = maint/repair/lease/rental/parking; MV insurance (SETE) sits in BEA DTIN not DMVS -> mild scope gap
   - component: air_transportation
     source_type: ppi_relative
     source_series:
@@ -4909,6 +4983,12 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DAIT
+    bea_weight_code: DAITRC
+    bea_price_code: DAITRG
+    bea_mapping_note: 'H9a: BEA = ''PPI for domestic scheduled passenger air transportation'' = PCU481111 (=bridge). Mapping CORRECT (corr 0.70).
+      No change.'
+    residue: false
   - component: other_transportation_services
     source_type: cpi_relative
     source_series:
@@ -4918,6 +4998,10 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DGRD
+    bea_weight_code: DGRDRC
+    bea_price_code: DGRDRG
+    bea_mapping_note: DGRD ground transport incl. intracity transit; CPI SETG splits intercity differently
   - component: recreation_services
     source_type: cpi_relative
     source_series:
@@ -4929,6 +5013,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DRCA
+    bea_weight_code: DRCARC
+    bea_price_code: DRCARG
   - component: food_services_accommodations
     source_type: cpi_relative
     source_series:
@@ -4938,31 +5025,53 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DFSA
+    bea_weight_code: DFSARC
+    bea_price_code: DFSARG
   - component: financial_service_charges_fees
     source_type: cpi_relative
     source_series:
-    - SEGD05
-    scope_adjustment_note: CPI financial services stratum covers bank/checking fees; BEA mixes in PPI deposit-service
-      charges
+    - SS68021
+    scope_adjustment_note: CPI financial services stratum covers bank/checking fees; BEA mixes in PPI deposit-service charges
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DOFI
+    bea_weight_code: DOFIRC
+    bea_price_code: DOFIRG
+    bea_mapping_note: 'H9a: BEA deflates with ''CPI for checking account and other bank services'' (SS68021)+PPI brokerage, NOT CPI Financial
+      services SEGD05 [NIPA Handbook ch.5 Table 5.B (Dec 2024)]. SS68021 corr 0.32 vs BEA DOFI (SEGD05 was 0.17) — improved but still weak ->
+      RESIDUE.'
+    residue: true
   - component: portfolio_management_investment_advice
     source_type: ppi_relative
     source_series:
-    - PCU523920523920
+    - PCU5239205239202
     scope_adjustment_note: known BEA source; strongly market-linked
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DPMI
+    bea_weight_code: DPMIRC
+    bea_price_code: DPMIRG
+    bea_mapping_note: 'H9a/H9b: BEA = fixed-weighted avg of PPI portfolio mgmt + PPI investment advice [NIPA Handbook ch.5 Table 5.B (Dec 2024)].
+      Old PCU523920523920 discontinued 2022-12; live successor PCU5239205239202 (corr 0.82 vs BEA DPMI) -> S&P path was wrong; RETURNS to trackable.'
+    residue: false
   - component: financial_services_without_payment
     source_type: bea_imputed
     source_series: null
-    scope_adjustment_note: 'imputed bank services: BEA user-cost method. Approximation: deposit/loan balances x
-      rate spreads; equity-linked fees via S&P500 path'
+    scope_adjustment_note: 'imputed bank services: BEA user-cost method. Approximation: deposit/loan balances x rate spreads; equity-linked fees
+      via S&P500 path'
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DIMP
+    bea_weight_code: DIMPRC
+    bea_price_code: DIMPRG
+    frozen_drift_bp: 0.0
+    bea_mapping_note: 'H9b/H9c FALSIFIED OOS (S&P path wrong; drift +54.58bp/mo over-corrected 2023+, +1.85bp bias) -> NULL restored: freeze-at-zero
+      (frozen_drift_bp=0). Standing rule: re-selected each January (see npish).'
+    residue: true
   - component: life_insurance
     source_type: bea_imputed
     source_series: null
@@ -4970,6 +5079,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DLIF
+    bea_weight_code: DLIFRC
+    bea_price_code: DLIFRG
   - component: communication
     source_type: cpi_relative
     source_series:
@@ -4980,6 +5092,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DCOM
+    bea_weight_code: DCOMRC
+    bea_price_code: DCOMRG
   - component: education_services
     source_type: cpi_relative
     source_series:
@@ -4988,6 +5103,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DTED
+    bea_weight_code: DTEDRC
+    bea_price_code: DTEDRG
   - component: professional_other_services
     source_type: cpi_relative
     source_series:
@@ -4999,6 +5117,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DPRS
+    bea_weight_code: DPRSRC
+    bea_price_code: DPRSRG
   - component: personal_care_services
     source_type: cpi_relative
     source_series:
@@ -5007,6 +5128,9 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: medium
+    bea_stem: DPCS
+    bea_weight_code: DPCSRC
+    bea_price_code: DPCSRG
   - component: npish_final_consumption
     source_type: bea_imputed
     source_series: null
@@ -5014,9 +5138,15 @@ pce_bridge:
     weight_source: bea_pce_detail_pipeline_nominal_shares
     in_core: true
     confidence: low
+    bea_stem: DNPI
+    bea_weight_code: DNPIRC
+    bea_price_code: DNPIRG
+    frozen_drift_bp: 0.0
+    bea_mapping_note: 'H9c FALSIFIED OOS (drift +26.38bp/mo over-corrected 2023+, +0.98bp bias) -> NULL restored: freeze-at-zero (frozen_drift_bp=0).
+      Standing rule: carry spec re-selected each January on data through prior year-end, frozen for the calendar year, changes logged.'
+    residue: true
 reconciliation:
-  note: 'Session 2B Gate 2. quality: stable|weak|unstable|monitor|insufficient_overlap. optimistic=stat from revised_latest_only
-    proxy.'
+  note: 'Session 2B Gate 2. quality: stable|weak|unstable|monitor|insufficient_overlap. optimistic=stat from revised_latest_only proxy.'
   pairs:
   - label: EIA gasoline vs CPI Gasoline (SETB01)
     cpi_weight: 2.895
@@ -5099,8 +5229,7 @@ reconciliation:
     proxy_quality: monitor
     optimistic: false
 group_c_official:
-  note: 'Session 2B Group C: official_current series in the official_current table (methodology replication 3A/3B
-    only, NEVER backtest targets).'
+  note: 'Session 2B Group C: official_current series in the official_current table (methodology replication 3A/3B only, NEVER backtest targets).'
   bls_cpi_series:
     published_strata_covered: 181/181 (100%)
     series: 231 SA + 270 NSA item_codes
@@ -5110,16 +5239,15 @@ group_c_official:
   ppi_series:
     final_demand: 12 SA + 12 NSA (WPS*/WPU*)
     pce_source_ppis: 3 of 4 present (hospitals/physicians/home-health/nursing, air transport, P&C insurance)
-    absence: 'PCU523920523920 (portfolio management) DISCONTINUED 2022-12; BLS API returns empty. Historical 2002-2022
-      on FRED. Post-2022 -> PCE-bridge S&P500-path approximation (financial_services_without_payment). Follow-up:
-      ingest 2002-2022 from FRED if 3B needs it.'
+    absence: 'PCU523920523920 (portfolio management) DISCONTINUED 2022-12; BLS API returns empty. Historical 2002-2022 on FRED. Post-2022 -> PCE-bridge
+      S&P500-path approximation (financial_services_without_payment). Follow-up: ingest 2002-2022 from FRED if 3B needs it.'
   bls_seasonal_factors:
-    status: SA series present as CUSR0000* alongside NSA CUUR0000*; implied factors = NSA/SA derivable. Explicit
-      BLS seasonal-factor files not separately ingested (not needed while SA+NSA both present).
+    status: SA series present as CUSR0000* alongside NSA CUUR0000*; implied factors = NSA/SA derivable. Explicit BLS seasonal-factor files not
+      separately ingested (not needed while SA+NSA both present).
   bea_pce_detail:
-    status: 'NOT INGESTED — requires a BEA API key (like FRED, user-provided) or BEA underlying-detail downloads.
-      The PCE bridge''s OFFICIAL INPUTS (CPI + PPI feeders) ARE covered, so 3A can proceed; 3B PCE-reconstruction
-      VALIDATION needs BEA Table 2.4.4U underlying detail. USER ACTION: provide a BEA API key to enable.'
+    status: 'NOT INGESTED — requires a BEA API key (like FRED, user-provided) or BEA underlying-detail downloads. The PCE bridge''s OFFICIAL INPUTS
+      (CPI + PPI feeders) ARE covered, so 3A can proceed; 3B PCE-reconstruction VALIDATION needs BEA Table 2.4.4U underlying detail. USER ACTION:
+      provide a BEA API key to enable.'
   pce_bridge_bea_imputed_absent_by_design: 5
 lead_profiles:
   Manheim vs CPI Used cars (SETA02):
@@ -5261,5 +5389,4 @@ lead_profiles:
       n: 117
       beta: 0.2543
       r2: 0.3092
-    note: 'stable_leading = admissible in Session 4 ONLY as a lagged feature at peak_lead, never contemporaneous.
-      H2: shelter leads ~1yr+.'
+    note: 'stable_leading = admissible in Session 4 ONLY as a lagged feature at peak_lead, never contemporaneous. H2: shelter leads ~1yr+.'

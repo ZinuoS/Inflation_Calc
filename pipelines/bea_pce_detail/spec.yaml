@@ -1,19 +1,36 @@
-# bea_pce_detail pipeline spec (Session 2B, Group C) — DEPENDENCY-BLOCKED
+# bea_pce_detail pipeline spec (Session: BEA ingestion) — the true PCE weights + price detail
 source: bea_pce_detail
 description: >
-  BEA PCE underlying detail price indexes (NIPA Table 2.4.4U, "Price Indexes for
-  Personal Consumption Expenditures by Type of Product, underlying detail"). The
-  official PCE-component price series against which the CPI/PPI->PCE bridge
-  reconstruction is validated in Session 3B.
+  BEA NIPA underlying detail: Table 2.4.5U (U20405, nominal PCE by type of product — the
+  bridge's true expenditure WEIGHTS) and Table 2.4.4U (U20404, price indexes — per-component
+  PCE actuals for the valid-gate ATTRIBUTION and validation). Monthly. official_current;
+  methodology/validation only, NEVER a proxy feature or a backtest target.
 vintage_status: official_current
-methodology_replication_only: true   # 3B PCE-bridge VALIDATION; NEVER a backtest target
+methodology_replication_only: true
 
 api:
   provider: BEA
   base_url: https://apps.bea.gov/api/data
-  dataset: NIPA
-  table_name: T20404U            # Table 2.4.4U underlying detail price indexes
+  dataset: NIUnderlyingDetail
   frequency: M
-  requires_env_key: BEA_API_KEY  # free key, https://apps.bea.gov/api/signup/
+  requires_env_key: BEA_API_KEY
+  tables:
+    U20405: nominal        # RC series (current $, millions) -> weights
+    U20404: price          # RG series (chain price index, 2017=100) -> attribution/actuals
+  years: "2010-2026"       # covers the 5y eval + prior-year weights with margin
 
-status: SKIPPED_pending_key       # see SKIPPED.md
+# official_current staged columns: source, series_id (BEA SeriesCode, e.g. DNMVRC/DNMVRG),
+# item_code (=SeriesCode), seasonal (SA — BEA monthly are seasonally adjusted), frequency,
+# period (YYYY-MM-01), value. RC vs RG suffix keeps nominal and price distinct (no collision).
+
+publication:                 # Task 0: structural weights input — annual, knowable far ahead
+  kind: scheduled
+  rule: annual_plus_comprehensive_revision
+  observed_asof_estimated: false
+  cite: https://www.bea.gov/data/consumer-spending/main   # NIPA release + annual/comprehensive update schedule
+  note: >
+    2.4.5U weights are a STRUCTURAL annual input, vintage-appropriate and knowable far ahead of
+    any forecast time (no daily role). Monthly detail is revised with the monthly PCE release
+    (~M+1) and restated at the annual update (late July) and comprehensive updates (~5y). For
+    weights we use the vintage-appropriate ANNUAL nominal share, so within-month revision is
+    immaterial; the biennial/annual weight-era annotation still applies pre-2023.

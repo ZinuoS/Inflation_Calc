@@ -67,7 +67,32 @@ def _boundary_dist(bp: float) -> float:
     return abs(bp - nearest)
 
 
-def evaluate(start: str, end: str, db_path=DEFAULT_DB) -> Acceptance:
+def _trackable_core_actual(conn, ref_month: str) -> float | None:
+    """Instrument-B target: the ACTUAL trackable-core MoM = BEA-weighted Laspeyres of the
+    NON-residue in-core components' own BEA price relatives (2.4.4U RG). BEA does not publish
+    'core ex those 3', so the truth for the sub-aggregate is constructed from BEA's own
+    component prices + weights (latest-vintage; non-residue components revise little)."""
+    import yaml
+    comps = [c for c in yaml.safe_load(open(pce_bridge.MAPPING))["pce_bridge"]["components"]
+             if c.get("in_core") and not c.get("residue")]
+    wts = pce_bridge.bea_weights(int(ref_month[:4]))
+    pm = pce_bridge._add_months(ref_month, -1) if hasattr(pce_bridge, "_add_months") else None
+    d = dt.date.fromisoformat(ref_month); pm = dt.date(d.year - (d.month == 1), d.month - 1 or 12, 1).isoformat()
+    num = den = 0.0
+    for c in comps:
+        code = c.get("bea_price_code")
+        px = {p: v for p, v in conn.execute(
+            "SELECT period, value FROM official_current WHERE series_id=? AND period IN (?,?)",
+            (code, ref_month, pm))}
+        if ref_month in px and pm in px and px[pm]:
+            w = wts.get(c["component"], 0.0)
+            num += w * (float(px[ref_month]) / float(px[pm])); den += w
+    return num / den - 1.0 if den else None
+
+
+def evaluate(start: str, end: str, instrument: str = "A", db_path=DEFAULT_DB) -> Acceptance:
+    """instrument 'A' = full core vs first-release PCEPILFE; 'B' = trackable core (ex residue)
+    vs the BEA-constructed trackable-core actual."""
     out = Acceptance()
     months = _month_range(start, end)
     with db.connect(db_path) as conn, open_timebase(db_path) as tb:
@@ -75,16 +100,19 @@ def evaluate(start: str, end: str, db_path=DEFAULT_DB) -> Acceptance:
             ft = _cpi_release_ft(conn, m)
             if ft is None:
                 out.skipped.append((m, "no CPI release date")); continue
-            # First-release PCEPILFE MoM: the canonical within-vintage first release (the value
-            # BEA first printed) = the first_release_mom view, which is the asof_mom_for_ref
-            # value evaluated at PCE's own release time. Using the view avoids the PCE
-            # release-calendar reference_period convention offset (data-month vs release-month).
-            row = conn.execute(
-                "SELECT mom FROM first_release_mom WHERE series_id='PCEPILFE' AND reference_period=?", (m,)).fetchone()
-            if row is None or row[0] is None:
-                out.skipped.append((m, "PCE first release unavailable (shutdown/not released)")); continue
-            actual = row[0]
-            res = pce_bridge.assemble_core_pce_mom(m, ft, allow_approximate_weights=True, db_path=db_path)
+            if instrument == "B":
+                actual = _trackable_core_actual(conn, m)
+                if actual is None:
+                    out.skipped.append((m, "BEA trackable-core actual unavailable")); continue
+            else:
+                # First-release PCEPILFE MoM: the canonical within-vintage first release (the value
+                # BEA first printed) = the first_release_mom view.
+                row = conn.execute(
+                    "SELECT mom FROM first_release_mom WHERE series_id='PCEPILFE' AND reference_period=?", (m,)).fetchone()
+                if row is None or row[0] is None:
+                    out.skipped.append((m, "PCE first release unavailable (shutdown/not released)")); continue
+                actual = row[0]
+            res = pce_bridge.assemble_core_pce_mom(m, ft, exclude_residue=(instrument == "B"), db_path=db_path)
             if res.core_pce_mom is None:
                 out.skipped.append((m, "bridge produced no estimate")); continue
             out.weights_basis = res.weights_basis
@@ -146,6 +174,45 @@ def summarize(acc: Acceptance, ex_covid: bool = False) -> dict:
     }
 
 
+def attribution_vs_bea(ref_month: str, db_path=DEFAULT_DB) -> list[dict]:
+    """VALID-gate attribution (uses BEA 2.4.4U per-component actuals, now available): each
+    core component's weighted (bridge_relative - BEA_actual_relative) in bp — the verified
+    contribution to that month's miss. Ranked by |contribution|. This is the attribution the
+    degraded gate could not do."""
+    import datetime as _dt
+
+    import yaml
+    comps = {x["component"]: x for x in yaml.safe_load(open(pce_bridge.MAPPING))["pce_bridge"]["components"]
+             if x.get("in_core")}
+
+    def _add(m, k):
+        d = _dt.date.fromisoformat(m); mo = d.month - 1 + k
+        return _dt.date(d.year + mo // 12, mo % 12 + 1, 1).isoformat()
+    ft = _dt.datetime(int(ref_month[:4]), int(ref_month[5:7]), 28) + _dt.timedelta(days=45)
+    res = pce_bridge.assemble_core_pce_mom(ref_month, ft, db_path=db_path)
+    wts, _ = pce_bridge.pce_weights(ref_month=ref_month, db_path=db_path)
+    with db.connect(db_path) as conn:
+        tot = sum(wts.get(cv.component, 0) for cv in res.components if cv.relative is not None)
+        rows = []
+        for cv in res.components:
+            if cv.relative is None:
+                continue
+            stem = comps[cv.component].get("bea_stem")
+            px = {p: float(v) for p, v in conn.execute(
+                "SELECT period, value FROM official_current WHERE series_id=? AND period IN (?,?)",
+                (f"{stem}RG", ref_month, _add(ref_month, -1)))}
+            pm = _add(ref_month, -1)
+            if ref_month not in px or pm not in px or not px[pm]:
+                continue
+            bea = px[ref_month] / px[pm]
+            contrib = (wts.get(cv.component, 0) / tot) * (cv.relative - bea) * 10000 if tot else 0.0
+            rows.append({"component": cv.component, "contrib_bp": round(contrib, 2), "method": cv.method,
+                         "bridge_mom_bp": round((cv.relative - 1) * 10000, 1),
+                         "bea_actual_bp": round((bea - 1) * 10000, 1)})
+    rows.sort(key=lambda r: -abs(r["contrib_bp"]))
+    return rows
+
+
 def attribution(acc: Acceptance, ref_month: str, db_path=DEFAULT_DB) -> list[dict]:
     """Degraded-mode attribution for a miss: each component's weighted contribution to the
     bridge MoM, ranked by |contribution|. Without BEA per-component actuals we can rank the
@@ -158,7 +225,7 @@ def attribution(acc: Acceptance, ref_month: str, db_path=DEFAULT_DB) -> list[dic
     with db.connect(db_path) as conn:
         ft = _cpi_release_ft(conn, ref_month)
     res = pce_bridge.assemble_core_pce_mom(ref_month, ft, allow_approximate_weights=True, db_path=db_path)
-    wts, _ = pce_bridge.pce_weights(allow_approximate=True, db_path=db_path)
+    wts, _ = pce_bridge.pce_weights(ref_month=ref_month, allow_approximate=True, db_path=db_path)
     tot = sum(wts.get(c.component, 0.0) for c in res.components if c.relative is not None)
     rows = []
     for cv in res.components:
