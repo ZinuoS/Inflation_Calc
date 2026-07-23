@@ -1,0 +1,15 @@
+# macro_state pipeline spec (Session 4, Task 3) — macro-state features for the VoC/H10 challengers
+source: macro_state
+description: >
+  Daily macro-state series via FRED: broad dollar (DTWEXBGS), 2y Treasury (DGS2), WTI crude
+  (DCOILWTICO). Feature inputs ONLY (never a target); monthly-averaged in voc.py. Market data,
+  known in real time — same-day observable.
+vintage_status: unrevised
+series: {broad_dollar: DTWEXBGS, rate_2y: DGS2, wti: DCOILWTICO}
+frequency: daily
+publication:                    # Task 2d firewall metadata
+  kind: scheduled
+  rule: same_day                # market close / daily quote, final and known same day
+  observed_asof_estimated: false
+  cite: https://fred.stlouisfed.org/
+  note: "daily market data, real-time observable; monthly average known by month-end"

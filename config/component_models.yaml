@@ -1,0 +1,26 @@
+# Structured component-model configs (Session 4, Task 2) — FROZEN.
+# Boring by design: economics-imposed pass-through where a proxy pins the price; a seasonal
+# baseline everywhere else. Features are read ONLY through proxy_asof + windows.py at their
+# measured leads. betas marked `imposed` are set by mechanism and NEVER regressed on (doctrine);
+# betas marked `fit` are estimated train-only inside walk-forward folds (Task 4).
+# DEGRADED feature set: no Keepa daily goods panel (annotate downstream).
+
+default:
+  model: seasonal_ar          # baseline: mean of trailing same-calendar-month NSA MoMs (captures
+  seasonal_years: 8           # the dominant NSA seasonal pattern) + AR(1) on the deseasonalized part
+  ar_lags: 1
+
+components:
+  SETB01:                     # Gasoline (all types) — the strongest admitted signal
+    model: pass_through
+    proxy: {source: eia_gasoline, series_key: US, window: full_month_mean, lead: 0}
+    beta: 0.965               # imposed: retail->CPI NSA pass-through (reconcile NSA-vs-NSA, R^2 0.978)
+    beta_source: imposed
+    intercept: 0.0
+
+  SETA02:                     # Used cars & trucks — Manheim wholesale leads retail by 2 months (H1)
+    model: lead_feature
+    proxy: {source: manheim, series_key: US_full_month, window: full_month_mean, lead: 2}
+    beta: 0.497               # from the lead_profile peak (lag-2); re-fit train-only in folds
+    beta_source: fit
+    intercept: 0.0

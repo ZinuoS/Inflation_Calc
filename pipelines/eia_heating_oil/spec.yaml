@@ -18,3 +18,7 @@ publication:
   observed_asof_estimated: false
   cite: https://www.eia.gov/petroleum/gasdiesel/
   note: "daily spot published final next business day"
+
+window:
+  window_type: daily
+  mapped_stratum: SEHE01

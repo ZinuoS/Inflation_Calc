@@ -14,3 +14,7 @@ publication:                    # Task 2d
   observed_asof_estimated: false
   cite: FRED SP500 (daily close)
   note: "market close known in real time; equity path for AUM-based fees"
+
+window:
+  window_type: daily
+  mapped_stratum: null        # equity path (AUM), not a CPI stratum proxy

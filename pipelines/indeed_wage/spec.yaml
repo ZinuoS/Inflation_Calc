@@ -25,3 +25,7 @@ publication:
   observed_asof_estimated: true
   cite: https://github.com/hiring-lab/indeed-wage-tracker
   note: "ESTIMATED observed_asof; monitor-only; optimism-flagged"
+
+window:
+  window_type: event_based
+  mapped_stratum: null

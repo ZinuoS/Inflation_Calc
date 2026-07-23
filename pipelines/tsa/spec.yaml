@@ -21,3 +21,7 @@ publication:
   observed_asof_estimated: false
   cite: https://www.tsa.gov/travel/passenger-volumes
   note: "daily checkpoint counts posted next day; monthly mean of complete months"
+
+window:
+  window_type: monthly        # complete-month mean only (monitor)
+  mapped_stratum: SETG01

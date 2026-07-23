@@ -19,3 +19,7 @@ publication:
   observed_asof_estimated: true
   cite: https://www.atlantafed.org/chcs/wage-growth-tracker
   note: "ESTIMATED observed_asof; monitor-only; optimism-flagged"
+
+window:
+  window_type: event_based
+  mapped_stratum: null

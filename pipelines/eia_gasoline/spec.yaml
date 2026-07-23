@@ -20,3 +20,7 @@ publication:                    # Task 2d: information-timing firewall metadata
   observed_asof_estimated: false
   cite: https://www.eia.gov/petroleum/gasdiesel/notice.php   # GDFU publication-time notice
   note: "collected 8am Mondays (Form EIA-878); data always represent Monday prices"
+
+window:
+  window_type: daily          # weekly obs form a within-month price path; aggregable any scheme
+  mapped_stratum: SETB01

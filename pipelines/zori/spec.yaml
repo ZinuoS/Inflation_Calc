@@ -29,3 +29,7 @@ publication:
   observed_asof_estimated: true
   cite: https://www.zillow.com/research/data/
   note: "ESTIMATED observed_asof (not recorded) — ~3rd week of M+1; carries optimism flag"
+
+window:
+  window_type: event_based    # leading indicator; EXEMPT from within-month alignment
+  mapped_stratum: null

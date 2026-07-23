@@ -25,3 +25,8 @@ publication:
   observed_asof_estimated: false
   cite: https://site.manheim.com/  # VERIFIED: archive URLs /YYYY/MM/ = M+1 (provenance.json)
   note: "full-month UVVI in first week of next month; mid-month update ~17th of M (midmonth_followup)"
+
+window:
+  window_type: partial        # two publications: mid-month covers days ~1-15, full-month = full
+  mid_month_day_range: [1, 15]   # Manheim mid-month update methodology (first-half transactions)
+  mapped_stratum: SETA02

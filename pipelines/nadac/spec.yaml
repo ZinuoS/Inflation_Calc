@@ -39,3 +39,7 @@ publication:
   observed_asof_estimated: false
   cite: https://www.medicaid.gov/medicaid/prescription-drugs/pharmacy-pricing/index.html
   note: "CMS NADAC weekly reference file; month M complete ~1 week after month end"
+
+window:
+  window_type: daily          # weekly reference files; within-month path aggregable
+  mapped_stratum: SEMF01
