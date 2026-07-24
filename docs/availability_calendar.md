@@ -53,3 +53,25 @@ the bridge adds no new information after CPI/PPI day, so the honest PCE call tim
   month-M ZORI before ~M+1-25, is reading the future.
 - `estimated` sources (ZORI, wage trackers) use a +7-day conservatism margin, so their T-minus
   is a *late* bound — they arrive no later than shown, possibly a few days earlier.
+
+## Sources ASSESSED AND REJECTED (Session 7, Part B) — do not re-litigate
+
+Four services sources were sought against the June-2026 attribution; **none was admitted**. Each
+is recorded here with its disqualifying reason so later sessions do not re-open a closed question.
+Full evidence in `checkpoint_log_s7.md`.
+
+| source | target | arrival vs CPI freeze | why rejected |
+|---|---|---|---|
+| **STR / CoStar** lodging | SEHB02 | n/a | **Access.** Both hosts return `403` on `/robots.txt`. Blocked at the edge; not fought (rule 5). Untested, not disproven — reopen only with a licensed feed. |
+| **PPI Hotels & Motels** `PCU721110721110` | SEHB02 | **after CPI** | No lead (lag−1 corr 0.10; peak is contemporaneous), R² 0.21. Fails on signal *and* timing. |
+| **Wireless posted-plan tracker** | SEED03 | would be daily | **Observability.** CPI vs PPI wireless corr **+0.08** over 150 months; June-2026 CPI −331 bp while PPI +1 bp. The monthly signal is internal to BLS measurement (hedonic), not an external price event. Also: a tracker started now has zero backtest history. |
+| **SERFF filed rates** | SETE | n/a | **Access.** `403` on `/robots.txt`; Filing Access sits behind per-state click-through terms, not accepted on the principal's behalf. |
+| **NAIC Auto Insurance Database** | SETE | ~2 years | **Verified**, not assumed: 2022/2023 report adopted **December 2025**. Annual; categorically unusable monthly. |
+| **EIA-861M / Electric Power Monthly** | SEHF01 | **~M−2** | **Information ordering.** At the T-4 freeze CPI has published through *M−1* while 861M reports *M−2* — the source is **strictly staler than the target's own history**. Also not on FRED; direct API needs a key we do not hold. |
+| **Henry Hub gas** `DHHNGSP` (pass-through) | SEHF01 | daily, ~1 day | Genuinely leading, but no signal: lags 0–12 scanned raw and net of seasonal; best residual +0.199 against 2se 0.164 over a **13-point scan**, with no coherent decay shape. |
+
+### Standing structural rule established here
+
+**No PPI series can ever be a CPI next-print feature.** PPI for reference month *M* releases
+**+1 to +5 days after** CPI for the same month (verified across 8 recent prints; once −1). PPI
+remains legitimate for the **PCE bridge**, which calls ~2 weeks later — where it is already used.

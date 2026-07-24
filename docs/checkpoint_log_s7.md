@@ -320,4 +320,113 @@ headroom is in **baseline specification, not data acquisition** — the opposite
 opening premise, and a conclusion reached only because all four acquisitions were allowed to fail
 honestly.
 
-**STATUS: CHECKPOINT S4 / PART B COMPLETE — awaiting go before Part C (integration + counterfactual).**
+**CHECKPOINT S4 / PART B — cleared 2026-07-23.**
+
+---
+
+# PART C — integration, curve, counterfactual
+
+**Rescoped, and the rescope is the point.** C1 and C2 were written on the assumption that Part B
+would deliver sources to integrate and to annotate the curve with. It delivered none, so C1 becomes
+a *record* of what was assessed and closed, and C2 becomes a measurement of what intramonth
+information actually exists **without** any new source. Nothing was integrated because there was
+nothing to integrate — stated plainly rather than dressed up.
+
+## C1 — availability calendar updated
+
+`docs/availability_calendar.md` gains a **"Sources ASSESSED AND REJECTED"** section: all seven
+candidates evaluated across S1–S4 (STR/CoStar, PPI hotels, wireless tracker, SERFF, NAIC,
+EIA-861M, Henry Hub), each with its disqualifying reason, so a later session does not re-open a
+closed question. It also records the standing structural rule established at S1: **no PPI series
+can ever be a CPI next-print feature** (PPI lands +1 to +5 days after CPI for the same reference
+month), while remaining legitimate for the PCE bridge.
+
+**Nothing was added to the intramonth monitor.** No proxy config changed; no frozen config touched.
+
+## C2 — MAE-vs-days curve, annotated by source (18 prints, headline NSA)
+
+| T-minus | MAE (bp) | what arrived |
+|---|--:|---|
+| T-30 | 10.26 | — |
+| **T-28** | **9.70** | Manheim mid-month (median calendar day 15, a **Thursday**) |
+| **T-24** | **8.82** | EIA weekly gasoline (day 19, **Monday**) |
+| **T-17** | **8.20** | EIA weekly gasoline (day 25, **Monday**) |
+| T-16 | 8.12 | (Tuesday spillover) |
+| **T-10** | **7.60** | EIA weekly gasoline (day 1–3, **Monday**) — month *M* now fully observed |
+| T-9 → T-3 | **7.51** | **nothing** |
+
+**The source attribution is verified, not asserted.** Every major step lands on a **Monday** —
+EIA's weekly gasoline collection day (Form EIA-878, 8am Mondays), per `pipelines/eia_gasoline`.
+The decisive test: the **core** curve (energy excluded) was regenerated over the same 18 prints and
+is **perfectly flat — a single distinct value, 7.43 bp, from T-30 to T-3, change 0.00 bp.**
+
+So: **100% of the intramonth information gain in the CPI nowcast is gasoline.** Core CPI has
+*literally zero* intramonth information — the call at T-30 is identical to the call at T-3.
+
+**Two consequences.**
+
+- **The T-4 freeze is validated and is conservative.** The curve is flat from **T-9**; the freeze
+  could move to T-9 with no measured loss. (Not changed here — that is a config decision, and this
+  session admits nothing.)
+- **This is exactly what Part B was for, and why its failure matters.** The flat core curve *is*
+  the missing-services problem, measured. Part B went looking for something — anything — that
+  arrives intramonth on the non-energy side, and found nothing admissible. The core curve is flat
+  today and, absent a licensed feed, will stay flat.
+
+## C3 — counterfactual tail → `docs/counterfactual_tail.md`
+
+Perfect foresight on all four Part-B strata, applied to the 88-print Session-6 replay record
+(frozen configs, nothing refit):
+
+| statistic | actual | hard-conceded perfect | all-4 perfect |
+|---|--:|--:|--:|
+| MAE (bp) | **11.51** | 10.25 | **9.60** |
+| p90 \|deviation\| | 29.8 | 29.5 | 24.9 |
+| **max \|deviation\|** | **62.4** | **64.3** | **63.2** |
+
+Two results that cut against the premise the session opened on:
+
+1. **The ceiling on the entire acquisition programme was 1.9 bp of MAE** (17%) — and that is with
+   *zero* forecast error on all four strata, which no real feed delivers.
+2. **It would not have improved the worst month; it makes it marginally worse** (62.4 → 63.2 bp).
+   Across 88 months the four strata point the same way as the total error only **75%** of the time.
+   Acquisition was never a tail-risk fix.
+
+**June-2026 was the exception, not the pattern.** It is the single month where all four erred in
+the same direction at once (+21.4 bp of a +42.4 bp miss). The rest of the tail is the 2021–22
+surge, where misses were broad-based: 2022-06 (−62.4 bp) has a combined contribution from these
+four of **+0.6 bp**. The postmortem that launched this session generalized from an outlier.
+
+---
+
+# FINAL — admission-candidate table (Session 7)
+
+**NOTHING IS ADMITTED IN THIS SESSION.** Per the standing instruction, this is a candidate list for
+Ash to decide on, not a set of admissions. No frozen config was altered; no proxy was added; the
+counterfactual is a record, not a performance claim.
+
+| candidate | evidence | status | what would be needed to admit |
+|---|---|---|---|
+| **H11 — panel-aware baseline** (housing strata) | Own-lag autocorr **+0.840 / +0.795** on `housing_panel_6` vs **+0.059 / +0.022** on `monthly_all_areas`; mechanism cited to the BLS HOM (6 panels, 6-month rent ratios). Pre-registered **before** any fitting. | **CANDIDATE — in-sample mechanism only** | OOS MAE under purged embargoed walk-forward, memory length swept as a **curve**; decomposition before verdict; shadow config. Pre-registered expectation ≤1.5 bp headline gain concentrated in OER/rent. |
+| **H11b — bimonthly lag-2 reversal** | bimonthly − monthly-all-areas lag-2 **−0.141, t = −5.58**; SETE lag-2 **−0.394**. Broad (SETE ranks 12/118), consistent with a design mechanism. | **CANDIDATE — DISCOVERED IN-SAMPLE, NOT PRE-REGISTERED** | Must be **pre-registered first**, then tested OOS independently. Explicitly **not** folded into H11 and not counted as an H11 win. |
+| **H11 bimonthly limb as originally written (lag-1)** | t = **+1.53** — does not separate the classes. | **NOT SUPPORTED** | — (recorded as a pre-registered non-win) |
+| Seasonal window length (`seasonal_years: 8`) | SEHF01 residual lag-12 autocorr **+0.286** (2se 0.229) — annual structure surviving the 8-year same-month mean. | **LOGGED, NOT PURSUED** | Would need its own pre-registration; noticed in passing during S4, not chased. |
+| Move freeze T-4 → T-9 | Headline curve flat from T-9 (7.51 bp); core curve flat throughout. | **OBSERVATION ONLY** | A config decision; deliberately not taken here. |
+| Sources S1–S4 (lodging, wireless, insurance, electricity) | Four independent disqualifications — access, observability, access, information ordering. | **CLOSED — NONE ADMITTED** | S1 reopens only with a licensed STR/CoStar feed (untested, not disproven). |
+
+## Session verdict
+
+The session was launched on the premise that the June-2026 miss was a **data-sourcing** failure.
+Three independent lines of evidence say it was not:
+
+1. **Part B**: four sources sought, **zero admissible** — for four different structural reasons.
+2. **C3 counterfactual**: even *perfect* foresight on all four buys **1.9 bp** of MAE and **does
+   not improve the worst month**. June-2026 was an outlier, not the pattern.
+3. **C2 curve**: the core nowcast has **exactly zero** intramonth information; 100% of the gain is
+   gasoline — which is already admitted and already near its ceiling (R² 0.978).
+
+**The headroom is in baseline specification, not acquisition.** That is where Part A pointed, where
+H11/H11b now have the strongest evidence, and where the next session should go — with H11b
+pre-registered **before** it is fitted.
+
+**STATUS: PART C COMPLETE / SESSION 7 COMPLETE — awaiting sign-off. Nothing admitted.**
