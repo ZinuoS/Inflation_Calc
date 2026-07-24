@@ -173,4 +173,151 @@ the stronger ground that no external source *can* carry it.
 **Running total:** S1+S2 concede **9.5 bp of the 42.4 bp June miss** as structurally irreducible.
 `proxy-plausible` has fallen 9.8% → **7.3%** of CPI weight; `untrackable` has risen to **35.4%**.
 
-**STATUS: CHECKPOINT S2 — awaiting go before S3 (motor-vehicle insurance → SETE).**
+**CHECKPOINT S2 — cleared 2026-07-23.**
+
+---
+
+## CHECKPOINT S3 — motor-vehicle insurance (SETE, wt 2.75)
+
+### External sources → **NONE ADMISSIBLE**
+
+| candidate | outcome |
+|---|---|
+| **SERFF filed rates** | `filingaccess.serff.com` and `www.serff.com` both **403 on robots.txt** — blocked at the edge, not fought. Filing Access additionally sits behind **per-state click-through terms**, which are not accepted on the principal's behalf. |
+| **PPI insurance** | Ruled out **structurally** by the S1 finding: PPI publishes *after* CPI for the same reference month, so no PPI series can ever be a CPI next-print feature. |
+| **NAIC Auto Insurance Database Report** | **Verified**, not assumed: the 2022/2023 report was **adopted December 2025** — annual, ~2-year lag. Categorically unusable for a monthly nowcast. |
+| Commercial premium trackers (Insurify/Bankrate/etc.) | Opaque methodology, no governed history, unclear licensing — not admissible as a naru pipeline source. |
+
+### But S3 produced the session's first POSITIVE result — H11's mechanism, tested
+
+The Part-A sampling design leaves a **measurable fingerprint in the CPI's own history**, so part of
+what an external source was wanted for is recoverable internally. Mean own-lag autocorrelation of
+NSA MoM by **cited** collection design (2014+, strata with n ≥ 100):
+
+| cited design | n | lag-1 | lag-2 |
+|---|--:|--:|--:|
+| `housing_panel_6` (6-month ratios) | 2 | **+0.840** | **+0.795** |
+| `monthly_big3_bimonthly_elsewhere` | 118 | +0.107 | **−0.119** |
+| `monthly_all_areas` | 59 | +0.059 | +0.022 |
+
+**bimonthly − monthly-all-areas: lag-2 −0.141 (t = −5.58); lag-1 +0.048 (t = +1.53).**
+
+**Scoring this honestly:**
+
+- **H11 panel limb — CORROBORATED, strongly.** The two housing-panel strata show +0.84/+0.80
+  persistence against ~0.0 where the design predicts nothing. This is the 6-month-ratio design
+  showing up exactly where cited, on the index's two highest-weight strata.
+- **The pre-registered null HELD.** `monthly_all_areas` shows +0.06/+0.02 — the A3 red flag
+  ("gain concentrated where the design predicts no mechanism") did **not** fire.
+- **H11 bimonthly limb, AS LITERALLY PRE-REGISTERED (own-lag-**1**) — NOT SUPPORTED.** t = +1.53.
+  The written hypothesis named lag-1, and lag-1 does not separate the classes.
+- **The lag-2 reversal is strong (t = −5.58) but was NOT pre-registered.** It is therefore recorded
+  as **H11b — a NEW hypothesis discovered in-sample**, to be pre-registered and tested OOS on its
+  own. It is **not** folded into H11 and **not** claimed as a win, exactly as the S2 lag-1 +0.19
+  was recorded and dropped.
+
+**SETE specifically:** lag-1 **+0.359**, lag-2 **−0.394** (both ≫ 2se = 0.166), nothing at lag 6/12.
+But SETE ranks only **12th of 118** bimonthly strata by |lag-2| — the effect is **broad, not an
+insurance peculiarity**, which is what a design-driven mechanism should look like.
+
+**Caveat that limits all of the above:** autocorrelation is **not** forecast gain. The frozen
+baseline already carries AR(1), so the lag-1 structure is partly captured already; the lag-2
+reversal is the genuinely unexploited part. The real test is OOS MAE under purged walk-forward —
+**not run here, and not to be run until H11/H11b are properly staged.**
+
+**Verdict.** SETE **reclassified `proxy-plausible` → `untrackable-idiosyncratic`** for external
+sourcing, flagged as an **internal-structure candidate (H11b)**. June's +8.8 bp insurance
+contribution is **not** conceded as irreducible — unlike lodging and wireless, there is now a
+named, cross-sectionally validated mechanism that might recover part of it without any new data.
+
+**Running totals:** three of four Part-B sources closed with no admissible feed.
+`proxy-plausible` 9.8% → **4.5%** of CPI weight; `untrackable` → **38.2%**.
+
+**CHECKPOINT S3 — cleared 2026-07-23.**
+
+---
+
+## CHECKPOINT S4 — electricity (SEHF01, wt 2.49) → **NO ADMISSIBLE SOURCE**
+
+### The decisive argument is structural, not statistical
+
+**EIA-861M is strictly dominated by CPI's own published history.** At the T-4 freeze for reference
+month *M*, CPI has already published through *M−1*. The Electric Power Monthly reports through
+roughly *M−2*. **The source's newest observation is always older than the target's own newest
+published month** — so it cannot carry information the model does not already hold. This holds
+regardless of how well the two series correlate, and it is why the A2 "trajectory, not next-print"
+note was right.
+
+**Corroborated empirically.** If a lag-2 same-measure source could help, the target's
+seasonal-residual would have to retain 2-month memory. It does not:
+
+| SEHF01 seasonal-residual own-lag autocorr | value | 2se | |
+|---|--:|--:|---|
+| lag 1 | +0.177 | 0.214 | not significant |
+| **lag 2** (the 861M horizon) | **+0.130** | 0.216 | **not significant** |
+| lag 3 | +0.190 | 0.217 | not significant |
+| lag 12 | +0.286 | 0.229 | significant — see below |
+
+The frozen seasonal baseline already removes **40%** of the raw variation (sd 155 → 93 bp).
+
+### Access status (recorded, but moot)
+
+EIA-861M is **not on FRED** (0 hits), the route both existing EIA pipelines use. Direct EIA API v2
+access needs an **EIA key we do not hold**. Recorded as a real gap — but *not* the binding
+constraint, since the source would be dominated even if we had it.
+
+### The pass-through channel was tested and failed
+
+Retail electricity follows fuel costs, so **Henry Hub natural gas** (daily, FRED `DHHNGSP`,
+~1-day lag — genuinely leading, unlike 861M) was scanned at lags 0–12, raw and net of the seasonal
+baseline. Best residual correlations: +0.199 (lag 3), +0.196 (lag 11), against 2se = 0.164 over a
+**13-point scan**. Nothing survives multiplicity, and the pattern has no coherent shape (+ at 3/4,
+− at 7, + at 11, − at 12) — a real pass-through would show a decaying hump. **No usable signal.**
+
+### Recorded, not chased
+
+The **lag-12 residual autocorrelation (+0.286, significant)** says the 8-year same-month mean is
+leaving annual structure on the table — plausibly drifting seasonal rate schedules. That is a
+**baseline-specification** finding (cf. `seasonal_years: 8`), not a source finding. Logged for the
+H11 family; **not pursued here**, and not counted as an S4 result.
+
+**Verdict.** SEHF01 **reclassified `proxy-plausible` → `untrackable-idiosyncratic`**. June's
++4.1 bp electricity contribution is **conceded as irreducible**. (June detail: actual +149 bp
+against a seasonal mean of ~+298 bp — a −1.9σ residual, matching the postmortem's ~2σ over-predict.)
+
+---
+
+# PART B COMPLETE — summary
+
+**Four sources sought; zero admitted.** Each closed on a *different* kind of obstacle, which is
+itself the finding:
+
+| # | stratum | wt | why it closed |
+|---|---|--:|---|
+| S1 | SEHB02 lodging | 1.07 | **access** — STR/CoStar edge-blocked; PPI backup has no lead and publishes after CPI |
+| S2 | SEED03 wireless | 1.34 | **observability** — the monthly signal is internal to BLS measurement (CPI vs PPI corr +0.08; June −331 vs +1 bp) |
+| S3 | SETE insurance | 2.75 | **access** — SERFF 403 + click-through; NAIC verified annual/~2-yr lag |
+| S4 | SEHF01 electricity | 2.49 | **information ordering** — 861M is strictly staler than CPI's own history; gas pass-through fails multiplicity |
+
+**Class weights, before → after Part B:**
+
+| class | before | after |
+|---|--:|--:|
+| structurally-slow | 51.5% | 51.5% |
+| untrackable-idiosyncratic | 32.9% | **40.7%** |
+| proxy-plausible | 9.8% | **2.0%** |
+| proxy-admitted | 5.8% | 5.8% |
+
+`proxy-plausible` now holds only SEHE01 (0.08), SETG01 (0.88), SEMF01 (0.97) — all previously
+assessed weak. **The acquisition thesis is closed: there is no meaningful un-harvested public
+high-frequency price data left for CPI.** Roughly **18.2 bp of the 42.4 bp June miss is conceded
+as structurally irreducible** (S1+S2+S4 = 9.6 bp hard-conceded; S3's 8.8 bp held open).
+
+**What survived is not a source but a mechanism.** The Part-A audit produced H11 (design-implied
+baseline structure), whose panel limb is strongly corroborated (+0.84/+0.80 vs ~0.0) and which
+spawned **H11b** (bimonthly lag-2 reversal, t = −5.58). Part B's real yield is that the remaining
+headroom is in **baseline specification, not data acquisition** — the opposite of the session's
+opening premise, and a conclusion reached only because all four acquisitions were allowed to fail
+honestly.
+
+**STATUS: CHECKPOINT S4 / PART B COMPLETE — awaiting go before Part C (integration + counterfactual).**

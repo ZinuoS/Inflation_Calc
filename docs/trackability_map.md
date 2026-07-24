@@ -60,6 +60,26 @@ weak and only a proxy can help.
   in June-2026 CPI moved **−331 bp while PPI moved +1 bp**. The monthly signal is internal to BLS
   measurement, not a market event any external tracker can see. Revised class weights:
   structurally-slow 51.5% / untrackable **35.4%** / proxy-plausible **7.3%** / proxy-admitted 5.8%.
+- **SETE motor-vehicle insurance (wt 2.75): RECLASSIFIED `proxy-plausible` →
+  `untrackable-idiosyncratic` for EXTERNAL sourcing, flagged INTERNAL-STRUCTURE CANDIDATE (H11b)**
+  (S3, 2026-07-23). SERFF 403-blocked + click-through terms; PPI ruled out by the S1 timing
+  finding; NAIC verified annual with ~2-year lag. **But** the cited sampling design leaves a
+  measurable fingerprint in the CPI's own history — bimonthly strata carry a lag-2 reversal that
+  monthly-priced strata do not (**t = −5.58**), and SETE's own lag-2 is **−0.394**. Unlike lodging
+  and wireless, June's insurance contribution is **not** conceded as irreducible. Revised class
+  weights: structurally-slow 51.5% / untrackable **38.2%** / proxy-plausible **4.5%** /
+  proxy-admitted 5.8%.
+- **SEHF01 electricity (wt 2.49): RECLASSIFIED `proxy-plausible` → `untrackable-idiosyncratic`**
+  (S4, 2026-07-23). EIA-861M is **strictly dominated by CPI's own history** — at the T-4 freeze its
+  newest reference month (~*M−2*) is older than CPI's own newest published month (*M−1*) — and the
+  target's seasonal residual has no significant 2-month memory (+0.130, 2se 0.216). The Henry Hub
+  gas pass-through channel was scanned at lags 0–12 and fails multiplicity.
+
+**PART B COMPLETE: four sources sought, zero admitted.** Final class weights —
+structurally-slow **51.5%** / untrackable-idiosyncratic **40.7%** / proxy-admitted **5.8%** /
+proxy-plausible **2.0%** (only SEHE01, SETG01, SEMF01 remain, all previously assessed weak).
+The acquisition thesis is closed; the surviving headroom is in **baseline specification**
+(H11 / H11b), not data acquisition. See `checkpoint_log_s7.md`.
 
 ## The June-2026 movers — does sampling design explain the reversal?
 
