@@ -429,4 +429,40 @@ Three independent lines of evidence say it was not:
 H11/H11b now have the strongest evidence, and where the next session should go — with H11b
 pre-registered **before** it is fitted.
 
-**STATUS: PART C COMPLETE / SESSION 7 COMPLETE — awaiting sign-off. Nothing admitted.**
+---
+
+# H11 — RUN AND RESOLVED → `docs/h11_results.md`
+
+**VERDICT: NOT ADMITTED.** Evaluated in a shadow config (`src/nowcast/h11.py` + `tests/test_h11.py`);
+`config/component_models.yaml` untouched.
+
+**The pre-registered red flag fired**: the OOS gain was *largest in `monthly_all_areas`* — the
+control class where the cited design predicts no mechanism (−5.02 bp at k=2, vs −2.73 for panel
+strata). A3 mandated an audit before any admission. Two findings:
+
+1. **The red-flag threshold was itself mis-specified.** It was written in absolute bp, but baseline
+   MAE differs ~15× across classes (panel 8.53 bp, monthly_all_areas 130.56 bp). In **relative**
+   terms the concentration is exactly as predicted: panel **−32.4%** vs −3.2% / −4.9%. Recorded as
+   a defect in the pre-registration, not as licence to ignore the flag.
+2. **The confound that actually sinks it.** Decomposing the panel gain: **−2.19 bp is just a fitted
+   carry beating the frozen 0.3**, and only **−0.60 bp is the longer-memory mechanism H11 named** —
+   **22%**. Worse, that increment is *not design-differentiated* (−0.60 panel vs −0.40 / −0.51
+   elsewhere). H11 claimed lag *count* matters for panel strata; the sweep says it barely matters
+   anywhere.
+
+**Headline effect is negligible:** 11.51 → **11.36 bp (−0.15)** applying H11 to its pre-registered
+panel target; −0.17 with bimonthly added; and **+0.78 bp (WORSE)** if applied to all strata,
+vindicating the control. A −2.79 bp per-stratum gain on ~33% of weight yields 0.15 bp at the
+aggregate — component errors offset in aggregation, so component gains do not propagate.
+
+**What is really true:** the frozen **0.3 carry is badly mis-set for high-persistence strata**
+(panel lag-1 autocorr +0.84). That is design-attributable and is the genuine signal here — but it
+is **not what H11 pre-registered**, and it is worth ~0.15 bp at the headline. Any follow-up must be
+pre-registered fresh, with a **matched control** (fitted AR(1) everywhere) so the fitted-vs-frozen
+confound cannot masquerade as a design effect, and with thresholds in **relative** terms. It must
+not reuse this experiment's numbers — they are now in-sample with respect to it.
+
+**Updated candidate status:** H11 → **NOT ADMITTED (pre-registered non-win, audited)**.
+H11b remains un-tested and un-pre-registered; it is untouched by this run.
+
+**STATUS: PART C COMPLETE / SESSION 7 COMPLETE / H11 RESOLVED — awaiting sign-off. Nothing admitted.**
