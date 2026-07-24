@@ -1,0 +1,1837 @@
+# CPI sampling design, per stratum (Session: sampling audit, Part A1)
+#
+# CITATIONS (BLS Handbook of Methods, CPI chapter — bls.gov/opub/hom/cpi/, retrieved 2026-07-23):
+#  * collection frequency [data.htm]: "Food at home, energy, and selected other items are priced
+#    monthly. So, too, are prices for all other commodity and service items in the three largest
+#    publication areas: New York, Los Angeles, and Chicago. Elsewhere, prices are collected
+#    bimonthly for the remaining commodity and service items; those are assigned to either even-
+#    or odd-numbered months for pricing."
+#    => non-food/energy strata are only PARTIALLY monthly; a shock outside the big-3 smears
+#       across two prints. This is a MECHANICAL smoothing, not model error.
+#  * housing panel [data.htm/design.htm]: "The housing sample is divided into six panels, with the
+#    housing units in each panel priced twice per year." "Every month, we collect rent prices ...
+#    and the 6-month price ratio is computed (the current rent divided by the rent 6 months ago)
+#    ... measures of price change ... are based on weighted averages of these rent ratios."
+#    => rent/OER are structurally slow BY DESIGN: a market-rent shock enters via 6-month ratios,
+#       one panel per month. This is the DESIGN CAUSE of the H2 rent-lead result.
+#  * quality adjustment [calculation.htm]: "direct quality adjustment information include
+#    observable factors such as size or weight, manufacturers' cost data, and hedonic regression
+#    models." The HOM does NOT enumerate which strata are hedonically adjusted -> recorded as
+#    UNVERIFIED per stratum rather than asserted (no folklore).
+#  * motor-vehicle-insurance premium-following: NOT documented in the HOM chapter; requires the
+#    separate BLS factsheet. Left UNVERIFIED rather than assumed.
+#
+# COMPUTED (not cited): seasonal_reliability_bp = mean across calendar months of the std-dev of
+# that month's NSA MoM across years (2014+). LOW = the seasonal-mean fallback is trustworthy;
+# HIGH = the fallback is structurally weak for that stratum.
+strata:
+  SEFA01:
+    name: Flour and prepared flour mixes
+    weight_cpi_u: 0.038
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 109.3
+  SEFA02:
+    name: Breakfast cereal
+    weight_cpi_u: 0.136
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 101.5
+  SEFA03:
+    name: Rice, pasta, cornmeal
+    weight_cpi_u: 0.141
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 92.3
+  SEFB01:
+    name: Bread
+    weight_cpi_u: 0.175
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 79.1
+  SEFB02:
+    name: Fresh biscuits, rolls, muffins
+    weight_cpi_u: 0.12
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 113.3
+  SEFB03:
+    name: Cakes, cupcakes, and cookies
+    weight_cpi_u: 0.21
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 78.0
+  SEFB04:
+    name: Other bakery products
+    weight_cpi_u: 0.217
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 79.0
+  SEFC01:
+    name: Uncooked ground beef
+    weight_cpi_u: 0.236
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 149.8
+  SEFC02:
+    name: Uncooked beef roasts
+    weight_cpi_u: 0.087
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 223.9
+  SEFC03:
+    name: Uncooked beef steaks
+    weight_cpi_u: 0.24
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 174.2
+  SEFC04:
+    name: Uncooked other beef and veal
+    weight_cpi_u: 0.076
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 152.7
+  SEFD01:
+    name: Bacon, breakfast sausage, and related products
+    weight_cpi_u: 0.131
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 125.1
+  SEFD02:
+    name: Ham
+    weight_cpi_u: 0.066
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 182.4
+  SEFD03:
+    name: Pork chops
+    weight_cpi_u: 0.046
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 213.0
+  SEFD04:
+    name: Other pork including roasts, steaks, and ribs
+    weight_cpi_u: 0.097
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 188.1
+  SEFE:
+    name: Other meats
+    weight_cpi_u: 0.207
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 88.3
+  SEFF01:
+    name: Chicken
+    weight_cpi_u: 0.291
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 89.4
+  SEFF02:
+    name: Other uncooked poultry including turkey
+    weight_cpi_u: 0.072
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 131.7
+  SEFG01:
+    name: Fresh fish and seafood
+    weight_cpi_u: 0.165
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 94.9
+  SEFG02:
+    name: Processed fish and seafood
+    weight_cpi_u: 0.149
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 85.6
+  SEFH:
+    name: Eggs
+    weight_cpi_u: 0.133
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 446.2
+  SEFJ01:
+    name: Milk
+    weight_cpi_u: 0.19
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 97.0
+  SEFJ02:
+    name: Cheese and related products
+    weight_cpi_u: 0.261
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 83.4
+  SEFJ03:
+    name: Ice cream and related products
+    weight_cpi_u: 0.115
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 107.4
+  SEFJ04:
+    name: Other dairy and related products
+    weight_cpi_u: 0.192
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 73.9
+  SEFK01:
+    name: Apples
+    weight_cpi_u: 0.073
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 166.5
+  SEFK02:
+    name: Bananas
+    weight_cpi_u: 0.06
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 94.0
+  SEFK03:
+    name: Citrus fruits
+    weight_cpi_u: 0.077
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 201.6
+  SEFK04:
+    name: Other fresh fruits
+    weight_cpi_u: 0.322
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 189.7
+  SEFL01:
+    name: Potatoes
+    weight_cpi_u: 0.063
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 144.4
+  SEFL02:
+    name: Lettuce
+    weight_cpi_u: 0.044
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 346.5
+  SEFL03:
+    name: Tomatoes
+    weight_cpi_u: 0.063
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 295.4
+  SEFL04:
+    name: Other fresh vegetables
+    weight_cpi_u: 0.305
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 103.0
+  SEFM01:
+    name: Canned fruits and vegetables
+    weight_cpi_u: 0.096
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 98.0
+  SEFM02:
+    name: Frozen fruits and vegetables
+    weight_cpi_u: 0.084
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 97.8
+  SEFM03:
+    name: Other processed fruits and vegetables including dried
+    weight_cpi_u: 0.082
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 95.4
+  SEFN01:
+    name: Carbonated drinks
+    weight_cpi_u: 0.324
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 91.9
+  SEFN02:
+    name: Frozen noncarbonated juices and drinks
+    weight_cpi_u: 0.004
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 152.0
+  SEFN03:
+    name: Nonfrozen noncarbonated juices and drinks
+    weight_cpi_u: 0.346
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 70.5
+  SEFP01:
+    name: Coffee
+    weight_cpi_u: 0.221
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 103.2
+  SEFP02:
+    name: Other beverage materials including tea
+    weight_cpi_u: 0.099
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 96.1
+  SEFR01:
+    name: Sugar and sugar substitutes
+    weight_cpi_u: 0.032
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 97.0
+  SEFR02:
+    name: Candy and chewing gum
+    weight_cpi_u: 0.241
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 81.3
+  SEFR03:
+    name: Other sweets
+    weight_cpi_u: 0.055
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 98.3
+  SEFS01:
+    name: Butter and margarine
+    weight_cpi_u: 0.066
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 134.2
+  SEFS02:
+    name: Salad dressing
+    weight_cpi_u: 0.055
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 120.9
+  SEFS03:
+    name: Other fats and oils including peanut butter
+    weight_cpi_u: 0.11
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 95.8
+  SEFT01:
+    name: Soups
+    weight_cpi_u: 0.085
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 111.8
+  SEFT02:
+    name: Frozen and freeze dried prepared foods
+    weight_cpi_u: 0.305
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 79.9
+  SEFT03:
+    name: Snacks
+    weight_cpi_u: 0.372
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 84.5
+  SEFT04:
+    name: Spices, seasonings, condiments, sauces
+    weight_cpi_u: 0.317
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 70.2
+  SEFT05:
+    name: Baby food and formula
+    weight_cpi_u: 0.053
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 93.8
+  SEFT06:
+    name: Other miscellaneous foods
+    weight_cpi_u: 0.582
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 66.1
+  SEFV01:
+    name: Full service meals and snacks
+    weight_cpi_u: 2.386
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 20.4
+  SEFV02:
+    name: Limited service meals and snacks
+    weight_cpi_u: 2.684
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 20.0
+  SEFV03:
+    name: Food at employee sites and schools
+    weight_cpi_u: 0.065
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 365.6
+  SEFV04:
+    name: Food from vending machines and mobile vendors
+    weight_cpi_u: 0.054
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 63.9
+  SEFV05:
+    name: Other food away from home
+    weight_cpi_u: 0.185
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 39.7
+  SEFW01:
+    name: Beer, ale, and other malt beverages at home
+    weight_cpi_u: 0.135
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 42.3
+  SEFW02:
+    name: Distilled spirits at home
+    weight_cpi_u: 0.09
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 42.9
+  SEFW03:
+    name: Wine at home
+    weight_cpi_u: 0.172
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 41.3
+  SEFX:
+    name: Alcoholic beverages away from home
+    weight_cpi_u: 0.443
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 27.4
+  SEHA:
+    name: Rent of primary residence
+    weight_cpi_u: 7.84
+    collection_frequency: housing_panel_6
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: 6 panels, each unit priced twice/yr; monthly index from 6-MONTH rent ratios
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 14.3
+  SEHB01:
+    name: Housing at school, excluding board
+    weight_cpi_u: 0.221
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 11.8
+  SEHB02:
+    name: Other lodging away from home including hotels and motels
+    weight_cpi_u: 1.068
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 224.2
+  SEHC01:
+    name: Owners' equivalent rent of primary residence
+    weight_cpi_u: 25.23
+    collection_frequency: housing_panel_6
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: 6 panels, each unit priced twice/yr; monthly index from 6-MONTH rent ratios
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 13.4
+  SEHD:
+    name: Tenants' and household insurance
+    weight_cpi_u: 0.292
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 36.6
+  SEHE01:
+    name: Fuel oil
+    weight_cpi_u: 0.083
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 555.2
+  SEHE02:
+    name: Propane, kerosene, and firewood
+    weight_cpi_u: 0.057
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 195.7
+  SEHF01:
+    name: Electricity
+    weight_cpi_u: 2.489
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 77.2
+  SEHF02:
+    name: Utility (piped) gas service
+    weight_cpi_u: 0.773
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 228.6
+  SEHG01:
+    name: Water and sewerage maintenance
+    weight_cpi_u: 0.783
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 18.8
+  SEHG02:
+    name: Garbage and trash collection
+    weight_cpi_u: 0.361
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 39.1
+  SEHH01:
+    name: Floor coverings
+    weight_cpi_u: 0.07
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 112.1
+  SEHH02:
+    name: Window coverings
+    weight_cpi_u: 0.046
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 222.9
+  SEHH03:
+    name: Other linens
+    weight_cpi_u: 0.123
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 181.3
+  SEHJ01:
+    name: Bedroom furniture
+    weight_cpi_u: 0.305
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 94.1
+  SEHJ02:
+    name: Living room, kitchen, and dining room furniture
+    weight_cpi_u: 0.438
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 108.4
+  SEHJ03:
+    name: Other furniture
+    weight_cpi_u: 0.136
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 134.8
+  SEHK01:
+    name: Major appliances
+    weight_cpi_u: 0.065
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 144.5
+  SEHK02:
+    name: Other appliances
+    weight_cpi_u: 0.123
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 103.9
+  SEHL01:
+    name: Clocks, lamps, and decorator items
+    weight_cpi_u: 0.329
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 130.6
+  SEHL02:
+    name: Indoor plants and flowers
+    weight_cpi_u: 0.121
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 99.5
+  SEHL03:
+    name: Dishes and flatware
+    weight_cpi_u: 0.043
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 212.3
+  SEHL04:
+    name: Nonelectric cookware and tableware
+    weight_cpi_u: 0.072
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 129.1
+  SEHM01:
+    name: Tools, hardware and supplies
+    weight_cpi_u: 0.21
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 66.2
+  SEHM02:
+    name: Outdoor equipment and supplies
+    weight_cpi_u: 0.3
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 83.2
+  SEHN01:
+    name: Household cleaning products
+    weight_cpi_u: 0.308
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 56.4
+  SEHN02:
+    name: Household paper products
+    weight_cpi_u: 0.175
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 86.6
+  SEHN03:
+    name: Miscellaneous household products
+    weight_cpi_u: 0.364
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 75.9
+  SEHP01:
+    name: Domestic services
+    weight_cpi_u: 0.277
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 98.3
+  SEHP02:
+    name: Gardening and lawncare services
+    weight_cpi_u: 0.363
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 96.2
+  SEHP03:
+    name: Moving, storage, freight expense
+    weight_cpi_u: 0.067
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 174.9
+  SEHP04:
+    name: Repair of household items
+    weight_cpi_u: 0.097
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 87.9
+  SEAA01:
+    name: Men's suits, sport coats, and outerwear
+    weight_cpi_u: 0.097
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 244.3
+  SEAA02:
+    name: Men's underwear, nightwear, swimwear, and accessories
+    weight_cpi_u: 0.13
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 146.5
+  SEAA03:
+    name: Men's shirts and sweaters
+    weight_cpi_u: 0.126
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 201.9
+  SEAA04:
+    name: Men's pants and shorts
+    weight_cpi_u: 0.115
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 166.4
+  SEAB:
+    name: Boys' apparel
+    weight_cpi_u: 0.116
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 209.1
+  SEAC01:
+    name: Women's outerwear
+    weight_cpi_u: 0.068
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 292.9
+  SEAC02:
+    name: Women's dresses
+    weight_cpi_u: 0.104
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 250.7
+  SEAC03:
+    name: Women's suits and separates
+    weight_cpi_u: 0.366
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 174.2
+  SEAC04:
+    name: Women's underwear, nightwear, swimwear, and accessories
+    weight_cpi_u: 0.234
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 139.7
+  SEAD:
+    name: Girls' apparel
+    weight_cpi_u: 0.141
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 204.6
+  SEAE01:
+    name: Men's footwear
+    weight_cpi_u: 0.191
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 99.7
+  SEAE02:
+    name: Boys' and girls' footwear
+    weight_cpi_u: 0.124
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 150.2
+  SEAE03:
+    name: Women's footwear
+    weight_cpi_u: 0.269
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 106.7
+  SEAF:
+    name: Infants' and toddlers' apparel
+    weight_cpi_u: 0.103
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 164.9
+  SEAG01:
+    name: Watches
+    weight_cpi_u: 0.035
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 208.8
+  SEAG02:
+    name: Jewelry
+    weight_cpi_u: 0.128
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 218.3
+  SETA01:
+    name: New vehicles
+    weight_cpi_u: 3.838
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 38.5
+  SETA02:
+    name: Used cars and trucks
+    weight_cpi_u: 2.759
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 168.7
+  SETA03:
+    name: Leased cars and trucks
+    weight_cpi_u: 0.394
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 71.0
+  SETA04:
+    name: Car and truck rental
+    weight_cpi_u: 0.138
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 373.5
+  SETB01:
+    name: Gasoline (all types)
+    weight_cpi_u: 2.895
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 491.2
+  SETB02:
+    name: Other motor fuels
+    weight_cpi_u: 0.086
+    collection_frequency: monthly_all_areas
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; monthly repricing in all areas
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 410.2
+  SETC01:
+    name: Tires
+    weight_cpi_u: 0.293
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 61.9
+  SETC02:
+    name: Vehicle accessories other than tires
+    weight_cpi_u: 0.056
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 78.2
+  SETD01:
+    name: Motor vehicle body work
+    weight_cpi_u: 0.058
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 55.0
+  SETD02:
+    name: Motor vehicle maintenance and servicing
+    weight_cpi_u: 0.514
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 42.0
+  SETD03:
+    name: Motor vehicle repair
+    weight_cpi_u: 0.399
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 91.4
+  SETE:
+    name: Motor vehicle insurance
+    weight_cpi_u: 2.754
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 123.8
+  SETF01:
+    name: State motor vehicle registration and license fees
+    weight_cpi_u: 0.296
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 26.1
+  SETF03:
+    name: Parking and other fees
+    weight_cpi_u: 0.189
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 84.0
+  SETG01:
+    name: Airline fares
+    weight_cpi_u: 0.881
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 317.6
+  SETG02:
+    name: Other intercity transportation
+    weight_cpi_u: 0.244
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 126.7
+  SETG03:
+    name: Intracity transportation
+    weight_cpi_u: 0.355
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 103.4
+  SEMF01:
+    name: Prescription drugs
+    weight_cpi_u: 0.973
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 58.1
+  SEMF02:
+    name: Nonprescription drugs
+    weight_cpi_u: 0.381
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 61.2
+  SEMG:
+    name: Medical equipment and supplies
+    weight_cpi_u: 0.135
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 86.6
+  SEMC01:
+    name: Physicians' services
+    weight_cpi_u: 1.684
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 33.8
+  SEMC02:
+    name: Dental services
+    weight_cpi_u: 0.904
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 40.9
+  SEMC03:
+    name: Eyeglasses and eye care
+    weight_cpi_u: 0.327
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 49.1
+  SEMC04:
+    name: Services by other medical professionals
+    weight_cpi_u: 0.511
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 39.3
+  SEMD01:
+    name: Hospital services
+    weight_cpi_u: 2.167
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 44.6
+  SEMD02:
+    name: Nursing homes and adult day services
+    weight_cpi_u: 0.221
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 30.5
+  SEME:
+    name: Health insurance
+    weight_cpi_u: 0.89
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 145.4
+  SERA01:
+    name: Televisions
+    weight_cpi_u: 0.107
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 128.6
+  SERA02:
+    name: Cable, satellite, and live streaming television service
+    weight_cpi_u: 0.606
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 48.0
+  SERA03:
+    name: Other video equipment
+    weight_cpi_u: 0.017
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 142.0
+  SERA04:
+    name: Purchase, subscription, and rental of video
+    weight_cpi_u: 0.188
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 151.8
+  SERA05:
+    name: Audio equipment
+    weight_cpi_u: 0.046
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 154.3
+  SERA06:
+    name: Recorded music and music subscriptions
+    weight_cpi_u: 0.082
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 108.4
+  SERB01:
+    name: Pets and pet products
+    weight_cpi_u: 0.612
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 52.9
+  SERB02:
+    name: Pet services including veterinary
+    weight_cpi_u: 0.546
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 42.9
+  SERC01:
+    name: Sports vehicles including bicycles
+    weight_cpi_u: 0.284
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 122.3
+  SERC02:
+    name: Sports equipment
+    weight_cpi_u: 0.231
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 70.7
+  SERD01:
+    name: Photographic equipment and supplies
+    weight_cpi_u: 0.026
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 138.3
+  SERD02:
+    name: Photographers and photo processing
+    weight_cpi_u: 0.037
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 87.1
+  SERE01:
+    name: Toys
+    weight_cpi_u: 0.293
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 83.6
+  SERE02:
+    name: Sewing machines, fabric and supplies
+    weight_cpi_u: 0.029
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 274.9
+  SERE03:
+    name: Music instruments and accessories
+    weight_cpi_u: 0.043
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 95.7
+  SERF01:
+    name: Club membership for shopping clubs, fraternal, or other organizations, or participant sports fees
+    weight_cpi_u: 0.766
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 76.6
+  SERF02:
+    name: Admissions
+    weight_cpi_u: 0.704
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 120.0
+  SERF03:
+    name: Fees for lessons or instructions
+    weight_cpi_u: 0.158
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 72.7
+  SERG01:
+    name: Newspapers and magazines
+    weight_cpi_u: 0.054
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 176.4
+  SERG02:
+    name: Recreational books
+    weight_cpi_u: 0.06
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 150.9
+  SEEA:
+    name: Educational books and supplies
+    weight_cpi_u: 0.038
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 92.5
+  SEEB01:
+    name: College tuition and fees
+    weight_cpi_u: 1.351
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 15.4
+  SEEB02:
+    name: Elementary and high school tuition and fees
+    weight_cpi_u: 0.408
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 21.0
+  SEEB03:
+    name: Day care and preschool
+    weight_cpi_u: 0.699
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 27.6
+  SEEB04:
+    name: Technical and business school tuition and fees
+    weight_cpi_u: 0.046
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 26.1
+  SEEC01:
+    name: Postage
+    weight_cpi_u: 0.059
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 64.6
+  SEEC02:
+    name: Delivery services
+    weight_cpi_u: 0.005
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 92.3
+  SEED03:
+    name: Wireless telephone services
+    weight_cpi_u: 1.34
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 74.8
+  SEED04:
+    name: Residential telephone services
+    weight_cpi_u: 0.126
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 52.4
+  SEEE01:
+    name: Computers, peripherals, and smart home assistants
+    weight_cpi_u: 0.293
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 105.6
+  SEEE02:
+    name: Computer software and accessories
+    weight_cpi_u: 0.027
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 193.6
+  SEEE03:
+    name: Internet services and electronic information providers
+    weight_cpi_u: 0.923
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 56.4
+  SEEE04:
+    name: Telephone hardware, calculators, and other consumer information items
+    weight_cpi_u: 0.461
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 118.0
+  SEGA01:
+    name: Cigarettes
+    weight_cpi_u: 0.327
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 51.9
+  SEGA02:
+    name: Tobacco products other than cigarettes
+    weight_cpi_u: 0.114
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 76.5
+  SEGB01:
+    name: Hair, dental, shaving, and miscellaneous personal care products
+    weight_cpi_u: 0.324
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 47.9
+  SEGB02:
+    name: Cosmetics, perfume, bath, nail preparations and implements
+    weight_cpi_u: 0.34
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 57.1
+  SEGC01:
+    name: Haircuts and other personal care services
+    weight_cpi_u: 0.676
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 36.2
+  SEGD01:
+    name: Legal services
+    weight_cpi_u: 0.27
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 51.9
+  SEGD02:
+    name: Funeral expenses
+    weight_cpi_u: 0.166
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 36.8
+  SEGD03:
+    name: Laundry and dry cleaning services
+    weight_cpi_u: 0.129
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 35.9
+  SEGD04:
+    name: Apparel services other than laundry and dry cleaning
+    weight_cpi_u: 0.029
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 86.4
+  SEGD05:
+    name: Financial services
+    weight_cpi_u: 0.236
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 153.4
+  SEGE:
+    name: Miscellaneous personal goods
+    weight_cpi_u: 0.184
+    collection_frequency: monthly_big3_bimonthly_elsewhere
+    within_month_window: collected across the month; BLS does not publish a per-stratum intra-month schedule (HOM silent)
+      -> windows.py/H8 selects empirically
+    panel_structure: outlet sample; bimonthly (odd/even month assignment) outside NY/LA/Chicago
+    quality_adjustment: direct methods incl. hedonic regression are used where quality change is observable; HOM does not
+      enumerate per stratum -> UNVERIFIED per-stratum
+    seasonal_reliability_bp: 115.9

@@ -46,3 +46,37 @@ automatically; no number here is a consensus comparison (no licensed consensus f
 | within band (±7.5) | **NO — miss** |
 
 _CPI component attribution: see `event_study_results.csv` for the frozen per-component calls; published stratum detail is in `official_current`._
+
+## Postmortem diagnosis — why the +42.4 bp miss (appended 2026-07-23)
+
+**The admitted signal was accurate.** Gasoline (SETB01, 3.1% wt): forecast **−926 bp** vs actual
+**−968 bp** → only +1.3 bp of the miss. The energy pass-through called the ~9.5% gasoline collapse
+that drove the headline down. The model failed *elsewhere*.
+
+**The miss is concentrated in no-proxy strata that broke their seasonal pattern** (weighted
+forecast − actual, bp):
+
+| stratum | name | wt | forecast | actual | err |
+|---|---|--:|--:|--:|--:|
+| SETE | Motor vehicle insurance | 2.9% | +84 | **−214** | +8.8 |
+| SEED03 | Wireless telephone services | 1.4% | +44 | **−331** | +5.3 |
+| SEHB02 | Hotels / lodging away from home | 1.1% | +74 | **−296** | +4.2 |
+| SEHF01 | Electricity | 2.6% | +303 | +149 | +4.1 |
+| SEHC01 | Owners' equivalent rent | 26.9% | +34 | +23 | +2.9 |
+| SEHA | Rent of primary residence | 8.3% | +34 | +13 | +1.8 |
+
+Two failure shapes: **three sharp reversals** (insurance, wireless, lodging — 300–400 bp against
+the seasonal norm) and **small per-unit errors on very heavy weights** (OER at 27% costs 2.9 bp on
+an 11 bp miss). The decomposition accounts for ~35 of the 42.4 bp; the residual ~7 bp is spread
+across many small strata and normalization differences — not claimed as attributed.
+
+**Structural, not a bug.** Nothing is fitted (betas frozen/imposed), inputs were normal, and no
+missed-but-available signal existed. ~94% of CPI weight has no contemporaneous proxy and falls to
+a seasonal mean that *by construction cannot see an idiosyncratic month*. This is the
+`evaluation_1.md` caveat ("edge concentrated in energy") experienced from the other side, and it
+means the error distribution has **fat tails**: the ~7.5 bp recent-regime average includes this
+42 bp month.
+
+**FLAGGED as data-acquisition targets** (highest value first): **SETE motor-vehicle insurance**,
+**SEED03 wireless telephone services**, **SEHB02 lodging** — plus **SEHF01 electricity** (official
+source exists). Pursued in Part B of the sampling/acquisition session; classification first.
