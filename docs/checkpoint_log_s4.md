@@ -159,3 +159,55 @@ The honest "how early do we know what we know": the estimate converges by ~T-8 a
 (EIA) completes + Manheim lands, and improves NOTHING after T-4 (freeze). ~7.5bp recent-regime
 floor (vs 11.6bp on the fuller 2019-26 window incl. the 2021-22 surge). nb05 = one print's path.
 DEGRADED feature set (no Keepa). test_intramonth. Desk-facing only after admission sign-off.
+
+# ===== SESSION 6 — event-study replay, pre-print reports, pristine ledger =====
+
+## TASK 1 — event_study.py (pure replay) · CHECKPOINT 1 — REPLAY CONSISTENT
+
+src/nowcast/event_study.py: for every evaluable print, reconstruct the info set at the T-3 freeze
+(timebase + proxy_asof enforced inside the frozen models), run the FROZEN admitted configs, log
+call/benchmarks/realized/deviation/attribution -> docs/event_study_results.csv (88 prints x 2
+instruments). No re-fitting, no regeneration with today's information.
+
+**CONSISTENCY vs evaluation_1.md — EXACT once the same filter is applied:**
+| instrument | replay (all, n=88) | replay (benchmark-complete, n=87) | evaluation_1.md |
+|---|--:|--:|--:|
+| cpi_headline | 11.51 | **11.60** | 11.6 |
+| cpi_core | 12.64 | **12.78** | 12.8 |
+The apparent delta was NOT a discrepancy: evaluation_1.md required all benchmarks non-null, which
+drops **2025-12** (its AR(1) needs 2025-11, missing in the shutdown gap); the replay keeps that row.
+Restricted to the identical n=87 sample the replay reproduces evaluation_1.md exactly. Month sets
+are identical (no month in one and not the other).
+
+**FREEZE VALIDATED:** |T-0 call − T-4 call| = 0.0000bp across the last 14 prints — nothing useful
+arrives between T-4 and T-0, confirming the availability calendar's "last useful update" and the
+enforced freeze. Locked by test_event_study.test_freeze_equivalence_t0_equals_t4.
+VoC verdict annotation updated everywhere: REJECTED **ON AVAILABLE FEATURES** (degraded set, no
+Keepa) — untested, not disproven, on a richer panel.
+
+## TASKS 2/3/4 — pre-print reports, pristine ledger, postmortem loop
+
+**Task 2 — report.py → docs/prints/{YYYY-MM}_{print}.md.** One-pager: call + band, every number
+referenced inline (what it is measured against), COIN-FLIP flag, component-attribution table as
+centrepiece, regime line, running pristine scorecard (misses as prominent as hits), freeze status,
+and an **information-set hash** (fingerprint of the observable inputs — re-running the same as-of
+on the same data reproduces it; test-locked as as-of-sensitive).
+LIVE PAGES GENERATED: `2026-07_cpi.md` (as-of 2026-07-22, **T-21, NOT FROZEN**, headline -5.1bp
+±8.8, core +12.0bp) and `2026-06_pce.md` (as-of CPI-day 2026-07-14, FROZEN, +7.6bp ±8.0).
+
+**Task 3 — docs/pristine_ledger.md, APPEND-ONLY.** Seeded with those two calls (#1, #2). Each row
+carries a `row_hash` over immutable fields (instrument/ref_month/as_of/frozen/call/band); the only
+legal mutations are append and realized-population. tests/test_ledger.py enforces: intact hashes,
+tamper detection, hash-invariance under realized-population, write-once per call.
+
+**Task 4 — postmortem loop + DRY-RUN (green).** `report.postmortem(..., dry_run=True)` replays a
+completed print at its T-3 freeze, writes a `*_DRYRUN` page, and does NOT touch the pristine
+ledger (a retroactive call is not pristine). Results:
+- CPI 2026-06: call +7.5 vs realized **-34.9** -> **deviation +42.4bp, MISS** (outside ±7.5 band).
+  VERIFIED REAL, not a bug: index 335.123->333.952 = -0.349%, and the independent event-study
+  replay shows the same -34.94 realized / +42.41 deviation. June-2026 NSA fell hard; the largest
+  2026 miss (others: +13.4, +8.3, -3.7, -21.2, -3.9). Kept prominent per the misses-as-prominent rule.
+- PCE 2026-05: call +20.1 vs realized +32.0 -> deviation -11.9bp, MISS; **8 BEA-2.4.4U attribution
+  rows populated** (proving the PCE attribution path works when component prices exist).
+Ledger untouched by both dry-runs (still 2 rows, integrity OK). Runbook updated: T-3 freeze+generate,
+T+0 realized, T+2 postmortem, with the PCE-attribution-waits-for-2.4.4U note.

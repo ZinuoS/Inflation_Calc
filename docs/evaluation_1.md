@@ -37,7 +37,7 @@ precision sub-aggregate, was terminated).
 | **H4** freight/commodity leads core-goods 1–2Q (trajectory) | — | freight layer NOT BUILT | **NOT TESTED** |
 | **H5** tariff-announcement lags improve core-goods 2025–26 | tariff dummy in VoC feature set | tariff loading small; no dedicated core-goods tariff-lag model beats baseline | **NOT SUPPORTED** (at current scope) |
 | **H6** Keepa daily goods panel improves goods nowcast | — | no KEEPA key → NOT BUILT | **NOT TESTED** (degraded) |
-| **H7** complexity (ridge/RFF) beats the structured model | purged sweep-curve, decomposed | ridge best 15.3 / RFF 29 > structured 11.5; curves flat; loadings = energy+AR+seasonal | **NOT SUPPORTED** (pre-reg non-win) |
+| **H7** complexity (ridge/RFF) beats the structured model | purged sweep-curve, decomposed | ridge best 15.3 / RFF 29 > structured 11.5; curves flat; loadings = energy+AR+seasonal | **NOT SUPPORTED — rejected ON AVAILABLE FEATURES** (pre-reg non-win; degraded set, no Keepa daily goods panel — a richer panel is untested, not disproven) |
 | **H8** within-month window is identifiable | fold-selection stability | gasoline stable full-month (R² 0.97); heating-oil unstable→default | **SUPPORTED** (for strong proxies; else default) |
 | **H9** BEA source mappings (a/b/c) | handbook audit + corr vs 2.4.4U | a: financial≠SEGD05 (still residue); air=PPI ✓; portfolio=PPI corr 0.82 ✓. b: equity-path FALSIFIED. c: drift FALSIFIED OOS→null | **MIXED / mostly falsified** |
 | **H10** bridge residual is learnable at CPI-day | ridge/RFF sweep on the wedge | ridge 8.96 (worse) / RFF 8.33 ≈ plain bridge 8.39; no gain | **NOT SUPPORTED — ~7 bp floor irreducible** (pre-reg null) |
@@ -64,7 +64,10 @@ was triggered. H10 and H7 both confirmed their nulls with the sweep curves as ev
 - **ADMITTED — structured CPI nowcast** (headline + core): the primary instrument.
 - **ADMITTED AS MONITOR — PCE Instrument A** (full core): unbiased CPI-day estimate + attribution;
   explicitly NOT a precision instrument.
-- **REJECTED — VoC complex models (H7) and the H10 residual model**: no OOS gain.
+- **REJECTED ON AVAILABLE FEATURES — VoC complex models (H7) and the H10 residual model**: no OOS
+  gain on the **degraded feature set** (no Keepa daily goods panel). The rejection is scoped to the
+  features we have — complexity is **untested, not disproven**, on a richer panel; re-test if Keepa
+  (or an equivalent daily goods source) ever lands.
 - **DEMOTED to trajectory-only — shelter / ZORI (H2)**: all-tenant CPI carries the next print.
 - **NOT BUILT (no admission possible)** — freight (H4), Keepa goods (H6), tariff-lag core-goods (H5).
 
