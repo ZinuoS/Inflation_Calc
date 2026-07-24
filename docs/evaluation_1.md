@@ -72,3 +72,16 @@ was triggered. H10 and H7 both confirmed their nulls with the sweep curves as ev
 - **NOT BUILT (no admission possible)** — freight (H4), Keepa goods (H6), tariff-lag core-goods (H5).
 
 nb05 (intramonth path) is now cleared to go desk-facing.
+
+## vs the market's number (Session 8 — see `benchmark_evaluation_1.md`)
+
+Benchmark infra built: **Cleveland Fed nowcast** (vintage-safe, full OOS coverage) and **SPF**
+(quarterly trajectory) ingested as real public data; **press consensus** is gap-first (auto-backfill
+403-blocked, manual curation only — no fabrication). The three pre-registered consensus claims
+(PR-1 side-of-consensus, PR-2 boundary, PR-3 MAE) are **awaiting curation (n=0)**; machinery is
+ready. Analog run vs the Cleveland Fed nowcast (a later-closing benchmark): headline beats it
+(12.4 vs 19.2 bp) with an 85% side-rate — which **trips the pre-registered audit**. Audit: we
+**lose on core** (13.3 vs 10.8 bp), so it is not a blanket leak; the headline edge is the admitted
+gasoline pass-through against a benchmark that underuses weekly EIA data. **Belief withheld** until
+the consensus test runs. Our NSA call is put on the SA (market) basis via a leakage-safe prior-year
+factor (~2.5bp handicap, stated).

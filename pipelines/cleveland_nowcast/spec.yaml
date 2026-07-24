@@ -1,0 +1,22 @@
+# cleveland_nowcast pipeline spec (Session 8) — external BENCHMARK, not a feature/target
+source: cleveland_nowcast
+description: >
+  Federal Reserve Bank of Cleveland inflation nowcast (headline/core CPI, headline/core PCE),
+  parsed from the public webchart JSON. One row per (series, reference_month) = the model's FINAL
+  pre-release nowcast (the daily value immediately before that month's release vline). Used ONLY as
+  an evaluation benchmark ("vs a public model's number"); never a proxy feature, never a target.
+url: https://www.clevelandfed.org/-/media/files/webcharts/inflationnowcasting/nowcast_month.json
+vintage_status: point_in_time            # observed_asof = last business day before the release
+units: percent_mom_seasonally_adjusted   # the market variable (compared to SA rounded actual)
+
+storage:
+  kind: derived_eval_artifact            # data/benchmarks/cleveland_nowcast.csv (like event_study_results.csv)
+  rationale: >
+    Benchmarks are held OUTSIDE proxy_observations on purpose: a benchmark is itself a forecast of
+    the target, so putting it in the proxy/feature table would be a leakage footgun. It is a
+    read-only eval input; determinism (rule 4) is preserved because network lives only in fetch().
+  raw: data/raw/cleveland_nowcast/{as_of}/nowcast_month.json  (immutable, gitignored)
+  provenance: data/raw/cleveland_nowcast/{as_of}/provenance.json  (url, retrieved_at, sha256, bytes)
+
+role: benchmark
+compared_against: CUSR0000SA0 / CUSR0000SA0L1E (CPI) and DPCCRG (core PCE), SA MoM rounded to 0.1pp

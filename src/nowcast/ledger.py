@@ -16,18 +16,21 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 LEDGER = REPO / "docs" / "pristine_ledger.md"
 COLS = ["n", "instrument", "ref_month", "as_of", "frozen", "call_bp", "band_bp",
-        "realized_bp", "deviation_bp", "verdict", "row_hash"]
+        "consensus_bp", "consensus_asof", "realized_bp", "deviation_bp", "verdict", "row_hash"]
 IMMUTABLE = ["instrument", "ref_month", "as_of", "frozen", "call_bp", "band_bp"]
 PENDING = "—"
 
 HEADER = """# Pristine forward ledger
 
 **Append-only.** One row per forward call, written when the call is made — before the print.
-Legal edits: (1) append a new row, (2) populate `realized_bp` / `deviation_bp` / `verdict` once
-the print lands. Any other change breaks the row's `row_hash` and fails `tests/test_ledger.py`.
+Legal edits: (1) append a new row, (2) populate `consensus_bp` / `consensus_asof` when the preview
+articles land (after our T-4 freeze, before the print), (3) populate `realized_bp` / `deviation_bp`
+/ `verdict` once the print lands. Any other change breaks the row's `row_hash` and fails
+`tests/test_ledger.py`.
 
 `call_bp` = predicted first-release MoM (NSA for CPI, core PCE for PCE). `band_bp` = the OOS band
-at that lead. `frozen` = whether the call was past its T-4 freeze. Misses are kept, never edited out.
+at that lead. `consensus_bp` = press consensus median, carrying its OWN as-of (it closes later than
+our freeze). `frozen` = whether the call was past its T-4 freeze. Misses are kept, never edited out.
 
 """
 
@@ -62,6 +65,7 @@ def append_call(rec: dict) -> dict:
     row = {"n": str(len(rows) + 1), "instrument": rec["instrument"], "ref_month": rec["ref_month"],
            "as_of": rec["as_of"], "frozen": "yes" if rec.get("frozen") else "no",
            "call_bp": f"{rec['call_bp']:+.1f}", "band_bp": f"{rec['band_bp']:.1f}",
+           "consensus_bp": PENDING, "consensus_asof": PENDING,
            "realized_bp": PENDING, "deviation_bp": PENDING, "verdict": PENDING}
     row["row_hash"] = row_hash(row)
     rows.append(row)
@@ -84,6 +88,22 @@ def populate_realized(instrument: str, ref_month: str, realized_bp: float, devia
             r["deviation_bp"] = f"{deviation_bp:+.1f}"
             r["verdict"] = verdict
             _write(rows)          # row_hash unchanged: it covers immutable fields only
+            return r
+    return None
+
+
+def populate_consensus(instrument: str, ref_month: str, consensus_bp: float, consensus_asof: str) -> dict | None:
+    """Record the press consensus for an existing call. Consensus lands AFTER our T-4 freeze but
+    BEFORE the print (preview articles ~T-1 to T-3), so it carries its OWN as-of. Non-immutable:
+    populated once, does not touch the row_hash. Idempotent (won't overwrite a set consensus)."""
+    rows = read_rows()
+    for r in rows:
+        if r["instrument"] == instrument and r["ref_month"] == ref_month:
+            if r.get("consensus_bp", PENDING) != PENDING:
+                return {"skipped": "consensus already populated (append-only)"}
+            r["consensus_bp"] = f"{consensus_bp:+.1f}"
+            r["consensus_asof"] = consensus_asof
+            _write(rows)                 # row_hash unchanged: consensus is not an immutable field
             return r
     return None
 

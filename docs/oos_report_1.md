@@ -157,3 +157,12 @@ unchanged (the drifts affected level, not dispersion). Per-era note: window is e
 reversal were adjudicated on this window. Only the PRISTINE tier, once populated by forward
 prints, can confirm the monitor's unbiasedness out-of-sample. No tier is blended into another's
 summary stat.
+
+---
+## vs the market's number (Session 8)
+
+Instrument A's story is **speed**: its core-PCE call is made on **CPI-day, ~16 days before the
+SPF/consensus survey close**. That head start cannot be scored yet — a per-print consensus panel is
+gap-first (auto-backfill 403-blocked; manual curation only). SPF is ingested as a separate quarterly
+trajectory benchmark; Cleveland Fed as a per-print external number. See `benchmark_evaluation_1.md`.
+No tier blended: rounded (market) and unrounded (our-call) metrics are kept in separate columns.

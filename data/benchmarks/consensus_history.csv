@@ -1,0 +1,173 @@
+print,reference_month,variable,consensus_pct,article_type,source_url,article_date,retrieved_at,note
+CPI,2023-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-12-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-12-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2023-12-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2023-12-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-07-01,mom_headline,0.2,recap,https://www.cnbc.com/2024/08/14/july-consumer-price-index.html,2024-08-14,2026-07-24,Dow Jones 0.2; actual 0.2 match
+CPI,2024-07-01,mom_core,0.2,recap,https://www.cnbc.com/2024/08/14/july-consumer-price-index.html,2024-08-14,2026-07-24,forecast 0.2; actual 0.2 match
+PCE,2024-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-08-01,mom_headline,0.2,recap,https://www.cnbc.com/2024/09/11/cpi-inflation-report-august-2024-.html,2024-09-11,2026-07-24,Dow Jones 0.2 in line
+CPI,2024-08-01,mom_core,0.2,recap,https://www.cnbc.com/2024/09/11/cpi-inflation-report-august-2024-.html,2024-09-11,2026-07-24,estimate 0.2; actual 0.3 above
+PCE,2024-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-09-01,mom_headline,0.1,recap,https://www.cnbc.com/2024/10/10/cpi-inflation-september-2024.html,2024-10-10,2026-07-24,Dow Jones 0.1; actual 0.2 above
+CPI,2024-09-01,mom_core,0.3,recap,https://www.cnbc.com/2024/10/10/cpi-inflation-september-2024.html,2024-10-10,2026-07-24,forecast 0.3; actual 0.3
+PCE,2024-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-10-01,mom_headline,0.2,recap,https://www.jpmorgan.com/insights/markets-and-economy/economy/cpi-report-october-2024,2024-11-13,2026-07-24,MoM 0.2 in line with consensus
+CPI,2024-10-01,mom_core,0.3,recap,https://www.jpmorgan.com/insights/markets-and-economy/economy/cpi-report-october-2024,2024-11-13,2026-07-24,core 0.3 in line with consensus
+PCE,2024-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-11-01,mom_headline,0.3,recap,https://www.cnbc.com/2024/12/11/cpi-inflation-november-2024-annual-inflation-rate-accelerates-to-2point7percent-in-november-as-expected.html,2024-12-11,2026-07-24,in line with Dow Jones 0.3
+CPI,2024-11-01,mom_core,0.3,recap,https://www.cnbc.com/2024/12/11/cpi-inflation-november-2024-annual-inflation-rate-accelerates-to-2point7percent-in-november-as-expected.html,2024-12-11,2026-07-24,in line with Dow Jones 0.3
+PCE,2024-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-12-01,mom_headline,0.3,recap,https://www.cnbc.com/2025/01/15/cpi-inflation-december-2024-.html,2025-01-15,2026-07-24,Dow Jones 0.3; actual 0.4
+CPI,2024-12-01,mom_core,0.3,recap,https://www.cnbc.com/2025/01/15/cpi-inflation-december-2024-.html,2025-01-15,2026-07-24,"actual core 0.2, 0.1pp less than expected -> 0.3"
+PCE,2024-12-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2024-12-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-04-01,mom_core,0.3,recap,https://www.cnbc.com/2025/05/13/cpi-inflation-april-2025.html,2025-05-13,2026-07-24,forecast 0.3; actual 0.2
+PCE,2025-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-05-01,mom_headline,0.2,recap,https://www.jpmorgan.com/insights/markets-and-economy/economy/cpi-report-may-2025,2025-06-11,2026-07-24,FactSet 0.2; actual 0.1
+CPI,2025-05-01,mom_core,0.3,recap,https://www.jpmorgan.com/insights/markets-and-economy/economy/cpi-report-may-2025,2025-06-11,2026-07-24,consensus 0.3; actual 0.1
+PCE,2025-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-06-01,mom_core,0.2,recap,https://www.morningstar.com/economy/june-cpi-report-shows-inflation-slowed-more-than-expected,2025-07-15,2026-07-24,consensus 0.2; actual flat
+PCE,2025-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-07-01,mom_headline,0.2,recap,https://www.cnbc.com/2025/08/12/cpi-inflation-report-july-2025.html,2025-08-12,2026-07-24,forecast 0.2; actual 0.2 match
+CPI,2025-07-01,mom_core,0.3,recap,https://www.cnbc.com/2025/08/12/cpi-inflation-report-july-2025.html,2025-08-12,2026-07-24,forecast 0.3; actual 0.3 match
+PCE,2025-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-08-01,mom_headline,0.3,recap,https://www.cnbc.com/2025/09/11/consumer-prices-rose-at-annual-rate-of-2point9percent-in-august-as-weekly-jobless-claims-jump.html,2025-09-11,2026-07-24,Dow Jones 0.3; actual 0.4
+CPI,2025-08-01,mom_core,0.3,recap,https://www.cnbc.com/2025/09/11/consumer-prices-rose-at-annual-rate-of-2point9percent-in-august-as-weekly-jobless-claims-jump.html,2025-09-11,2026-07-24,forecast 0.3; actual 0.3 match
+PCE,2025-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-09-01,mom_headline,0.4,recap,https://www.cnbc.com/2025/10/24/cpi-inflation-september-2025.html,2025-10-24,2026-07-24,Dow Jones 0.4; actual 0.3
+CPI,2025-09-01,mom_core,0.3,recap,https://www.cnbc.com/2025/10/24/cpi-inflation-september-2025.html,2025-10-24,2026-07-24,forecast 0.3; actual 0.2
+PCE,2025-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2025-12-01,mom_headline,0.3,recap,https://www.cnbc.com/2026/01/13/cpi-inflation-december-2025-breakdown.html,2026-01-13,2026-07-24,consensus 0.3; actual 0.3
+CPI,2025-12-01,mom_core,0.3,recap,https://www.cnbc.com/2026/01/13/cpi-inflation-december-2025-breakdown.html,2026-01-13,2026-07-24,consensus 0.3; actual 0.2 below
+PCE,2025-12-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2025-12-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-01-01,mom_headline,0.3,recap,https://www.cnbc.com/2026/02/13/cpi-inflation-report-january-2026.html,2026-02-13,2026-07-24,forecast 0.3; actual 0.2
+CPI,2026-01-01,mom_core,0.3,recap,https://www.cnbc.com/2026/02/13/cpi-inflation-report-january-2026.html,2026-02-13,2026-07-24,forecast 0.3; actual 0.3
+PCE,2026-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-02-01,mom_headline,0.3,recap,https://www.cnbc.com/2026/03/11/cpi-inflation-report-february-2026.html,2026-03-11,2026-07-24,Dow Jones consensus 0.3; actual 0.3 match
+CPI,2026-02-01,mom_core,0.2,recap,https://www.cnbc.com/2026/03/11/cpi-inflation-report-february-2026.html,2026-03-11,2026-07-24,consensus 0.2; actual 0.2 match
+PCE,2026-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-03-01,mom_core,0.3,recap,https://www.cnbc.com/2026/04/10/cpi-inflation-report-march-2026.html,2026-04-10,2026-07-24,"actual core 0.2, reported 0.1pp below consensus -> 0.3"
+PCE,2026-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-04-01,mom_headline,0.6,recap,https://www.cnbc.com/2026/05/12/cpi-inflation-april-2026-.html,2026-05-12,2026-07-24,monthly as forecast 0.6
+CPI,2026-04-01,mom_core,0.3,recap,https://www.cnbc.com/2026/05/12/cpi-inflation-april-2026-.html,2026-05-12,2026-07-24,consensus 0.3; actual 0.4 hotter
+PCE,2026-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-05-01,mom_headline,0.5,recap,https://www.cnbc.com/2026/06/10/cpi-inflation-report-may-2026.html,2026-06-10,2026-07-24,FactSet/consensus 0.5; actual 0.5 met
+CPI,2026-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2026-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-06-01,mom_headline,-0.2,recap,https://www.cnbc.com/2026/07/14/consumer-price-index-inflation-report-june-2026.html,2026-07-14,2026-07-24,Dow Jones consensus; actual -0.4 beat -0.2
+CPI,2026-06-01,mom_core,0.2,recap,https://www.cnbc.com/2026/07/14/consumer-price-index-inflation-report-june-2026.html,2026-07-14,2026-07-24,consensus 0.2; actual flat
+PCE,2026-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2026-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2026-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PPI,2026-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)

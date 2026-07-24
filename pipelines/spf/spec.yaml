@@ -1,0 +1,14 @@
+# spf pipeline spec (Session 8) — quarterly TRAJECTORY benchmark, not per-print
+source: spf
+description: >
+  Philadelphia Fed Survey of Professional Forecasters, median inflation forecasts (CPI, core CPI,
+  PCE, core PCE), annualized-rate, horizons 0 (current quarter) .. 5 (five quarters ahead), keyed
+  by survey (year, quarter). Quarterly trajectory benchmark ONLY — reported in its own table,
+  never aligned to a monthly MoM surprise, never a proxy feature or target.
+url: https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/survey-of-professional-forecasters/historical-data/medianLevel.xlsx
+vintage_status: point_in_time            # observed_asof = mid-2nd-month of the survey quarter (deadline)
+units: annualized_percent
+storage:
+  kind: derived_eval_artifact            # data/benchmarks/spf.csv
+  raw: data/raw/spf/{as_of}/medianLevel.xlsx  (immutable, gitignored)
+role: benchmark_trajectory

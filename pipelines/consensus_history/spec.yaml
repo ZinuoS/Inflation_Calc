@@ -1,0 +1,18 @@
+# consensus_history pipeline spec (Session 8) — press-reported consensus median (facts + citation)
+source: consensus_history
+description: >
+  Press-reported consensus median per print (CPI headline/core MoM, PCE core MoM, PPI where
+  reported), each row a cited fact: value + source_url + article_date. The rounded market variable.
+  MANUAL CURATION: automated fetch is 403-blocked and the snippet summarizer is unreliable, so rows
+  are added only when a human opens the dated article. Gaps are recorded, never interpolated.
+vintage_status: point_in_time            # article-dated
+units: rounded_percent                   # 0.1pp rounding = the market variable
+storage:
+  kind: derived_eval_artifact            # data/benchmarks/consensus_history.csv
+  ships: gap_first                       # seed grid = all gaps until curated
+sources_preferred: [Reuters, AP, CNBC, MarketWatch]   # prefer PRE-print preview; record both on disagreement
+policy:
+  no_article_text_stored: true           # only the numeric fact + citation
+  prefer_preview_over_recap: true
+  gaps_never_interpolated: true
+role: benchmark
