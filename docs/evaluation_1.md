@@ -58,3 +58,14 @@ was triggered. H10 and H7 both confirmed their nulls with the sweep curves as ev
   as a ~1-yr-ahead trajectory signal only.
 - **NOT BUILT (pending) — freight (H4), Keepa goods (H6), a dedicated tariff-lag core-goods model
   (H5)**: no admission possible without the data/build.
+
+## ADMISSION DECISION — signed off 2026-07-22 (Ash)
+
+- **ADMITTED — structured CPI nowcast** (headline + core): the primary instrument.
+- **ADMITTED AS MONITOR — PCE Instrument A** (full core): unbiased CPI-day estimate + attribution;
+  explicitly NOT a precision instrument.
+- **REJECTED — VoC complex models (H7) and the H10 residual model**: no OOS gain.
+- **DEMOTED to trajectory-only — shelter / ZORI (H2)**: all-tenant CPI carries the next print.
+- **NOT BUILT (no admission possible)** — freight (H4), Keepa goods (H6), tariff-lag core-goods (H5).
+
+nb05 (intramonth path) is now cleared to go desk-facing.
