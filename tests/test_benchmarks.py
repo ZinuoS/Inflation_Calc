@@ -1,27 +1,14 @@
 """Guards for the Session-8 benchmark layer: parse correctness, no-fabrication in the consensus
 curation artifact, the leakage-safe SA conversion, and the pre-registered evaluation machinery."""
-import importlib.util
-import sys
 from pathlib import Path
 
 import pytest
 
-REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / "pipelines"))          # for the shared _ingest import
-
-
-def _load_pipeline(name: str):
-    """Load pipelines/<name>/fetch.py under a UNIQUE module name — every pipeline's file is
-    literally `fetch.py`, so a plain `import fetch` would collide/cache the wrong one."""
-    spec = importlib.util.spec_from_file_location(f"{name}_fetch",
-                                                  REPO / "pipelines" / name / "fetch.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+from conftest import REPO, load_pipeline
 
 
 def test_cleveland_parse_is_prerelease_and_sane():
-    CF = _load_pipeline("cleveland_nowcast")
+    CF = load_pipeline("cleveland_nowcast")
     raw = (REPO / "data" / "raw" / "cleveland_nowcast").glob("*/nowcast_month.json")
     raw = sorted(raw)[-1].read_bytes()
     rows = CF.parse(raw)
@@ -35,7 +22,7 @@ def test_cleveland_parse_is_prerelease_and_sane():
 
 
 def test_consensus_ships_gap_first_and_rejects_uncited_facts():
-    CH = _load_pipeline("consensus_history")
+    CH = load_pipeline("consensus_history")
     rows = CH.read_rows()
     assert rows, "gap grid should be seeded"
     # a curated row without a source_url/article_date is an uncited fact -> must be rejected
@@ -82,7 +69,7 @@ def test_binom_p_symmetric():
 def test_no_curated_consensus_row_is_uncited():
     """Every curated consensus row must carry a source_url AND article_date — no fabrication.
     (Figures were sourced via web search of the cited dated articles; each remains spot-checkable.)"""
-    CH = _load_pipeline("consensus_history")
+    CH = load_pipeline("consensus_history")
     rows = CH.read_rows()
     assert CH.validate(rows) == []
     curated = [r for r in rows if r["article_type"] in ("preview", "recap")]

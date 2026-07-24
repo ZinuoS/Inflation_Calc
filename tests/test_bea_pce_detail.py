@@ -1,8 +1,9 @@
 """Parse test for the bea_pce_detail edge (BEA-ingestion session, Task 0)."""
-import json, sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pipelines" / "bea_pce_detail"))
-import fetch as bea
+import json
+
+from conftest import load_pipeline
+
+bea = load_pipeline("bea_pce_detail")     # unique-named load; no sys.modules['fetch'] collision
 
 SPEC = {"source": "bea_pce_detail"}
 SAMPLE = {"BEAAPI": {"Results": {"Data": [
