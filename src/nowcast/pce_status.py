@@ -69,6 +69,37 @@ def band_from_history(db_path=DEFAULT_DB) -> dict:
             "months": int(len(acc.months))}
 
 
+def implied_yoy(call_bp: float, ref_month: str = REF_MONTH, db_path=DEFAULT_DB) -> dict | None:
+    """YoY implied by our single MoM call plus the 11 already-published months.
+
+    IMPORTANT (CLAUDE.md rule 8): YoY is **never a target or an evaluation metric** here — overlapping
+    12-month windows make YoY error series autocorrelated, which is exactly the leakage rule 8 forbids.
+    This is a *reporting* transform: given published index levels, our one MoM call *determines* the
+    YoY figure, so it adds no new claim and its uncertainty is exactly the MoM uncertainty.
+    """
+    base = _add_months(ref_month, -12)
+    prev = _add_months(ref_month, -1)
+    with db.connect(db_path) as conn:
+        lv = {p: float(v) for p, v in conn.execute(
+            "SELECT reference_period, latest_value FROM latest_value WHERE series_id=? "
+            "AND reference_period IN (?,?,?)", (PCE_SERIES, base, prev, _add_months(base, -1)))}
+    if base not in lv or prev not in lv:
+        return None
+    idx = lv[prev] * (1 + call_bp / 1e4)
+    out = {"base_month": base, "base_level": lv[base], "prev_level": lv[prev],
+           "implied_yoy_pct": (idx / lv[base] - 1) * 100}
+    pb = _add_months(base, -1)
+    if pb in lv:
+        out["published_prev_yoy_pct"] = (lv[prev] / lv[pb] - 1) * 100
+    return out
+
+
+def _add_months(m: str, k: int) -> str:
+    d = dt.date.fromisoformat(m)
+    mo = d.month - 1 + k
+    return dt.date(d.year + mo // 12, mo % 12 + 1, 1).isoformat()
+
+
 def read_log() -> list[dict]:
     if not LOG.exists():
         return []
@@ -126,15 +157,40 @@ def render(as_of: dt.date | None = None, db_path=DEFAULT_DB) -> str:
         f"| {r['check_date']} | {r['days_to_print']} | {r['realized_status']} | {r['call_bp']} | {r['note']} |"
         for r in log) or "| — | — | — | — | (no checks logged yet) |"
 
+    yoy = implied_yoy(call, REF_MONTH, db_path)
+    y_lo = implied_yoy(lo, REF_MONTH, db_path)
+    y_hi = implied_yoy(hi, REF_MONTH, db_path)
+
     if status == "published":
-        head = (f"**PRINT PUBLISHED.** First-release core PCE MoM = **{realized:+.1f} bp**. "
-                f"This report does NOT adjudicate — run `report.postmortem('pce','{REF_MONTH}')` "
-                f"per the runbook to populate the ledger.")
+        head = (f"**PRINT PUBLISHED.** First-release core PCE MoM = **{realized / 100:+.3f} pp** "
+                f"({realized:+.1f} bp). This report does NOT adjudicate — run "
+                f"`report.postmortem('pce','{REF_MONTH}')` per the runbook to populate the ledger.")
     else:
         tminus = f"T−{dtp}" if dtp is not None and dtp > 0 else f"T+{abs(dtp)}" if dtp else "T+0"
         head = (f"**STANDING PREDICTION — NOT GRADED.** The print is due **{rel}** — "
                 f"**{tminus}** as of {as_of}. The first-release value is not in the DB, so "
                 f"`realized` is **pending**; no value is imputed.")
+
+    yoy_block = "_index levels unavailable — YoY not computed_"
+    if yoy:
+        prev_y = (f"{yoy['published_prev_yoy_pct']:+.2f}%" if "published_prev_yoy_pct" in yoy else "n/a")
+        rng = (f"[{y_lo['implied_yoy_pct']:+.2f}%, {y_hi['implied_yoy_pct']:+.2f}%]"
+               if y_lo and y_hi else "n/a")
+        yoy_block = f"""| figure | value | rounds to |
+|---|--:|--:|
+| last published YoY ({_add_months(REF_MONTH, -1)[:7]}) | {prev_y} | — |
+| **implied YoY for {REF_MONTH[:7]}** | **{yoy['implied_yoy_pct']:+.3f}%** | **{round(yoy['implied_yoy_pct'], 1):+.1f}%** |
+| implied 80% YoY range | {rng} | — |
+
+Base month {yoy['base_month'][:7]} index = {yoy['base_level']:.3f}; {_add_months(REF_MONTH, -1)[:7]} = {yoy['prev_level']:.3f}.
+
+**Why YoY is reported but never scored.** CLAUDE.md rule 8 bars YoY *targets* — overlapping 12-month
+windows autocorrelate the error series and inflate apparent skill. Here YoY is a **deterministic
+transform**: eleven of the twelve months are already published, so our single MoM call *determines*
+the YoY figure. It therefore adds **no independent claim**, and its uncertainty is exactly the MoM
+uncertainty — which is why the YoY range above is simply the MoM range re-expressed. The **MoM figure
+is the scored quantity**; YoY is release context only. (Caveat: BEA revises the index, so the base
+month can shift slightly and move YoY without our call changing.)"""
 
     return f"""# PCE status report — ledger entry #{row['n']}, core PCE {REF_MONTH[:7]}
 
@@ -144,58 +200,71 @@ def render(as_of: dt.date | None = None, db_path=DEFAULT_DB) -> str:
 
 {head}
 
+**Units: all figures in percentage points (pp), the release convention.** BEA publishes core PCE to
+one decimal place, so **one published increment = 0.1 pp**. Basis points are given in parentheses
+where a decomposition needs the finer grain (1 pp = 100 bp).
+
 ## The call (frozen — immutable)
+
+### MoM — the scored quantity
 
 | field | value |
 |---|---|
-| instrument | core PCE MoM, first release |
+| instrument | core PCE **MoM**, first release |
 | reference month | **{REF_MONTH[:7]}** |
-| **call** | **{call:+.1f} bp** = **{call / 100:+.3f} pp** → rounds to **{round(call / INCREMENT_BP) / 10:+.1f}%** |
-| band (at that lead) | ±{band:.1f} bp |
+| **call** | **{call / 100:+.3f} pp** ({call:+.1f} bp) → prints as **{round(call / INCREMENT_BP) / 10:+.1f}%** |
+| band (at that lead) | ±{band / 100:.3f} pp (±{band:.1f} bp) |
 | frozen as-of | **{row['as_of']}** (CPI-day call; ~16 days before the PCE print) |
 | release date | **{rel}** |
 | realized | **{row['realized_bp']}** |
 | verdict | **{row['verdict']}** |
 | row hash | `{row['row_hash']}` |
 
-Distance to the nearest 0.1 pp rounding boundary: **{dist:.1f} bp**
-({'COIN-FLIP — the rounding is a toss-up, reported not scored' if dist < COIN_FLIP_BP else f'not a coin-flip (threshold {COIN_FLIP_BP} bp)'}).
+Distance to the nearest 0.1 pp rounding boundary: **{dist / 100:.3f} pp** ({dist:.1f} bp)
+({'COIN-FLIP — the rounding is a toss-up, reported not scored' if dist < COIN_FLIP_BP else f'not a coin-flip (threshold {COIN_FLIP_BP / 100:.3f} pp)'}).
+
+### YoY — release context, **not** a scored target
+
+{yoy_block}
 
 ## Confidence range (empirical, n={h['n']})
 
 Built from Instrument A's own historical error distribution over 2023-01 → 2026-05 — **not** a fitted
 predictive distribution.
 
-| statistic | bp | published convention |
-|---|--:|---|
-| MAE | **{h['mae']:.2f}** | {h['mae'] / 100:.4f} pp = **{h['mae'] / INCREMENT_BP:.2f}×** one 0.1 pp increment |
-| mean signed bias | {h['bias']:+.2f} | essentially unbiased |
-| 80% error range | [{h['p10']:+.1f}, {h['p90']:+.1f}] | — |
-| **implied 80% range for this print** | **[{lo:+.1f}, {hi:+.1f}]** | **[{lo / 100:+.3f}, {hi / 100:+.3f}] pp** |
+| statistic | pp | bp | vs one 0.1 pp increment |
+|---|--:|--:|--:|
+| MAE | **{h['mae'] / 100:.3f}** | {h['mae']:.2f} | **{h['mae'] / INCREMENT_BP:.2f}×** |
+| mean signed bias | {h['bias'] / 100:+.3f} | {h['bias']:+.2f} | essentially unbiased |
+| 80% error range | [{h['p10'] / 100:+.3f}, {h['p90'] / 100:+.3f}] | [{h['p10']:+.1f}, {h['p90']:+.1f}] | — |
+| **implied 80% range, MoM print** | **[{lo / 100:+.3f}, {hi / 100:+.3f}]** | [{lo:+.1f}, {hi:+.1f}] | — |
 
-Historical hit rates: within half an increment **{h['within_half']:.0%}**, within one increment
-**{h['within_one']:.0%}**, two or more increments off **{h['two_plus']:.0%}**. Rounds to the same
-published tenth as the actual: **{h['correct_side']}/{h['months']}** ({h['correct_side'] / h['months']:.0%});
-**{h['coin_flip']}/{h['months']}** months were COIN-FLIP by construction.
+Historical hit rates: within half an increment (±0.05 pp) **{h['within_half']:.0%}**, within one
+increment (±0.1 pp) **{h['within_one']:.0%}**, two or more increments off **{h['two_plus']:.0%}**.
+Rounds to the same published tenth as the actual: **{h['correct_side']}/{h['months']}**
+({h['correct_side'] / h['months']:.0%}); **{h['coin_flip']}/{h['months']}** months were COIN-FLIP by
+construction.
 
 ## Where the error comes from, by PCE group
 
-Gross = mean |weighted component error| vs BEA 2.4.4U actuals; signed shows offsetting. Full method
-and the per-component league table: `docs/pce_wedge_decomposition.md`.
+Gross = mean |weighted component error| vs BEA 2.4.4U actuals; signed shows offsetting. At group level
+the numbers are small in pp, so bp is shown alongside. Full method and the per-component league table:
+`docs/pce_wedge_decomposition.md`.
 
-| PCE group | gross bp | signed bp | components |
-|---|--:|--:|--:|
+| PCE group | gross pp | gross bp | signed bp | components |
+|---|--:|--:|--:|--:|
 {groups}
-| **residue lines** *(separate, never blended)* | **8.11** | −3.72 | 3 |
+| **residue lines** *(separate, never blended)* | **0.081** | **8.11** | −3.72 | 3 |
 
-**The floor is a cancellation equilibrium.** Gross component error ≈ **31.8 bp/month** nets down to a
-**{h['mae']:.1f} bp** miss — a **4.0×** offset ratio. Accuracy comes from errors cancelling, not from
-components tracking well; a month where they align is materially worse (worst observed 24.5 bp).
-Mapping explains **82.2%** of monthly error variance; weight vintage only **0.2%** (H16 null).
+**The floor is a cancellation equilibrium.** Gross component error ≈ **0.318 pp/month** (31.8 bp) nets
+down to a **{h['mae'] / 100:.3f} pp** ({h['mae']:.1f} bp) miss — a **4.0×** offset ratio. Accuracy comes
+from errors cancelling, not from components tracking well; a month where they align is materially worse
+(worst observed 0.245 pp). Mapping explains **82.2%** of monthly error variance; weight vintage only
+**0.2%** (H16 null).
 
 ## Daily check log (append-only)
 
-| date | T-minus | realized | call bp | note |
+| date | T-minus | realized | call | note |
 |---|--:|---|--:|---|
 {logrows}
 
@@ -205,11 +274,16 @@ date via `report.postmortem`, per `docs/runbook.md`.*
 """
 
 
+
 def _group_table() -> str:
-    """PCE-group roll-up of the wedge league table (static grouping, computed values)."""
+    """PCE-group roll-up of the wedge league table (grouping static; values from H17).
+
+    Shown in pp (release convention) with bp alongside, because group-level magnitudes are small
+    in pp. Signed column exposes the offsetting that makes the net error ~4x smaller than gross.
+    """
     rows = [("durable goods", 5.26, +0.44, 5), ("transportation svcs", 5.16, +0.27, 3),
             ("health care", 3.67, -0.91, 6), ("financial & insurance", 2.94, -0.39, 2),
             ("other services", 2.37, +0.13, 4), ("nondurable goods", 1.98, +0.25, 5),
             ("recreation svcs", 1.27, +0.03, 1), ("food svcs & accommodation", 1.21, +0.02, 1),
             ("housing & utilities", 0.24, +0.02, 4)]
-    return "\n".join(f"| {n} | {g:.2f} | {s:+.2f} | {c} |" for n, g, s, c in rows)
+    return "\n".join(f"| {n} | {g / 100:.3f} | {g:.2f} | {s:+.2f} | {c} |" for n, g, s, c in rows)

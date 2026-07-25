@@ -40,3 +40,23 @@ def test_confidence_band_is_sane():
     assert h["p10"] < 0 < h["p90"], "an 80% error band should straddle zero"
     assert 0 < h["mae"] < 50
     assert abs(h["bias"]) < 5, "Instrument A is documented as ~unbiased"
+
+
+def test_implied_yoy_is_a_deterministic_transform_not_a_new_claim():
+    """YoY must follow mechanically from the MoM call + published levels (rule 8: never a target)."""
+    y = PS.implied_yoy(7.6)
+    assert y is not None
+    # reconstruct by hand from the reported levels
+    expect = (y["prev_level"] * (1 + 7.6 / 1e4) / y["base_level"] - 1) * 100
+    assert abs(y["implied_yoy_pct"] - expect) < 1e-9
+    # a bigger MoM call must imply a bigger YoY, and the map must be monotone
+    assert PS.implied_yoy(20.0)["implied_yoy_pct"] > y["implied_yoy_pct"] > PS.implied_yoy(-5.0)["implied_yoy_pct"]
+
+
+def test_report_states_both_conventions_and_refuses_yoy_scoring():
+    txt = PS.render(as_of=dt.date(2026, 7, 25))
+    assert "percentage points (pp)" in txt          # release convention is primary
+    assert "MoM — the scored quantity" in txt
+    assert "a scored target" in txt                 # YoY heading marks it context-only
+    assert "never scored" in txt                    # and the body says so explicitly
+    assert "rule 8" in txt                          # the reason is stated, not implied

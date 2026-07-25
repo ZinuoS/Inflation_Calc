@@ -6,66 +6,93 @@
 
 **STANDING PREDICTION — NOT GRADED.** The print is due **2026-07-30** — **T−5** as of 2026-07-25. The first-release value is not in the DB, so `realized` is **pending**; no value is imputed.
 
+**Units: all figures in percentage points (pp), the release convention.** BEA publishes core PCE to
+one decimal place, so **one published increment = 0.1 pp**. Basis points are given in parentheses
+where a decomposition needs the finer grain (1 pp = 100 bp).
+
 ## The call (frozen — immutable)
+
+### MoM — the scored quantity
 
 | field | value |
 |---|---|
-| instrument | core PCE MoM, first release |
+| instrument | core PCE **MoM**, first release |
 | reference month | **2026-06** |
-| **call** | **+7.6 bp** = **+0.076 pp** → rounds to **+0.1%** |
-| band (at that lead) | ±8.0 bp |
+| **call** | **+0.076 pp** (+7.6 bp) → prints as **+0.1%** |
+| band (at that lead) | ±0.080 pp (±8.0 bp) |
 | frozen as-of | **2026-07-14** (CPI-day call; ~16 days before the PCE print) |
 | release date | **2026-07-30** |
 | realized | **—** |
 | verdict | **—** |
 | row hash | `ab0165470397` |
 
-Distance to the nearest 0.1 pp rounding boundary: **2.6 bp**
-(not a coin-flip (threshold 1.5 bp)).
+Distance to the nearest 0.1 pp rounding boundary: **0.026 pp** (2.6 bp)
+(not a coin-flip (threshold 0.015 pp)).
+
+### YoY — release context, **not** a scored target
+
+| figure | value | rounds to |
+|---|--:|--:|
+| last published YoY (2026-05) | +3.41% | — |
+| **implied YoY for 2026-06** | **+3.219%** | **+3.2%** |
+| implied 80% YoY range | [+3.09%, +3.34%] | — |
+
+Base month 2025-06 index = 126.121; 2026-05 = 130.082.
+
+**Why YoY is reported but never scored.** CLAUDE.md rule 8 bars YoY *targets* — overlapping 12-month
+windows autocorrelate the error series and inflate apparent skill. Here YoY is a **deterministic
+transform**: eleven of the twelve months are already published, so our single MoM call *determines*
+the YoY figure. It therefore adds **no independent claim**, and its uncertainty is exactly the MoM
+uncertainty — which is why the YoY range above is simply the MoM range re-expressed. The **MoM figure
+is the scored quantity**; YoY is release context only. (Caveat: BEA revises the index, so the base
+month can shift slightly and move YoY without our call changing.)
 
 ## Confidence range (empirical, n=40)
 
 Built from Instrument A's own historical error distribution over 2023-01 → 2026-05 — **not** a fitted
 predictive distribution.
 
-| statistic | bp | published convention |
-|---|--:|---|
-| MAE | **7.97** | 0.0797 pp = **0.80×** one 0.1 pp increment |
-| mean signed bias | +0.36 | essentially unbiased |
-| 80% error range | [-11.9, +12.7] | — |
-| **implied 80% range for this print** | **[-5.1, +19.5]** | **[-0.051, +0.195] pp** |
+| statistic | pp | bp | vs one 0.1 pp increment |
+|---|--:|--:|--:|
+| MAE | **0.080** | 7.97 | **0.80×** |
+| mean signed bias | +0.004 | +0.36 | essentially unbiased |
+| 80% error range | [-0.119, +0.127] | [-11.9, +12.7] | — |
+| **implied 80% range, MoM print** | **[-0.051, +0.195]** | [-5.1, +19.5] | — |
 
-Historical hit rates: within half an increment **40%**, within one increment
-**68%**, two or more increments off **5%**. Rounds to the same
-published tenth as the actual: **15/40** (38%);
-**12/40** months were COIN-FLIP by construction.
+Historical hit rates: within half an increment (±0.05 pp) **40%**, within one
+increment (±0.1 pp) **68%**, two or more increments off **5%**.
+Rounds to the same published tenth as the actual: **15/40**
+(38%); **12/40** months were COIN-FLIP by
+construction.
 
 ## Where the error comes from, by PCE group
 
-Gross = mean |weighted component error| vs BEA 2.4.4U actuals; signed shows offsetting. Full method
-and the per-component league table: `docs/pce_wedge_decomposition.md`.
+Gross = mean |weighted component error| vs BEA 2.4.4U actuals; signed shows offsetting. At group level
+the numbers are small in pp, so bp is shown alongside. Full method and the per-component league table:
+`docs/pce_wedge_decomposition.md`.
 
-| PCE group | gross bp | signed bp | components |
-|---|--:|--:|--:|
-| durable goods | 5.26 | +0.44 | 5 |
-| transportation svcs | 5.16 | +0.27 | 3 |
-| health care | 3.67 | -0.91 | 6 |
-| financial & insurance | 2.94 | -0.39 | 2 |
-| other services | 2.37 | +0.13 | 4 |
-| nondurable goods | 1.98 | +0.25 | 5 |
-| recreation svcs | 1.27 | +0.03 | 1 |
-| food svcs & accommodation | 1.21 | +0.02 | 1 |
-| housing & utilities | 0.24 | +0.02 | 4 |
-| **residue lines** *(separate, never blended)* | **8.11** | −3.72 | 3 |
+| PCE group | gross pp | gross bp | signed bp | components |
+|---|--:|--:|--:|--:|
+| durable goods | 0.053 | 5.26 | +0.44 | 5 |
+| transportation svcs | 0.052 | 5.16 | +0.27 | 3 |
+| health care | 0.037 | 3.67 | -0.91 | 6 |
+| financial & insurance | 0.029 | 2.94 | -0.39 | 2 |
+| other services | 0.024 | 2.37 | +0.13 | 4 |
+| nondurable goods | 0.020 | 1.98 | +0.25 | 5 |
+| recreation svcs | 0.013 | 1.27 | +0.03 | 1 |
+| food svcs & accommodation | 0.012 | 1.21 | +0.02 | 1 |
+| housing & utilities | 0.002 | 0.24 | +0.02 | 4 |
+| **residue lines** *(separate, never blended)* | **0.081** | **8.11** | −3.72 | 3 |
 
-**The floor is a cancellation equilibrium.** Gross component error ≈ **31.8 bp/month** nets down to a
-**8.0 bp** miss — a **4.0×** offset ratio. Accuracy comes from errors cancelling, not from
-components tracking well; a month where they align is materially worse (worst observed 24.5 bp).
-Mapping explains **82.2%** of monthly error variance; weight vintage only **0.2%** (H16 null).
+**The floor is a cancellation equilibrium.** Gross component error ≈ **0.318 pp/month** (31.8 bp) nets
+down to a **0.080 pp** (8.0 bp) miss — a **4.0×** offset ratio. Accuracy comes
+from errors cancelling, not from components tracking well; a month where they align is materially worse
+(worst observed 0.245 pp). Mapping explains **82.2%** of monthly error variance; weight vintage only
+**0.2%** (H16 null).
 
 ## Daily check log (append-only)
 
-| date | T-minus | realized | call bp | note |
+| date | T-minus | realized | call | note |
 |---|--:|---|--:|---|
 | 2026-07-25 | 5 | pending | +7.6 | print not yet published; call stands frozen |
 

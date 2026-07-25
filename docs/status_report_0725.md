@@ -8,15 +8,25 @@ nothing refit. Companion notebook: `notebooks/nb06_prediction_status.ipynb`.
 2026-06) are standing predictions; PCE adjudicates **2026-07-30**, CPI **2026-08-12**. This report is
 backtest evidence only — it is what the confidence ranges below are built from.
 
+**Units.** Primary figures are in **percentage points (pp)** — the release convention (BLS/BEA publish
+to one decimal, so **one published increment = 0.1 pp**). Basis points appear alongside for the
+sector decomposition, where pp values get small. **1 pp = 100 bp.**
+
 ---
 
 ## 1. Aggregate accuracy and confidence range
 
-| instrument | n | MAE | bias | 80% confidence range | in pp |
-|---|--:|--:|--:|---|---|
-| **CPI headline NSA MoM** | 88 | **11.5 bp** | −5.3 bp | **[−26, +9] bp** | [−0.26, +0.09] pp |
-| **CPI core NSA MoM** | 88 | **12.6 bp** | −5.7 bp | **[−29, +10] bp** | [−0.29, +0.10] pp |
-| **PCE core (Instrument A)** | 40 | **8.0 bp** | +0.4 bp | **[−12, +13] bp** | [−0.12, +0.13] pp |
+| instrument | n | MAE (pp) | MAE (bp) | bias (pp) | 80% confidence range (pp) |
+|---|--:|--:|--:|--:|---|
+| **CPI headline NSA MoM** | 88 | **0.115** | 11.5 | −0.053 | **[−0.26, +0.09]** |
+| **CPI core NSA MoM** | 88 | **0.126** | 12.6 | −0.057 | **[−0.29, +0.10]** |
+| **PCE core (Instrument A)** | 40 | **0.080** | 8.0 | +0.004 | **[−0.12, +0.13]** |
+
+**YoY note (release context, never a target).** Both agencies publish MoM *and* YoY. YoY is excluded
+from every error statistic here by **CLAUDE.md rule 8** (overlapping 12-month windows autocorrelate
+the error series and inflate apparent skill). Where a YoY figure is useful it is derived
+mechanically — eleven of twelve months are already published, so a single MoM call *determines* it and
+inherits exactly its uncertainty (see `docs/pce_status_report.md`). **MoM is the scored quantity.**
 
 Reading in the **published convention** (prints are released to 0.1 pp = 10 bp): the CPI headline MAE
 is **≈1.1 published increments**, and the 80% range spans roughly **−2.6 to +1 increments**. The PCE
@@ -31,16 +41,16 @@ Each sector's own NSA MoM, forecast at T-3 and compared to the official major-gr
 the 80% range are in the sector's own units** (a sector with 2.5% weight moving 100 bp contributes
 only ~2.5 bp to the aggregate).
 
-| sector | CPI weight | MAE (bp) | bias | 80% range (bp) | n |
-|---|--:|--:|--:|---|--:|
-| Housing | 43.8% | **13** | -6 | [-32, +11] | 88 |
-| Transportation | 16.6% | **45** | -4 | [-84, +59] | 88 |
-| Food & beverages | 15.0% | **20** | -8 | [-45, +19] | 88 |
-| Medical care | 8.5% | **22** | +0 | [-32, +33] | 88 |
-| Education & communication | 6.1% | **21** | -7 | [-38, +26] | 88 |
-| Recreation | 4.7% | **31** | -10 | [-65, +35] | 88 |
-| Other goods & services | 2.9% | **27** | -11 | [-52, +30] | 88 |
-| Apparel | 2.5% | **77** | -6 | [-116, +113] | 88 |
+| sector | CPI weight | MAE (pp) | MAE (bp) | bias (bp) | 80% range (bp) | n |
+|---|--:|--:|--:|--:|---|--:|
+| Housing | 43.8% | **0.128** | 12.8 | -5.8 | [-32, +11] | 88 |
+| Transportation | 16.6% | **0.450** | 45.0 | -4.0 | [-84, +59] | 88 |
+| Food & beverages | 15.0% | **0.201** | 20.1 | -8.0 | [-45, +19] | 88 |
+| Medical care | 8.5% | **0.221** | 22.1 | +0.0 | [-32, +33] | 88 |
+| Education & communication | 6.1% | **0.208** | 20.8 | -6.8 | [-38, +26] | 88 |
+| Recreation | 4.7% | **0.306** | 30.6 | -9.7 | [-65, +35] | 88 |
+| Other goods & services | 2.9% | **0.271** | 27.1 | -10.9 | [-52, +30] | 88 |
+| Apparel | 2.5% | **0.771** | 77.1 | -6.4 | [-116, +113] | 88 |
 
 **How to read this.** Two very different things drive the ranking:
 
