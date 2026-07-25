@@ -28,6 +28,20 @@ publication:                 # Task 0: structural weights input — annual, know
   rule: annual_plus_comprehensive_revision
   observed_asof_estimated: false
   cite: https://www.bea.gov/data/consumer-spending/main   # NIPA release + annual/comprehensive update schedule
+  # H16 (2026-07-25) — MONTHLY cadence recorded explicitly. BEA publishes the Underlying Detail
+  # tables as "Annual, Quarterly, and Monthly estimates" on the Personal Income & Outlays cycle
+  # (cite above; verified "Current release: June 25, 2026 / Next release: July 30, 2026").
+  monthly_detail:
+    kind: scheduled
+    rule: pce_release_for_reference_month      # 2.4.5U for ref month M is public at the PCE release for M
+    lag_days: 55                               # observed M+1 day ~25-30 (release_calendar 2025-11..2026-11: +34..+60, median ~55)
+    observed_asof_estimated: false
+    firewall_note: >
+      Instrument A calls month M on CPI-day (~M+1 day 10-13), which PRECEDES the PCE release for M.
+      Therefore at that forecast time the freshest KNOWABLE nominal detail is reference month M-1
+      (published ~M day 25-30). Using month-M shares to forecast month M is look-ahead and is
+      disqualified. official_current carries no observed_asof column, so this lag rule IS the
+      firewall for the weight path.
   note: >
     2.4.5U weights are a STRUCTURAL annual input, vintage-appropriate and knowable far ahead of
     any forecast time (no daily role). Monthly detail is revised with the monthly PCE release
