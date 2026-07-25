@@ -12,36 +12,79 @@ Rounded (market) and unrounded (our-call) quantities are kept in separate column
 |---|---|---|
 | **Cleveland Fed nowcast** | INGESTED, vintage-safe | CPI headline **38/42** mo, CPI core **38/42**, PCE core **35** (4 year-boundary months dropped by the as-of safety guard; logged as gaps, not errors) |
 | **SPF** (quarterly trajectory) | INGESTED | CPI/core-CPI/PCE/core-PCE, all surveys incl. 2023-01→2026Q2 (336 rows in-window) |
-| **Press consensus** | 34 rows / 16-18 mo | Curated via **web search** of cited dated articles (2024-07→2026-06). WebFetch 403; figures taken from search of the named article, contaminated (year-mixed) months dropped as gaps. |
+| **Press consensus (CPI)** | 30 headline / 27 core mo | Web-search-curated from cited articles, 2023-01→2026-06; year-contaminated months gapped. **PCE-core: 9 mo** (thinner press coverage); **PPI: 0** (not separately previewed in press). |
 
-## The three PRE-REGISTERED results (consensus) — VERDICTS
+## The three PRE-REGISTERED results (consensus) — VERDICTS (extended panel)
 
-**Consensus panel:** 16 headline / 18 core months, curated via web search of cited dated
-articles (2024-07→2026-06; method + no-fabrication discipline in `pipelines/consensus_history/license_note.md`).
-The market variable is the rounded consensus median; our NSA call is SA-converted (stated ~2.5/1.9bp handicap).
+**Panel (extended Session 8→9):** 30 headline / 27 core months, 2023-01→2026-06, curated via
+web search of cited dated articles; year-contaminated months (the 2024/2026 same-month-name trap)
+dropped as gaps. **Pre-registration note:** PR-1/PR-2 were underpowered at n=4–8 in Session 8; this
+extension is the remedy. **The claims and thresholds are unchanged — no new claims, no threshold
+edits.** Market variable = rounded consensus median; our NSA call SA-converted (stated ~2.5/1.9bp handicap).
 
 | claim | headline | core | verdict |
 |---|--:|--:|---|
-| **PR-3** MAE: ours vs consensus (bp) | 7.54 vs **6.66** | 7.84 vs **6.0** | **NULL HELD** — consensus (later close, superset) beats us modestly, as pre-registered. **No surprise win → no leakage audit triggered.** |
-| **PR-1** side-of-consensus, divergence mo | 2/4 = 0.5 (p=1.0) | 5/8 = 0.625 (p=0.7266) | **INCONCLUSIVE (underpowered)** — core 62.5% sits in the pre-registered 55–65% band but n=8 (p=0.73); headline n=4. Not falsified (not ≤50%, not >80%), not confirmed. |
-| **PR-2** boundary-month err (bp) | ours 6.01 vs 8.14 (n=5) | ours 6.39 vs 3.44 (n=8) | **MIXED** — headline **better** than consensus; core **worse** (part of the gap is our stated SA-conversion handicap, which bites hardest exactly at rounding boundaries). |
+| **PR-3** MAE ours vs consensus (bp) | 7.27 vs 7.33 | 8.53 vs **5.29** | **NULL HELD (core); PARITY (headline).** Core: consensus beats us, as pre-registered. Headline: ours < consensus by **0.06 bp** — a tie that nonetheless tripped the pre-registered audit (below). |
+| **PR-1** side-of-consensus, divergence mo | 9/12 = 75% (p=0.146) | 8/12 = 67% (p=0.3877) | **DIRECTIONALLY SUPPORTIVE, NOT SIGNIFICANT.** Both above 50% and in/above the pre-registered 55–65% band; extension lifted n from 4–8 → 12 but neither reaches p<0.05. Not falsified, not confirmed. |
+| **PR-2** boundary-month err (bp) | ours 6.47 vs 6.87 (n=9) | ours 8.0 vs 3.16 (n=12) | **MIXED.** Headline no worse than consensus (supported); core worse — largely our stated SA-conversion handicap, which bites hardest at rounding boundaries. |
 
-**Reading.** The decisive integrity result is **PR-3**: on an honest, recently-curated consensus
-panel we **lose modestly** to a benchmark that closes later and embeds our own signals — precisely
-the pre-registered null. Nothing to audit. PR-1/PR-2 are directionally consistent with a weak,
-energy-tilted edge but are **underpowered** (4–8 divergence/boundary months); the honest verdict is
-*not yet established*, and n grows as the panel is curated back through 2023.
+**PR-3 headline audit (triggered because ours < consensus).** The margin is **0.06 bp — parity, not
+a win.** Audit findings: (1) the edge is **balanced** across the gasoline split (high-gasoline months
+−0.4 bp, low-gasoline +0.5 bp), i.e. not concentrated where a post-freeze leak would hide; (2) on
+**core** (no gasoline) we **lose** 8.53 vs 5.29 bp — a firewall breach would help core too, and it
+does not; (3) calls are the frozen T-3 replay clamped to T-4. **Conclusion: no leak.** Headline parity
+is the admitted gasoline edge offsetting consensus's later close; belief unchanged (parity ≠ win).
 
-**Reconciliation with the Cleveland analog below.** We "beat" Cleveland on headline (n=81) but lose
-to consensus (n=16). No contradiction: the Cleveland win is carried by the **2021–22 energy spikes**
-(our admitted gasoline edge, which Cleveland underuses); the consensus panel is **2024-07→2026-06**,
-calm in-line months where our gasoline edge is small and the latest-closing consensus edges us. On
-the same recent window the two benchmarks agree we have no material average-MAE edge.
+## PCE Instrument A vs press consensus — the speed trade (9 months)
 
-## Divergence-month inventory (core, vs consensus) — 14/18 diverge ≥ 0.05pp
+Instrument A calls core-PCE on **CPI-day (~T-16 before the PCE print)** — a full ~16 days before the
+survey/consensus close. Consensus therefore closes far later and should win on accuracy; the
+instrument's value is the head start + BEA attribution, not precision (pre-registered H3:
+matches-not-beats).
+
+| ref | Instrument A (bp) | consensus (bp) | actual (bp) | \|err A\| | \|err cons\| |
+|---|--:|--:|--:|--:|--:|
+| 2024-04 | +25.4 | +20.0 | +24.9 | 0.4 | 4.9 |
+| 2024-09 | +13.4 | +30.0 | +25.4 | 11.9 | 4.6 |
+| 2024-11 | +16.4 | +20.0 | +11.5 | 5.0 | 8.5 |
+| 2025-07 | +29.4 | +30.0 | +27.3 | 2.1 | 2.7 |
+| 2025-09 | +16.6 | +20.0 | +19.8 | 3.2 | 0.2 |
+| 2026-02 | +19.4 | +40.0 | +36.7 | 17.2 | 3.3 |
+| 2026-03 | +14.1 | +30.0 | +29.3 | 15.2 | 0.7 |
+| 2026-04 | +21.5 | +30.0 | +23.9 | 2.4 | 6.1 |
+| 2026-05 | +20.1 | +30.0 | +32.0 | 11.9 | 2.0 |
+| **MAE** | | | | **7.7** | **3.7** |
+
+Consensus (3.7 bp) beats Instrument A (7.7 bp), as expected for a call made 16 days earlier. The
+instrument is close in calm months and misses in the 2026 energy-spike months (2026-02/03, Iran-war
+oil) where the bridge struggles — confirming it as a **speed + attribution monitor, not a precision
+instrument**, and never scored as one.
+
+## Standing account — where the system sits vs external benchmarks
+
+- **vs the Cleveland Fed nowcast** (closes ~T-1): we hold an **energy-window edge** — headline beats
+  it across 2019–2026 (12.4 vs 19.2 bp, n=81), carried by the 2021–22/2023 gasoline spikes where our
+  admitted EIA weekly pass-through bites and Cleveland's model underuses it.
+- **vs later-closing press consensus** (closes ~T-1 to T-3, after our T-4 freeze): a **modest
+  deficit** overall (core 8.5 vs 5.3 bp) shading to **parity on headline** (7.27 vs 7.33) once the
+  gasoline edge is in play. No average-MAE win survives against the latest-closing benchmark — the
+  honest ceiling of a component nowcast that freezes earlier than the market's own number.
+- The two reconcile cleanly: our edge is **energy timing on headline**; on core, and against the
+  latest close, we do not beat the market — and we do not claim to.
+
+## Divergence-month inventory (core, vs consensus) — 22/27 diverge ≥ 0.05pp
 
 | ref | our SA call (pp) | consensus (round) | actual (round) | divergence | ≥0.05 |
 |---|--:|--:|--:|--:|:--:|
+| 2023-02 | +0.35 | +0.4 | +0.5 | -0.05 | ✓ |
+| 2023-04 | +0.28 | +0.4 | +0.5 | -0.12 | ✓ |
+| 2023-05 | +0.23 | +0.4 | +0.4 | -0.17 | ✓ |
+| 2023-06 | +0.18 | +0.3 | +0.2 | -0.12 | ✓ |
+| 2023-08 | +0.10 | +0.2 | +0.2 | -0.10 | ✓ |
+| 2023-09 | +0.39 | +0.3 | +0.3 | +0.09 | ✓ |
+| 2023-10 | +0.42 | +0.3 | +0.3 | +0.12 | ✓ |
+| 2023-12 | +0.17 | +0.3 | +0.3 | -0.13 | ✓ |
+| 2024-04 | +0.26 | +0.3 | +0.3 | -0.04 | · |
 | 2024-07 | +0.17 | +0.2 | +0.2 | -0.03 | · |
 | 2024-08 | +0.14 | +0.2 | +0.3 | -0.06 | ✓ |
 | 2024-09 | +0.40 | +0.3 | +0.3 | +0.10 | ✓ |

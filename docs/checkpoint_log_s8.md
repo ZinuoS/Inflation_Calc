@@ -105,18 +105,52 @@ the target) can never leak into the feature firewall. Network lives only in each
 Headline vs Cleveland stand-in, 2023+: **32 of 37 months diverge ≥ 0.05pp** (full table in
 `benchmark_evaluation_1.md`). Vs consensus: **awaiting curation**.
 
-### The three pre-registered results — VERDICTS (consensus panel now curated via web search)
-Consensus panel: **16 headline / 18 core months** (2024-07→2026-06), each a cited dated article;
-year-contaminated months dropped as gaps (no fabrication). See `benchmark_evaluation_1.md`.
-- **PR-3 (MAE vs consensus): NULL HELD.** ours 7.54 vs consensus 6.66 (headline); 7.84 vs 6.00 (core)
-  — consensus (later close, superset) beats us modestly, exactly as pre-registered. **No surprise win
-  → no leakage audit triggered.** This is the key integrity result.
-- **PR-1 (side-of-consensus): INCONCLUSIVE / underpowered.** core 5/8 = 62.5% (in the 55–65% band,
-  but p=0.73); headline 2/4. Not falsified, not confirmed.
-- **PR-2 (boundary months): MIXED.** headline better than consensus, core worse (partly our stated
-  SA-conversion handicap, which bites at rounding boundaries).
-- **Cleveland analog** (n=81, all years): we beat it on headline — reconciled as the 2021–22 gasoline
-  edge, NOT a contradiction (on the calm 2024-26 consensus window neither benchmark shows us an edge).
+### FINAL coverage (curated / total slots), by print type and year — Session 9 extension
+
+| print | variable | 2023 | 2024 | 2025 | 2026 |
+|---|---|--|--|--|--|
+| CPI | mom_headline | 11/12 | 9/12 | 5/12 | 5/7 |
+| CPI | mom_core | 8/12 | 7/12 | 7/12 | 5/7 |
+| PCE | mom_core | 0/12 | 3/12 | 2/12 | 4/7 |
+| PPI | mom_headline | 0/12 | 0/12 | 0/12 | 0/7 |
+
+**Total: 66 curated / 106 gap of 172 slots.** CPI headline 30, CPI core 27,
+PCE-core 9, PPI 0. Gaps are honest: year-contaminated same-month-name months, PCE months lacking a
+date-verifiable citation, and PPI (not separately previewed in the press) all stay gaps — never guessed.
+
+### Updated verdicts (extended panel, n=30 headline / 27 core)
+- **PR-3:** core NULL HELD (ours 8.53 vs consensus 5.29 bp); headline **PARITY** (7.27 vs 7.33). The
+  marginal ours<cons tripped the pre-registered audit → **no leak** (edge balanced across gasoline
+  split; we lose on core; frozen freeze). Parity ≠ win.
+- **PR-1:** directionally supportive, not significant — headline 9/12=75% (p=0.15), core 8/12=67%
+  (p=0.39). Extension lifted n from 4–8 → 12; still short of p<0.05. Claims/thresholds unchanged.
+- **PR-2:** mixed — headline no worse than consensus; core worse (SA-conversion handicap at boundaries).
+- **PCE Instrument A vs consensus (9 mo):** MAE 7.7 vs 3.7 bp — consensus wins, as expected for a call
+  made ~16 days earlier; Instrument A stands as a speed+attribution monitor, not precision.
+- **Standing account:** energy-window edge vs Cleveland; modest deficit → headline parity vs
+  later-closing consensus. No average-MAE win against the latest close; not claimed.
+
+### Session 9 sign-off notes (recorded before commit)
+
+1. **Audit note (headline parity).** The marginal headline result — ours **7.27** vs consensus
+   **7.33 bp**, ours lower by 0.06 bp — satisfied the letter of the pre-registered trigger (ours <
+   consensus → audit before belief), so the audit was run. It **cleared with mechanism**: the edge
+   is **balanced across the gasoline split** (high-gasoline months −0.4 bp, low-gasoline +0.5 bp),
+   not concentrated where a post-freeze leak would hide; and **core was unhelped** (we lose 8.53 vs
+   5.29 bp), which a blanket leak would have helped. Freeze held (frozen T-3 replay clamped to T-4).
+   **Parity ≠ win — held, not promoted.**
+
+2. **PR-1 status (the one live claim).** Side-of-consensus in divergence months is the single
+   **tradeable** claim: headline 9/12 = **75%** (p=0.15), core 8/12 = 67% (p=0.39). It is
+   **suggestive but not yet significant** at n=12. The extension exhausted the recoverable press
+   history; from here it is **powered up only by forward prints, at ~1 per month**. It stays live
+   and unconfirmed — the honest state — accumulating in the pristine ledger.
+
+3. **Instrument A framing.** MAE **7.7 vs 3.7 bp** against consensus is **not a defeat**: the
+   consensus number is made ~16 days *later*, right before the PCE print. Instrument A trades ~4 bp
+   of precision for a **~16-day head start** — the priced speed/precision tradeoff, exactly the
+   pre-registered H3 role (speed + attribution monitor, matches-not-beats). It is scored as a
+   monitor, never as a precision instrument.
 
 **Also done (TASK 3c):** `benchmark_evaluation_1.md` written; "vs the market's number" sections
 added to `evaluation_1.md` and `oos_report_1.md`; pristine ledger gained `consensus_bp` /

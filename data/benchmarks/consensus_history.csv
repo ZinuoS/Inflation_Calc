@@ -1,53 +1,53 @@
 print,reference_month,variable,consensus_pct,article_type,source_url,article_date,retrieved_at,note
-CPI,2023-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-01-01,mom_headline,0.4,recap,https://www.cnbc.com/2023/02/14/consumer-price-index-january-2023-.html,2023-02-14,2026-07-24,predicted 0.4; actual 0.5 hotter; YoY 6.4
 CPI,2023-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2023-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-02-01,mom_headline,0.4,recap,https://www.cnbc.com/2023/03/14/cpi-inflation-february-2023-.html,2023-03-14,2026-07-24,in line with Dow Jones 0.4; YoY 6.0
+CPI,2023-02-01,mom_core,0.4,recap,https://www.cnbc.com/2023/03/14/cpi-inflation-february-2023-.html,2023-03-14,2026-07-24,estimate 0.4; actual 0.5 above
 PCE,2023-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2023-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2023-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2023-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-04-01,mom_headline,0.4,recap,https://www.cnbc.com/2023/05/10/cpi-inflation-april-2023.html,2023-05-10,2026-07-24,in line with Dow Jones 0.4; YoY 4.9
+CPI,2023-04-01,mom_core,0.4,recap,https://www.cnbc.com/2023/05/10/cpi-inflation-april-2023.html,2023-05-10,2026-07-24,in line 0.4
 PCE,2023-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-05-01,mom_headline,0.1,recap,https://www.cnbc.com/2023/06/13/cpi-inflation-report-may-2023-.html,2023-06-13,2026-07-24,in line with Dow Jones 0.1; YoY 4.0
+CPI,2023-05-01,mom_core,0.4,recap,https://www.cnbc.com/2023/06/13/cpi-inflation-report-may-2023-.html,2023-06-13,2026-07-24,in line 0.4
 PCE,2023-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-06-01,mom_headline,0.3,recap,https://www.cnbc.com/2023/07/12/inflation-rose-just-0point2percent-in-june-less-than-expected-as-consumers-get-a-break-from-price-increases.html,2023-07-12,2026-07-24,expected 0.3; actual 0.2 below
+CPI,2023-06-01,mom_core,0.3,recap,https://www.cnbc.com/2023/07/12/inflation-rose-just-0point2percent-in-june-less-than-expected-as-consumers-get-a-break-from-price-increases.html,2023-07-12,2026-07-24,consensus 0.3; actual 0.2 below
 PCE,2023-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-07-01,mom_headline,0.2,recap,https://www.cnbc.com/2023/08/10/cpi-inflation-july-2023-.html,2023-08-10,2026-07-24,Dow Jones 0.2; actual 0.2; YoY 3.2
 CPI,2023-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2023-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-08-01,mom_headline,0.6,recap,https://www.cnbc.com/2023/09/13/cpi-inflation-report-august-2023-.html,2023-09-13,2026-07-24,expected 0.6; actual 0.6; YoY 3.7 gas surge
+CPI,2023-08-01,mom_core,0.2,recap,https://www.cnbc.com/2023/09/13/cpi-inflation-report-august-2023-.html,2023-09-13,2026-07-24,estimate 0.2; actual 0.3 above
 PCE,2023-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-09-01,mom_headline,0.3,recap,https://www.cnbc.com/2023/10/12/cpi-september-2023.html,2023-10-12,2026-07-24,forecast 0.3; actual 0.4; YoY 3.7
+CPI,2023-09-01,mom_core,0.3,recap,https://www.cnbc.com/2023/10/12/cpi-september-2023.html,2023-10-12,2026-07-24,in line 0.3
 PCE,2023-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-10-01,mom_headline,0.1,recap,https://www.cnbc.com/2023/11/14/cpi-inflation-report-october-2023.html,2023-11-14,2026-07-24,forecast 0.1; actual 0.0 below; YoY 3.2
+CPI,2023-10-01,mom_core,0.3,recap,https://www.cnbc.com/2023/11/14/cpi-inflation-report-october-2023.html,2023-11-14,2026-07-24,forecast 0.3; actual 0.2 below
 PCE,2023-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-11-01,mom_headline,0.0,recap,https://www.cnbc.com/2023/12/12/cpi-inflation-report-november-2023.html,2023-12-12,2026-07-24,Dow Jones no gain 0.0; actual 0.1; YoY 3.1
 CPI,2023-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2023-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-12-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2023-12-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2023-12-01,mom_headline,0.2,recap,https://www.cnbc.com/2024/01/11/cpi-inflation-report-december-2023-consumer-prices-rose-0point3percent-in-december-higher-than-expected-pushing-the-annual-rate-to-3point4percent.html,2024-01-11,2026-07-24,title: 0.3 higher than expected -> consensus 0.2; YoY 3.4
+CPI,2023-12-01,mom_core,0.3,recap,https://www.cnbc.com/2024/01/11/cpi-inflation-report-december-2023-consumer-prices-rose-0point3percent-in-december-higher-than-expected-pushing-the-annual-rate-to-3point4percent.html,2024-01-11,2026-07-24,estimate 0.3; actual 0.3
 PCE,2023-12-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2023-12-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2024-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-01-01,mom_headline,0.2,recap,https://www.cnbc.com/2024/02/13/cpi-inflation-january-2024-consumer-prices-rose-0point3percent-in-january-more-than-expected-as-the-annual-rate-moved-to-3point1percent.html,2024-02-13,2026-07-24,Dow Jones 0.2; actual 0.3 hotter; core not framed -> gap
 CPI,2024-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2024-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2024-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
@@ -59,11 +59,11 @@ CPI,2024-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-
 CPI,2024-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2024-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2024-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2024-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2024-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-PCE,2024-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-04-01,mom_headline,0.4,recap,https://www.cnbc.com/2024/05/15/cpi-inflation-april-2024-consumer-prices-rose-0point3percent-in-april.html,2024-05-15,2026-07-24,forecast 0.4; actual 0.3 below; YoY 3.4 confirms 2024
+CPI,2024-04-01,mom_core,0.3,recap,https://www.cnbc.com/2024/05/15/cpi-inflation-april-2024-consumer-prices-rose-0point3percent-in-april.html,2024-05-15,2026-07-24,forecast 0.3; actual 0.3 as forecast
+PCE,2024-04-01,mom_core,0.2,recap,https://www.cnbc.com/2024/05/31/pce-inflation-april-2024-the-feds-preferred-inflation-measure-rose-0point2percent-in-april.html,2024-05-31,2026-07-24,in line with Dow Jones 0.2; YoY 2.8
 PPI,2024-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-CPI,2024-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+CPI,2024-05-01,mom_headline,0.1,recap,https://www.cnbc.com/2024/06/12/cpi-report-june-inflation.html,2024-06-12,2026-07-24,Dow Jones 0.1; actual 0.0; YoY 3.3 confirms 2024
 CPI,2024-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PCE,2024-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 PPI,2024-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
@@ -81,7 +81,7 @@ PCE,2024-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-bloc
 PPI,2024-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2024-09-01,mom_headline,0.1,recap,https://www.cnbc.com/2024/10/10/cpi-inflation-september-2024.html,2024-10-10,2026-07-24,Dow Jones 0.1; actual 0.2 above
 CPI,2024-09-01,mom_core,0.3,recap,https://www.cnbc.com/2024/10/10/cpi-inflation-september-2024.html,2024-10-10,2026-07-24,forecast 0.3; actual 0.3
-PCE,2024-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-09-01,mom_core,0.3,recap,https://www.cnbc.com/2024/10/31/pce-inflation-september-2024-.html,2024-10-31,2026-07-24,matching consensus 0.3
 PPI,2024-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2024-10-01,mom_headline,0.2,recap,https://www.jpmorgan.com/insights/markets-and-economy/economy/cpi-report-october-2024,2024-11-13,2026-07-24,MoM 0.2 in line with consensus
 CPI,2024-10-01,mom_core,0.3,recap,https://www.jpmorgan.com/insights/markets-and-economy/economy/cpi-report-october-2024,2024-11-13,2026-07-24,core 0.3 in line with consensus
@@ -89,7 +89,7 @@ PCE,2024-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-bloc
 PPI,2024-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2024-11-01,mom_headline,0.3,recap,https://www.cnbc.com/2024/12/11/cpi-inflation-november-2024-annual-inflation-rate-accelerates-to-2point7percent-in-november-as-expected.html,2024-12-11,2026-07-24,in line with Dow Jones 0.3
 CPI,2024-11-01,mom_core,0.3,recap,https://www.cnbc.com/2024/12/11/cpi-inflation-november-2024-annual-inflation-rate-accelerates-to-2point7percent-in-november-as-expected.html,2024-12-11,2026-07-24,in line with Dow Jones 0.3
-PCE,2024-11-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2024-11-01,mom_core,0.2,recap,https://www.cnbc.com/2024/12/20/pce-inflation-november-2024-.html,2024-12-20,2026-07-24,estimate 0.2; actual 0.1 below
 PPI,2024-11-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2024-12-01,mom_headline,0.3,recap,https://www.cnbc.com/2025/01/15/cpi-inflation-december-2024-.html,2025-01-15,2026-07-24,Dow Jones 0.3; actual 0.4
 CPI,2024-12-01,mom_core,0.3,recap,https://www.cnbc.com/2025/01/15/cpi-inflation-december-2024-.html,2025-01-15,2026-07-24,"actual core 0.2, 0.1pp less than expected -> 0.3"
@@ -121,7 +121,7 @@ PCE,2025-06-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-bloc
 PPI,2025-06-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2025-07-01,mom_headline,0.2,recap,https://www.cnbc.com/2025/08/12/cpi-inflation-report-july-2025.html,2025-08-12,2026-07-24,forecast 0.2; actual 0.2 match
 CPI,2025-07-01,mom_core,0.3,recap,https://www.cnbc.com/2025/08/12/cpi-inflation-report-july-2025.html,2025-08-12,2026-07-24,forecast 0.3; actual 0.3 match
-PCE,2025-07-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-07-01,mom_core,0.3,recap,https://www.cnbc.com/2025/08/29/pce-inflation-report-july-2025.html,2025-08-29,2026-07-24,in line 0.3
 PPI,2025-07-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2025-08-01,mom_headline,0.3,recap,https://www.cnbc.com/2025/09/11/consumer-prices-rose-at-annual-rate-of-2point9percent-in-august-as-weekly-jobless-claims-jump.html,2025-09-11,2026-07-24,Dow Jones 0.3; actual 0.4
 CPI,2025-08-01,mom_core,0.3,recap,https://www.cnbc.com/2025/09/11/consumer-prices-rose-at-annual-rate-of-2point9percent-in-august-as-weekly-jobless-claims-jump.html,2025-09-11,2026-07-24,forecast 0.3; actual 0.3 match
@@ -129,7 +129,7 @@ PCE,2025-08-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-bloc
 PPI,2025-08-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2025-09-01,mom_headline,0.4,recap,https://www.cnbc.com/2025/10/24/cpi-inflation-september-2025.html,2025-10-24,2026-07-24,Dow Jones 0.4; actual 0.3
 CPI,2025-09-01,mom_core,0.3,recap,https://www.cnbc.com/2025/10/24/cpi-inflation-september-2025.html,2025-10-24,2026-07-24,forecast 0.3; actual 0.2
-PCE,2025-09-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2025-09-01,mom_core,0.2,recap,https://www.cnbc.com/2025/12/05/pce-inflation-report-september-2025.html,2025-12-05,2026-07-24,in line with Dow Jones 0.2 (delayed release)
 PPI,2025-09-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2025-10-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2025-10-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
@@ -149,19 +149,19 @@ PCE,2026-01-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-bloc
 PPI,2026-01-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2026-02-01,mom_headline,0.3,recap,https://www.cnbc.com/2026/03/11/cpi-inflation-report-february-2026.html,2026-03-11,2026-07-24,Dow Jones consensus 0.3; actual 0.3 match
 CPI,2026-02-01,mom_core,0.2,recap,https://www.cnbc.com/2026/03/11/cpi-inflation-report-february-2026.html,2026-03-11,2026-07-24,consensus 0.2; actual 0.2 match
-PCE,2026-02-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2026-02-01,mom_core,0.4,recap,https://www.cnbc.com/2026/04/09/core-inflation-was-3percent-in-february-as-expected-key-fed-gauge-shows.html,2026-04-09,2026-07-24,in line with Dow Jones 0.4
 PPI,2026-02-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2026-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2026-03-01,mom_core,0.3,recap,https://www.cnbc.com/2026/04/10/cpi-inflation-report-march-2026.html,2026-04-10,2026-07-24,"actual core 0.2, reported 0.1pp below consensus -> 0.3"
-PCE,2026-03-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2026-03-01,mom_core,0.3,recap,https://www.cnbc.com/2026/04/30/pce-inflation-rate-march-2026.html,2026-04-30,2026-07-24,in line with consensus 0.3
 PPI,2026-03-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2026-04-01,mom_headline,0.6,recap,https://www.cnbc.com/2026/05/12/cpi-inflation-april-2026-.html,2026-05-12,2026-07-24,monthly as forecast 0.6
 CPI,2026-04-01,mom_core,0.3,recap,https://www.cnbc.com/2026/05/12/cpi-inflation-april-2026-.html,2026-05-12,2026-07-24,consensus 0.3; actual 0.4 hotter
-PCE,2026-04-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2026-04-01,mom_core,0.3,recap,https://www.cnbc.com/2026/05/28/core-inflation-hit-an-annual-rate-of-3point3percent-in-april-as-expected-feds-preferred-gauge-shows-.html,2026-05-28,2026-07-24,estimate 0.3; actual 0.2 below
 PPI,2026-04-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2026-05-01,mom_headline,0.5,recap,https://www.cnbc.com/2026/06/10/cpi-inflation-report-may-2026.html,2026-06-10,2026-07-24,FactSet/consensus 0.5; actual 0.5 met
 CPI,2026-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
-PCE,2026-05-01,mom_core,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
+PCE,2026-05-01,mom_core,0.3,recap,https://www.cnbc.com/2026/06/25/pce-inflation-report-may-2026-.html,2026-06-25,2026-07-24,in line with Dow Jones 0.3; core PCE
 PPI,2026-05-01,mom_headline,,gap,,,,awaiting manual curation (auto-backfill 403-blocked)
 CPI,2026-06-01,mom_headline,-0.2,recap,https://www.cnbc.com/2026/07/14/consumer-price-index-inflation-report-june-2026.html,2026-07-14,2026-07-24,Dow Jones consensus; actual -0.4 beat -0.2
 CPI,2026-06-01,mom_core,0.2,recap,https://www.cnbc.com/2026/07/14/consumer-price-index-inflation-report-june-2026.html,2026-07-14,2026-07-24,consensus 0.2; actual flat
