@@ -81,6 +81,20 @@ proxy-plausible **2.0%** (only SEHE01, SETG01, SEMF01 remain, all previously ass
 The acquisition thesis is closed; the surviving headroom is in **baseline specification**
 (H11 / H11b), not data acquisition. See `checkpoint_log_s7.md`.
 
+## H12 closure — daily gasoline (data-quality sprint, 2026-07-25)
+
+**SETB01 gasoline stays on the weekly EIA feed.** A daily-retail upgrade was pre-registered (H12) and
+found **no admissible source**: AAA's historical endpoint sits under `/wp-admin/`, which its robots.txt
+**disallows**; GasBuddy's national history is served as a **chart image** (proprietary retail prices,
+ToS-restricted extraction). No daily *retail* series exists on EIA/FRED (EIA retail is weekly — already
+our proxy). Recorded as a gap, not fabricated, and **untested rather than disproven**.
+
+**Reopening condition:** a **licensed daily feed**. `OPIS` is noted as the vendor path for a future
+firm-side layer — **documented, not pursued** (out of scope for a public-data repo; D1 is public data
+only). The pre-registered H12 test (gain concentrated in `|gasoline MoM| > 300 bp` months and
+end-of-month moves the weekly Monday snapshot missed) is written and runs unchanged if such a feed
+ever lands.
+
 ## The June-2026 movers — does sampling design explain the reversal?
 
 Actual move measured in units of that stratum's own same-month dispersion (σ = seasonal_reliability).

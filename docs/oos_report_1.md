@@ -80,14 +80,30 @@ PCE ref through 2026-05; enumerated from `release_calendar`). Updated as prints 
 | core NSA | 1.12 | 0.55 | 6.11 (2023-09) | 1.08 | 1.29 |
 | core SA | 2.96 | 2.67 | 9.27 (2023-10) | 2.68 | 4.02 |
 
-### b. PPI final-demand machinery — NOT BUILT (documented gap)
+### b. PPI final-demand machinery — BUILT AND MEASURED (H15b, data-quality sprint)
 
-PPI final-demand reconstruction requires FD-ID **relative-importance weights** and a PPI
-aggregator; **neither is ingested/built** (mapping `ppi.final_demand` carries structure but no
-weights; WPSFD4 has no ALFRED vintage). Unlike the CPI side (`aggregate.py` + BLS weights), the
-PPI machinery does not exist yet, so there is no reconstruction to deviate. **Deferred** (a
-Session-4+ build: ingest PPI FD relative importances, add the aggregator). Recorded here rather
-than filled with a placeholder — the honest entry is the gap.
+The gap is closed. Published **FD-ID relative importances** (`bls.gov/web/ppi/ppi-fdgrouprel.xlsx`,
+Dec-2024 weights, posted 2026-06-11) give a **complete non-overlapping 33-group leaf partition
+summing to exactly 100.000** — the same coarsest-complete-partition doctrine as the CPI side. The 33
+NSA leaf series (`WPUFD…`) run through `index_math`'s price-updated Laspeyres and are compared to
+official final demand (`WPUFD4`) NSA MoM.
+
+| PPI FD replication (NSA MoM) | value |
+|---|--:|
+| **MAE, 2017-02 → 2025-12 (n=107)** | **3.89 bp** |
+| **MAE, 2023+ (n=36)** | **1.93 bp** |
+| median / p90 / max | 2.47 / 8.43 / 29.45 bp |
+| partition coverage | **100.0%** of FD weight |
+
+**2023+ at 1.93 bp is rounding-floor territory**, matching the pre-registered target and the CPI
+result's shape (headline NSA 0.50 bp). The residual concentrates in the **2022 energy spike**
+(worst: 2022-07 +29.5, 2022-06 −20.3 bp) — the same **weight-vintage era effect** as the CPI
+replication (a Dec-2024 weight set cannot reproduce 2022 relative importances), not a machinery
+error. Measurement/replication only: **no forward PPI skill is claimed or measured**, so this adds
+no predictive claim — it closes a *replication* gap.
+
+*Caveat, stated:* BLS's public API caps history at 10 years without a registration key, so the
+window starts 2017-02; FD leaf series were retrieved in two batches (25-series/request cap).
 
 ### c. PCE bridge — Instrument A (full core, post-H9c-reversal), CPI-day information only — QUASI-OOS
 

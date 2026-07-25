@@ -58,10 +58,20 @@ def _write(rows: list[dict]) -> None:
     LEDGER.write_text("\n".join(out) + "\n")
 
 
+def _freeze_kind(row: dict) -> str:
+    """Dedup dimension distinguishing the pre-freeze (T-21…) call from the T-3 frozen call for the
+    same (instrument, ref_month). Derived from the `frozen` flag — no stored column, no hash change
+    (the hash already covers as_of + frozen, which differ between the two rows)."""
+    frozen = row.get("frozen")
+    return "frozen" if (frozen is True or frozen == "yes") else "prefreeze"
+
+
 def append_call(rec: dict) -> dict:
     rows = read_rows()
-    if any(r["instrument"] == rec["instrument"] and r["ref_month"] == rec["ref_month"] for r in rows):
-        return {"skipped": "row already exists (append-only: a call is written once)"}
+    kind = _freeze_kind(rec)
+    if any(r["instrument"] == rec["instrument"] and r["ref_month"] == rec["ref_month"]
+           and _freeze_kind(r) == kind for r in rows):
+        return {"skipped": f"row already exists (append-only: one {kind} call per instrument/month)"}
     row = {"n": str(len(rows) + 1), "instrument": rec["instrument"], "ref_month": rec["ref_month"],
            "as_of": rec["as_of"], "frozen": "yes" if rec.get("frozen") else "no",
            "call_bp": f"{rec['call_bp']:+.1f}", "band_bp": f"{rec['band_bp']:.1f}",

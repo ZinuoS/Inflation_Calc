@@ -52,10 +52,14 @@ inflation-nowcast/
 4. Determinism: no LLM calls at runtime, no network calls inside index/bridge/validation
    code. Network only inside pipelines/, and every pipeline run logs (url, retrieval
    timestamp, bytes hash) into a provenance table.
-5. Licensing: every pipelines/{source}/ folder contains license_note.md (ToS/robots.txt
-   review, date checked). A source without a license note does not get a pipeline. No
-   auth walls, no CAPTCHA circumvention, no screenshot workarounds — a blocked source is
-   replaced by its backup, not fought.
+5. Licensing & acquisition: every pipelines/{source}/ folder contains license_note.md
+   (ToS/robots.txt review, date checked). A source without a license note does not get a
+   pipeline. No auth walls, no CAPTCHA circumvention. Where a source offers no API or bulk
+   download, scraping — including screenshot/OCR extraction — is permitted as a last
+   resort, provided (a) robots.txt is respected, (b) the license_note records the ToS
+   review, and (c) where the ToS restricts redistribution, the extracted data stays local
+   (gitignored) and only derived results are published. Prefer the cleanest available
+   method; document why a workaround was necessary.
 6. Vintage discipline: every observation row carries (reference_period, observed_asof).
    Backtests may only read rows with observed_asof ≤ forecast_time. The release calendar
    table is the firewall; treat violations as test failures.

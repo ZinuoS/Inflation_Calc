@@ -255,3 +255,11 @@ mirroring `run_golden_test`.
 **Local handling.** No shim — cosmetic. Every CSV-source loader in this repo
 (`cpi_weights_loader`, now `seasonal_factors_loader`) shows the identical lint line; `naru test`
 is used as the loader gate instead. Flagged, not worked around.
+
+## naru#(next) — X-13 one-year-ahead PROJECTED seasonal factors
+statsmodels `x13_arima_analysis` returns in-sample D10/D16 only; the projected
+next-year seasonal factors (needed to compare against BLS's realized factor
+revision, H13) are not surfaced. Desired: expose D16-with-appendfcst as a series.
+Minimal example: run x13as with `forecast{maxlead=12}` + `x11{appendfcst=yes save=(d16)}`,
+parse the `.d16` file (`YYYYMM value`). Implemented as a local SHIM inside the H13
+eval only (not promoted — H13 was rejected, so nothing survives to the package).

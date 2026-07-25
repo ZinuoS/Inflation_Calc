@@ -26,7 +26,18 @@ edits.** Market variable = rounded consensus median; our NSA call SA-converted (
 |---|--:|--:|---|
 | **PR-3** MAE ours vs consensus (bp) | 7.27 vs 7.33 | 8.53 vs **5.29** | **NULL HELD (core); PARITY (headline).** Core: consensus beats us, as pre-registered. Headline: ours < consensus by **0.06 bp** — a tie that nonetheless tripped the pre-registered audit (below). |
 | **PR-1** side-of-consensus, divergence mo | 9/12 = 75% (p=0.146) | 8/12 = 67% (p=0.3877) | **DIRECTIONALLY SUPPORTIVE, NOT SIGNIFICANT.** Both above 50% and in/above the pre-registered 55–65% band; extension lifted n from 4–8 → 12 but neither reaches p<0.05. Not falsified, not confirmed. |
-| **PR-2** boundary-month err (bp) | ours 6.47 vs 6.87 (n=9) | ours 8.0 vs 3.16 (n=12) | **MIXED.** Headline no worse than consensus (supported); core worse — largely our stated SA-conversion handicap, which bites hardest at rounding boundaries. |
+| **PR-2** boundary-month err (bp) | ours 6.47 vs 6.87 (n=9) | ours 8.0 vs 3.16 (n=12) | **MIXED.** Headline no worse than consensus (supported); core worse — largely our stated SA-conversion handicap, which bites hardest at rounding boundaries. **See the seam-constant annotation below: part of this handicap is now a MEASURED STRUCTURAL CONSTANT, not a fixable deficit.** |
+
+**PR-2 annotation — the seam handicap is a measured structural constant (H13, data-quality sprint).**
+Our SA conversion uses BLS's prior-year seasonal factor. H13 tested whether the February factor
+revision could be *predicted* (our X-13 on December-vintage NSA) and **failed decisively**: X-13
+projection was ~4× worse than carry-forward at predicting BLS's realized factor (pooled seam error
+**29.9 bp baseline → 120.9 bp**), on every code tested. The mechanism is that **BLS factor
+year-over-year drift is small — carry-forward is near-optimal, and for SETB02 it is exactly right
+(0.0 bp)**. At the aggregate the seam error carry-forward leaves is **~2.5–2.8 bp** (SA0 2.8,
+SA0L1E 2.5). That quantity is therefore **permanently retired as an improvement target**: it is a
+structural constant of using published factors, not a modelling deficit, and it is part of the
+SA-conversion handicap that shows up in PR-2's core column. Reported, not adjusted for.
 
 **PR-3 headline audit (triggered because ours < consensus).** The margin is **0.06 bp — parity, not
 a win.** Audit findings: (1) the edge is **balanced** across the gasoline split (high-gasoline months
