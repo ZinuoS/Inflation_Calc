@@ -30,6 +30,15 @@ released, there is no first-release value — the ledger row stays a standing pr
 Never fabricate a realized value under a T+0 label.** (This staging exists because a session opened
 at T-5 and correctly could not adjudicate.)
 
+### Daily (until each print lands) — regenerate the standing status report
+```
+python -c "from nowcast import pce_status; pce_status.update()"
+```
+Appends one dated row to `docs/pce_status_log.csv` (idempotent per date) and rewrites
+`docs/pce_status_report.md`. It reports `realized = pending` until the first-release value is actually
+in the DB — **it never adjudicates and never populates the ledger**; that stays with
+`report.postmortem` on the release date.
+
 ### Entry #2 — PCE core, ref 2026-06 (call +7.6 bp ±8.0, frozen as_of 2026-07-14)
 | date | when | action |
 |---|---|---|
