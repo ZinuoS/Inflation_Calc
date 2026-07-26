@@ -72,6 +72,16 @@ def fetch(as_of: str | None = None) -> Path:
     staged = out / "staged.csv"
     _ingest.write_staged_csv(staged, rows)
     print(f"zori: {len(rows)} monthly rows  {rows[0]['period']}..{rows[-1]['period']}")
+    # Task 3 — forward vintage capture: this source restates its own history and publishes
+    # no vintage archive, so every pull archives an immutable full-history snapshot.
+    try:
+        v = _ingest.archive_vintage(spec["source"], as_of, raw, "Metro_zori_sa_month.csv",
+                                    spec["url"], rows=len(rows),
+                                    period_min=rows[0]["period"], period_max=rows[-1]["period"])
+        print(f"vintage captured: {v.name} ({len(rows)} rows)")
+    except _ingest.VintageExists as e:
+        print(f"vintage already captured today; not overwritten ({e})")
+
     n = _ingest.load(spec["source"], staged, prov_path, as_of)
     print(f"zori: loaded {n} rows into proxy_observations")
     return staged

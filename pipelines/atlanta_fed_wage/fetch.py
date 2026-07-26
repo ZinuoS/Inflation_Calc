@@ -21,6 +21,15 @@ def fetch(as_of=None):
     out = _ingest.raw_dir(spec["source"], as_of)
     raw, status, url, obs = _ingest.fred_series(spec["fred_series_id"])
     (out/f"{spec['fred_series_id']}.json").write_bytes(raw)
+    # Task 3 — forward vintage capture: this source restates its own history and
+    # publishes no vintage archive, so every pull archives an immutable full-history
+    # snapshot. Re-running the same day raises VintageExists rather than overwriting.
+    try:
+        v = _ingest.archive_vintage(spec["source"], as_of, raw, f"{spec['fred_series_id']}.json",
+                                    url)
+        print(f"vintage captured: {v.name}")
+    except _ingest.VintageExists as e:
+        print(f"vintage already captured today ({e}); not overwritten")
     prov=[{"label":spec["fred_series_id"],"source_url":url,"http_status":status,
            "retrieved_at_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
            "sha256":_ingest.sha256(raw),"bytes":len(raw)}]

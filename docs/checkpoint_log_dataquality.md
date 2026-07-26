@@ -221,6 +221,35 @@ but the usable-at-freeze portion is far smaller than the revised-data correlatio
 
 **Admission proposal:** REJECT (no config change). Retain as a documented reopening condition.
 
+### H14 ANNOTATION — forward vintage capture (added 2026-07-26, Task 3)
+
+**Re-runnability, honestly qualified.** Task 3 makes `revised_latest_only` sources archive an
+immutable full-history snapshot on every pull (`data/raw/{source}/vintage_{date}/` + manifest;
+`_ingest.archive_vintage`, immutability asserted by `tests/test_vintage_capture.py`). Once ~4 quarters
+of snapshots exist, a revision-contaminated backtest becomes **pristinely re-runnable on our own
+archive** — each month reads the value we actually held, not today's restated one. **Calendar entry:
+re-evaluate H14 in 2027-07** (see `docs/runbook.md`).
+
+**BUT — a gap in H14 itself, found while wiring Task 3 and recorded rather than papered over.**
+There is **no ATRR pipeline, no `data/raw/atrr*`, and 0 ATRR rows in the DB.** The H14 numbers above
+were computed from a fetch that was **never ingested through a naru pipeline**, which breaks hard
+rule 2 (all ingestion via pipelines; raw pulls land immutably in `data/raw/`). Consequences, stated
+plainly:
+
+1. **H14's figures are currently NOT reproducible from this repo.** They are recorded as a finding but
+   cannot be re-derived until ATRR is ingested properly. The verdict (NOT ADOPTED) is unaffected —
+   it was a rejection, so nothing was built on top of it.
+2. **Task 3's capture cannot yet apply to ATRR**, because there is nothing to hook into. Capture is
+   live for the sources that *do* have pipelines: **zori** (proved on a real pull —
+   `vintage_2026-07-26`, 138 rows, sha-verified), **atlanta_fed_wage**, **indeed_wage**.
+   **apartment_list** remains documented-not-built (JS-gated download, no static URL) so it has no
+   fetch to wire.
+3. **Therefore the 2027-07 re-evaluation has a precondition:** build `pipelines/atrr` (fetch + spec +
+   license_note, `vintage_status: revised_latest_only`, quarterly publication block) so that quarterly
+   snapshots accumulate from now. **Without that, no ATRR archive accrues and H14 stays unre-runnable.**
+   Not built in this session — it is new ingestion, outside Task 3's stated scope, and it deserves its
+   own checkpoint.
+
 **STATUS: CHECKPOINT H14 — awaiting go before H15 (a: USDA if key; b: PPI-FD aggregator).**
 
 ---

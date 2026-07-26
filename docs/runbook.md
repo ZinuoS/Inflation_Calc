@@ -57,3 +57,9 @@ in the DB — **it never adjudicates and never populates the ledger**; that stay
 **Verdict frame (verbatim, both prints):** hit — or *"missed by X bp, inside/outside the published
 band; the postmortem ran on schedule; attribution to follow when BEA 2.4.4U components publish; the
 row stands unedited."*
+
+## Scheduled re-evaluations (long-horizon)
+
+| date | item | precondition |
+|---|---|---|
+| **2027-07** | **H14 re-evaluation — ATRR rent/OER carry on our OWN vintage archive.** H14 failed only on revision contamination (the gain was measured on restated data). With ~4 quarters of immutable snapshots the backtest becomes pristine: each month reads the value we actually held. | **`pipelines/atrr` must be built first** (fetch + spec + license_note, `vintage_status: revised_latest_only`, quarterly publication block). As of 2026-07-26 it does **not** exist, so **no ATRR snapshots are accruing** — see the H14 annotation in `checkpoint_log_dataquality.md`. Capture is already live for zori / atlanta_fed_wage / indeed_wage. |
