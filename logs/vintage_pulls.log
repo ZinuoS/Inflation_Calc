@@ -1,0 +1,18 @@
+[2026-07-26T18:30:33Z] === pull run start (host Mac) ===
+[2026-07-26T18:30:35Z] atrr: exit=0
+  [atrr]   unchanged, not re-archived: payload identical to vintage_2025q3 (sha c15aed3dc6c2); not re-archived
+  [atrr] atrr: 104 quarterly rows 1999-10-01..2025-07-01
+  [atrr] atrr: loaded 104 rows into proxy_observations
+[2026-07-26T18:30:36Z] zori: exit=0
+  [zori] zori: 138 monthly rows  2015-01-01..2026-06-01
+  [zori] vintage already captured today; not overwritten (data/raw/zori/vintage_2026-07-26 already captured; snapshots are immutable)
+  [zori] zori: loaded 138 rows into proxy_observations
+[2026-07-26T18:30:37Z] atlanta_fed_wage: exit=0
+  [atlanta_fed_wage] vintage captured: vintage_2026-07-26
+  [atlanta_fed_wage] atlanta_fed_wage: 353 monthly rows 1997-01-01..2026-06-01
+  [atlanta_fed_wage] atlanta_fed_wage: loaded 353 rows
+[2026-07-26T18:30:38Z] indeed_wage: exit=0
+  [indeed_wage] vintage captured: vintage_2026-07-26
+  [indeed_wage] indeed_wage: 90 monthly US rows 2019-01-01..2026-06-01
+  [indeed_wage] indeed_wage: loaded 90 rows
+[2026-07-26T18:30:38Z] === pull run end ===

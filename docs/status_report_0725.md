@@ -35,6 +35,30 @@ bridge is tighter (**0.8 increments**) and essentially unbiased.
 **Both CPI instruments carry a negative bias (≈−5 bp): the system under-predicts slightly on
 average.** That is a real, reportable property, not noise — it persists across 88 prints.
 
+## 1b. The metric that drives the headline reaction — same-tenth hit rate
+
+Prints are published to **one decimal place** and the market reacts to that rounded number, so the
+decision-relevant score is whether our call lands in the **same 0.1 pp bucket** as the actual.
+
+| instrument | window | n | **same-tenth hit** | MAE (pp) | MAE ÷ 0.05 |
+|---|---|--:|--:|--:|--:|
+| **CPI headline** | full 2019+ | 88 | **33%** | 0.1186 | 2.4× |
+| **CPI headline** | 2023+ | 40 | **42%** | 0.0702 | 1.4× |
+| CPI headline | 2025+ tariff | 16 | 44% | 0.0785 | 1.6× |
+| CPI core | 2023+ | 40 | 35% | 0.0869 | 1.7× |
+| PCE core | 2023+ | 40 | 38% | 0.0797 | 1.6× |
+
+**Why it is only ~one-in-three:** hitting the right tenth generally needs **|error| < 0.05 pp** (half
+an increment), and our error is **1.4–2.6× larger**. The objective is **accuracy-bound, not
+rule-bound** — no re-weighting supplies the missing factor of ~2, and even halving our error would
+reach only ~50–60%.
+
+**Versus consensus on consensus months** — headline **43% vs 43% (tie)**, core **30% vs 56%**, PCE
+**33% vs 78%**. On the printed tenth the market's own number is better on core and PCE; our edge stays
+**speed + attribution**. Full sensitivity analysis and the pre-registered follow-up (H22, a
+boundary-aware rounding rule — decision layer, small expected gain) are in
+`docs/rounded_objective.md`.
+
 ## 2. Sector-level backtest error — the core of this report
 
 Each sector's own NSA MoM, forecast at T-3 and compared to the official major-group print. **MAE and

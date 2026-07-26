@@ -239,11 +239,24 @@ predictive distribution.
 | 80% error range | [{h['p10'] / 100:+.3f}, {h['p90'] / 100:+.3f}] | [{h['p10']:+.1f}, {h['p90']:+.1f}] | — |
 | **implied 80% range, MoM print** | **[{lo / 100:+.3f}, {hi / 100:+.3f}]** | [{lo:+.1f}, {hi:+.1f}] | — |
 
-Historical hit rates: within half an increment (±0.05 pp) **{h['within_half']:.0%}**, within one
-increment (±0.1 pp) **{h['within_one']:.0%}**, two or more increments off **{h['two_plus']:.0%}**.
-Rounds to the same published tenth as the actual: **{h['correct_side']}/{h['months']}**
-({h['correct_side'] / h['months']:.0%}); **{h['coin_flip']}/{h['months']}** months were COIN-FLIP by
-construction.
+### The metric that drives the headline reaction
+
+The market reacts to the **published tenth**, so the decision-relevant score is whether our call lands
+in the same 0.1 pp bucket as the actual — not unrounded MAE.
+
+| | value |
+|---|--:|
+| **same-tenth hit rate (Instrument A, 2023+)** | **38%** (15/40) |
+| within half an increment (±0.05 pp) | {h['within_half']:.0%} |
+| within one increment (±0.1 pp) | {h['within_one']:.0%} |
+| two or more increments off | {h['two_plus']:.0%} |
+| COIN-FLIP months (rounding a toss-up by construction) | {h['coin_flip']}/{h['months']} |
+
+**Why the hit rate is only ~38%:** landing in the right tenth generally needs **|error| < 0.05 pp**,
+and our MAE is **{h['mae'] / 100:.3f} pp** — about **{h['mae'] / 5.0:.1f}×** that threshold. The
+objective is accuracy-bound, not rule-bound; see `docs/rounded_objective.md` for the sensitivity
+analysis and for consensus's own hit rate on the same months (78% on PCE — the market's number is
+better at this, while our edge stays speed + attribution).
 
 ## Where the error comes from, by PCE group
 
