@@ -62,4 +62,19 @@ row stands unedited."*
 
 | date | item | precondition |
 |---|---|---|
-| **2027-07** | **H14 re-evaluation — ATRR rent/OER carry on our OWN vintage archive.** H14 failed only on revision contamination (the gain was measured on restated data). With ~4 quarters of immutable snapshots the backtest becomes pristine: each month reads the value we actually held. | **`pipelines/atrr` must be built first** (fetch + spec + license_note, `vintage_status: revised_latest_only`, quarterly publication block). As of 2026-07-26 it does **not** exist, so **no ATRR snapshots are accruing** — see the H14 annotation in `checkpoint_log_dataquality.md`. Capture is already live for zori / atlanta_fed_wage / indeed_wage. |
+| **2027-07** | **H14 re-evaluation — ATRR rent/OER carry on a vintage archive.** H14 failed only on revision contamination. | **RE-SCOPED 2026-07-26: no longer blocked.** BLS publishes dated per-quarter vintages (2023q4→2025q3) and `pipelines/atrr` has backfilled all 9 into `data/raw/atrr/`; the contamination is reproducible from our archive (−17.6 bp as published vs +106.3 bp latest for 2024q2). A pristine re-run is possible **now** on that window — it needs its **own pre-registration**, not a wait. This date is simply when our own snapshots extend the window past BLS's archive start. |
+
+## Recurring pulls — vintage capture (`revised_latest_only` sources)
+
+Run per source; each archives an immutable snapshot and skips byte-identical payloads.
+
+| source | cadence to run | command |
+|---|---|---|
+| **atrr** | quarterly (mid-month after quarter end; **currently PAUSED by BLS since 2026-04** — a pull will report "unchanged" until publication resumes) | `python -c "import sys;sys.path.insert(0,'pipelines');import importlib.util as u;s=u.spec_from_file_location('f','pipelines/atrr/fetch.py');m=u.module_from_spec(s);s.loader.exec_module(m);m.fetch(backfill=False)"` |
+| **zori** | monthly (~M-end +25) | `python pipelines/zori/fetch.py` |
+| **atlanta_fed_wage** | monthly | `python pipelines/atlanta_fed_wage/fetch.py` |
+| **indeed_wage** | monthly | `python pipelines/indeed_wage/fetch.py` |
+
+`backfill=False` skips re-scraping BLS's archive (already captured). Snapshots live under
+`data/raw/{source}/vintage_{tag}/` — gitignored by design (raw data stays local; only derived results
+are published).

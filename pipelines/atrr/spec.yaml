@@ -1,0 +1,37 @@
+# atrr pipeline spec (Task 3 follow-on) — BLS research CPI, all-tenant regressed rent (R-CPI-ATR)
+source: atrr
+description: >
+  BLS research Consumer Price Index for all tenant regressed rent (R-CPI-ATR), quarterly index
+  levels. Monitor/research input for the rent-OER carry (pre-registered H14, NOT ADOPTED). Never a
+  target. The published 4-quarter-change columns are NOT ingested (hard rule 8 bars YoY quantities);
+  quarterly changes are derived from index levels at evaluation time.
+url: https://www.bls.gov/cpi/research-series/r-cpi-ntr-and-r-cpi-atr.xlsx
+landing_page: https://www.bls.gov/cpi/research-series/r-cpi-ntr.htm
+archive_url_template: https://www.bls.gov/cpi/research-series/r-cpi-ntr-and-r-cpi-atr-{tag}.xlsx
+sheet: R-CPI-ATR
+vintage_status: revised_latest_only   # BLS: "Perpetually revised, with recent periods being prone to large revisions"
+frequency: quarterly
+
+publication:
+  kind: scheduled
+  rule: quarterly_midmonth_after_quarter_end
+  lag_days: 45                       # observed 2024q1->2024-04-17, q2->07-15, q3->10-17, q4->2025-01-21, 2025q1->04-16
+  observed_asof_estimated: true      # per-release dates are not machine-published; rule-materialized
+  cite: https://www.bls.gov/cpi/research-series/r-cpi-ntr.htm
+  status_note: >
+    PAUSED. Cited verbatim (checked 2026-07-26): "Due to a lapse in appropriations resulting in
+    uncollected CPI Housing Survey data for October 2025 and competing priorities, BLS paused
+    publication of the R-CPI-NTR and R-CPI-ATR data in April 2026." Latest data = 2025q3. A recurring
+    pull captures no new vintage until BLS resumes; identical payloads are skipped by content hash.
+
+vintage_capture:
+  enabled: true
+  dir: data/raw/atrr/vintage_{tag}/
+  why: >
+    The source restates its own history, so the latest file cannot support a leakage-free backtest.
+    BLS DOES publish dated per-quarter archives (2023q3 ->), verified as genuine as-published
+    snapshots (1999q4 = 102.2753677 in the 2024q2 file vs 102.388 in the current file). Those are
+    backfilled once; our own dated snapshots accrue on top.
+  kinds: [bls_archived_quarter, our_pull_date]
+
+role: research_monitor

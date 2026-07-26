@@ -230,25 +230,38 @@ of snapshots exist, a revision-contaminated backtest becomes **pristinely re-run
 archive** — each month reads the value we actually held, not today's restated one. **Calendar entry:
 re-evaluate H14 in 2027-07** (see `docs/runbook.md`).
 
-**BUT — a gap in H14 itself, found while wiring Task 3 and recorded rather than papered over.**
-There is **no ATRR pipeline, no `data/raw/atrr*`, and 0 ATRR rows in the DB.** The H14 numbers above
-were computed from a fetch that was **never ingested through a naru pipeline**, which breaks hard
-rule 2 (all ingestion via pipelines; raw pulls land immutably in `data/raw/`). Consequences, stated
-plainly:
+**CORRECTION (2026-07-26) — two earlier claims in this repo were WRONG, and both are now fixed.**
 
-1. **H14's figures are currently NOT reproducible from this repo.** They are recorded as a finding but
-   cannot be re-derived until ATRR is ingested properly. The verdict (NOT ADOPTED) is unaffected —
-   it was a rejection, so nothing was built on top of it.
-2. **Task 3's capture cannot yet apply to ATRR**, because there is nothing to hook into. Capture is
-   live for the sources that *do* have pipelines: **zori** (proved on a real pull —
-   `vintage_2026-07-26`, 138 rows, sha-verified), **atlanta_fed_wage**, **indeed_wage**.
-   **apartment_list** remains documented-not-built (JS-gated download, no static URL) so it has no
-   fetch to wire.
-3. **Therefore the 2027-07 re-evaluation has a precondition:** build `pipelines/atrr` (fetch + spec +
-   license_note, `vintage_status: revised_latest_only`, quarterly publication block) so that quarterly
-   snapshots accumulate from now. **Without that, no ATRR archive accrues and H14 stays unre-runnable.**
-   Not built in this session — it is new ingestion, outside Task 3's stated scope, and it deserves its
-   own checkpoint.
+1. **"BLS publishes no ATRR vintage archive" — FALSE.** BLS publishes **dated per-quarter archive
+   files** (`r-cpi-ntr-and-r-cpi-atr-{YYYY}q{N}.xlsx`, **2023q3 → 2025q3**) alongside the current
+   workbook. Verified as genuine as-published snapshots, two ways: reference quarter 1999q4 reads
+   **102.2753677** in the 2024q2 file versus **102.388** in the current one; and the ATR row count
+   increments by **exactly one per quarter** (97, 98, 99 … 104), which is what a growing
+   as-published series must do. The earlier statement was an assumption I never checked.
+2. **"H14's numbers are not reproducible from this repo" — NO LONGER TRUE.** `pipelines/atrr` now
+   exists and has **backfilled all 9 BLS vintages** into `data/raw/atrr/vintage_{tag}/`, immutable
+   with manifests. H14's contamination evidence is **reproduced from our own archive**: the 2024q2
+   quarterly change reads **−17.6 bp as published** (vintage_2024q2) versus **+106.3 bp in the latest
+   vintage** — a **+123.9 bp revision**, matching the "−18 → +106" originally recorded. The
+   hard-rule-2 gap (ATRR analysed from a fetch that was never ingested) is **closed**: 104 quarterly
+   rows are now in `proxy_observations` and every vintage is on disk.
+
+**What this changes about the re-evaluation.** H14 no longer needs four quarters of our own snapshots —
+**BLS's archive already spans 2023q4 → 2025q3 (8 usable vintages)**, so a pristine re-run is possible
+**now**, bounded by that window rather than by 2027. It is **not run here**: re-opening a recorded
+verdict requires its own pre-registration. The 2027-07 calendar entry is retained but **re-scoped** —
+it is no longer a precondition-blocked wait, just the point by which our own snapshots extend the
+window past BLS's archive start.
+
+**Publication is PAUSED** (cited verbatim from the source page): *"Due to a lapse in appropriations
+resulting in uncollected CPI Housing Survey data for October 2025 and competing priorities, BLS paused
+publication of the R-CPI-NTR and R-CPI-ATR data in April 2026."* Latest data = **2025q3**. Our current
+pull was therefore **byte-identical to vintage_2025q3 and correctly skipped** by the archive's
+content-hash dedupe — for a paused source, "no new vintage" is the honest signal, not a storage task.
+
+**Capture status:** live for **atrr** (9 vintages), **zori** (`vintage_2026-07-26`, 138 rows,
+sha-verified), **atlanta_fed_wage**, **indeed_wage**. `apartment_list` stays documented-not-built
+(JS-gated, no static URL), so it has no fetch to wire.
 
 **STATUS: CHECKPOINT H14 — awaiting go before H15 (a: USDA if key; b: PPI-FD aggregator).**
 

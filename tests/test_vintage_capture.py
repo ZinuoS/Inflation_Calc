@@ -60,3 +60,45 @@ def test_committed_zori_vintage_is_intact():
     payload = (d / man["filename"]).read_bytes()
     assert _ingest.sha256(payload) == man["sha256"], "snapshot mutated since capture"
     assert man["bytes"] == len(payload)
+
+
+def test_unchanged_payload_is_not_rearchived(tmp_path, monkeypatch):
+    """A paused source must not accumulate byte-identical snapshots — absence IS the signal."""
+    monkeypatch.setattr(_ingest, "REPO", tmp_path)
+    _ingest.archive_vintage("demo", "2026-07-26", b"same", "d.csv", "http://x")
+    with pytest.raises(_ingest.VintageUnchanged):
+        _ingest.archive_vintage("demo", "2026-08-26", b"same", "d.csv", "http://x")
+    _ingest.archive_vintage("demo", "2026-09-26", b"CHANGED", "d.csv", "http://x")
+    assert _ingest.list_vintages("demo") == ["2026-07-26", "2026-09-26"]
+
+
+def test_atrr_archive_holds_bls_vintages_and_reproduces_the_revision():
+    """The ATRR archive is what makes H14 re-runnable. Assert it exists AND that a known revision
+    is recoverable from it (as-published vs latest for the same reference quarter)."""
+    import json
+    vs = _ingest.list_vintages("atrr")
+    if len(vs) < 2:
+        pytest.skip("atrr archive not populated in this checkout")
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("atrr_f", REPO / "pipelines" / "atrr" / "fetch.py")
+    af = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(af)
+    import yaml
+    sp = yaml.safe_load((REPO / "pipelines" / "atrr" / "spec.yaml").read_text())
+
+    def levels(tag):
+        d = _ingest.vintage_dir("atrr", tag)
+        man = json.loads((d / "manifest.json").read_text())
+        return {r["period"]: float(r["value"])
+                for r in af.parse((d / man["filename"]).read_bytes(), sp, observed_date=tag)}
+
+    if "2024q2" not in vs:
+        pytest.skip("2024q2 vintage absent")
+    pub, now = levels("2024q2"), levels(vs[-1])
+    per, prev = "2024-04-01", "2024-01-01"
+    if not all(k in pub and k in now for k in (per, prev)):
+        pytest.skip("reference quarters absent")
+    a = (pub[per] / pub[prev] - 1) * 1e4
+    b = (now[per] / now[prev] - 1) * 1e4
+    assert abs(b - a) > 50, ("the archive must preserve a real revision; if this collapses, the "
+                             f"snapshots are not point-in-time (as-published {a:.1f} vs latest {b:.1f} bp)")

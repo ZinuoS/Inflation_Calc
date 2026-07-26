@@ -364,3 +364,38 @@ quality**: we now know exactly where the SA-conversion error lives (component-ex
 aggregation) and exactly which target the benchmark should have been scoring against.
 
 **STATUS: SPRINT COMPLETE. Nothing adopted; frozen configs untouched; ledger untouched.**
+
+---
+
+## ADDENDUM (2026-07-26) — `pipelines/atrr` built; the recurring snapshot is live, and a correction
+
+**Built:** `pipelines/atrr/` (fetch + spec + license_note), the precondition flagged at the Task 3
+checkpoint. It does two jobs: archive a snapshot on every pull, and **backfill BLS's own dated
+archive**.
+
+**The correction that matters.** Task 3's premise — and my own earlier wording — was that BLS
+publishes **no** ATRR vintage archive, so we had to grow our own over ~4 quarters. **That was wrong.**
+BLS publishes dated per-quarter files (`...-{YYYY}q{N}.xlsx`, 2023q3 → 2025q3). They are genuine
+as-published snapshots, verified two ways: 1999q4 reads **102.2753677** in the 2024q2 file vs
+**102.388** in the current one, and the ATR row count increments by **exactly one per quarter**
+(97…104). All 9 are now archived locally with manifests.
+
+**Consequence:** H14 is **re-runnable now**, not in 2027. The contamination it turned on is reproduced
+from our archive — 2024q2 quarterly change **−17.6 bp as published** vs **+106.3 bp latest**
+(**+123.9 bp** revision), matching the "−18 → +106" recorded at the H14 checkpoint. That also closes a
+**hard-rule-2 gap** I reported at the Task 3 checkpoint: ATRR had been analysed from a fetch that was
+never ingested; it is now a proper pipeline with 104 rows in `proxy_observations` and every vintage on
+disk. **H14 is NOT re-run here** — re-opening a recorded verdict needs its own pre-registration.
+
+**Recurrence, and an honest wrinkle.** Publication is **PAUSED** (BLS, verbatim: *"…BLS paused
+publication of the R-CPI-NTR and R-CPI-ATR data in April 2026"*), latest data 2025q3. So the current
+file is byte-identical to `vintage_2025q3`, and the pull **correctly skipped it** via new content-hash
+dedupe (`VintageUnchanged`). For a paused source, *no new vintage* is the honest signal — the archive
+records changes, not calendar ticks. Runbook now carries the per-source recurring commands.
+
+**One vintage is legitimately empty:** in `vintage_2023q3` every R-CPI-ATR cell is `-` (the series was
+not yet populated). Archived anyway with `atr_empty: true` — "the series was empty as of this vintage"
+is exactly the evidence an archive should keep.
+
+Capture now live for **atrr** (9 vintages), **zori**, **atlanta_fed_wage**, **indeed_wage**;
+`apartment_list` remains documented-not-built (JS-gated).

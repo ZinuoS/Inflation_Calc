@@ -143,19 +143,36 @@ def vintage_dir(source: str, as_of: str) -> Path:
     return REPO / "data" / "raw" / source / f"vintage_{as_of}"
 
 
+class VintageUnchanged(Exception):
+    """The payload is byte-identical to the latest captured vintage — nothing new to record."""
+
+
 def archive_vintage(source: str, as_of: str, payload: bytes, filename: str,
                     url: str, rows: int | None = None,
                     period_min: str | None = None, period_max: str | None = None,
-                    extra: dict | None = None) -> Path:
+                    extra: dict | None = None, skip_if_unchanged: bool = True) -> Path:
     """Archive one immutable full-history snapshot. Raises VintageExists if already captured.
 
     Idempotent-by-refusal: re-running a pull on the same day does not silently replace the
     snapshot, because a replaced snapshot would destroy exactly the point-in-time evidence the
     archive exists to preserve.
+
+    `skip_if_unchanged` (default on) raises VintageUnchanged when the payload hashes identically to
+    the most recent captured vintage. A recurring pull against a PAUSED or slow-moving source would
+    otherwise accumulate byte-identical copies, which adds storage and zero evidence; the archive
+    should record CHANGES, and the absence of a new vintage is itself the honest signal that the
+    source has not moved.
     """
     d = vintage_dir(source, as_of)
     if d.exists() and (d / VINTAGE_MANIFEST).exists():
         raise VintageExists(f"{d.relative_to(REPO)} already captured; snapshots are immutable")
+    if skip_if_unchanged:
+        prev = list_vintages(source)
+        if prev:
+            pm = json.loads((vintage_dir(source, prev[-1]) / VINTAGE_MANIFEST).read_text())
+            if pm.get("sha256") == sha256(payload):
+                raise VintageUnchanged(
+                    f"payload identical to vintage_{prev[-1]} (sha {pm['sha256'][:12]}); not re-archived")
     d.mkdir(parents=True, exist_ok=True)
     (d / filename).write_bytes(payload)
     manifest = {
