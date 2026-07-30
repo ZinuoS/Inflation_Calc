@@ -14,4 +14,4 @@ our freeze). `frozen` = whether the call was past its T-4 freeze. Misses are kep
 | n | instrument | ref_month | as_of | frozen | call_bp | band_bp | consensus_bp | consensus_asof | realized_bp | deviation_bp | verdict | row_hash |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | cpi | 2026-07-01 | 2026-07-22 | no | -5.1 | 8.8 | — | — | — | — | — | 265f227e5cbb |
-| 2 | pce | 2026-06-01 | 2026-07-14 | yes | +7.6 | 8.0 | — | — | — | — | — | ab0165470397 |
+| 2 | pce | 2026-06-01 | 2026-07-14 | yes | +7.6 | 8.0 | — | — | +13.2 | -5.6 | HIT (tenth +0.1% called and realized; -5.6bp, inside +/-8.0 band) | ab0165470397 |

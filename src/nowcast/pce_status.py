@@ -44,12 +44,21 @@ def realized_status(ref_month: str = REF_MONTH, db_path=DEFAULT_DB) -> tuple[str
     The check is data-driven, not date-driven: a print counts as landed only when its first-release
     MoM is actually in the DB.
     """
+    prev = _add_months(ref_month, -1)
     with db.connect(db_path) as conn:
         r = conn.execute(
             "SELECT mom FROM first_release_mom WHERE series_id=? AND reference_period=?",
             (PCE_SERIES, ref_month)).fetchone()
-    if r and r[0] is not None:
-        return "published", float(r[0]) * 1e4
+        if r and r[0] is not None:
+            return "published", float(r[0]) * 1e4
+        # ALFRED's vintage archive lags the print by hours, so on release day the FRED/ALFRED path
+        # still reads "pending" while BEA has already published. Fall back to the BEA underlying
+        # detail (DPCCRG), within-vintage: both endpoints from the same ingest = a true first release.
+        px = {p: float(v) for p, v in conn.execute(
+            "SELECT period, value FROM official_current WHERE series_id='DPCCRG' AND period IN (?,?) "
+            "AND _superseded_by_run_id IS NULL", (ref_month, prev))}
+    if ref_month in px and prev in px and px[prev]:
+        return "published", (px[ref_month] / px[prev] - 1) * 1e4
     return "pending", None
 
 
